@@ -1,4 +1,5 @@
 import { Routes, Route, Link } from 'react-router-dom'
+import ShareLink from './components/ShareLink.jsx'
 import Home from './pages/Home.jsx'
 import Sos from './pages/Sos.jsx'
 import LanguageSwitcher from './components/LanguageSwitcher.jsx'
@@ -11,19 +12,18 @@ export default function App() {
 
   return (
     <>
-      <header>
+<header>
   <div className="container header-bar">
     <Link to="/" className="brand">CareBee</Link>
-
     <nav style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
       <Link to="/meds">Meds</Link>
       <Link to="/visits">Visits</Link>
       <LanguageSwitcher />
-      {/* Если делали кнопку Share:
-         <ShareLink /> */}
+      <ShareLink />
     </nav>
   </div>
 </header>
+
 
       <main>
         <div className="container">
