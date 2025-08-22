@@ -38,6 +38,33 @@ main {
   padding: 1rem;
 }
 
+.header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.share-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.copied-notice {
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
+}
+
+.short-link {
+  font-size: 0.8rem;
+  margin-top: 1rem;
+}
+
 .home {
   text-align: center;
 }
