@@ -26,3 +26,8 @@ npm run build
 
 - Home page with "CareBee" title and an SOS button.
 - `/sos` page containing a form with name, e-mail, and message fields.
+
+## Deployment
+
+The application is deployed via GitHub Pages at https://tradinovabg.github.io/CareBee/
+
