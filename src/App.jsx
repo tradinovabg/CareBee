@@ -8,17 +8,6 @@ export default function App() {
 
   return (
     <>
-// Вверху файла убедитесь, что есть импорты:
-import { Routes, Route, Link } from 'react-router-dom'
-import Home from './pages/Home'
-import Sos from './pages/Sos'
-import LanguageSwitcher from './components/LanguageSwitcher' // поправьте путь, если компонент в другом месте
-
-export default function App() {
-  const year = new Date().getFullYear()
-
-  return (
-    <>
       <header>
         <div className="container header-bar">
           <Link to="/" className="brand">CareBee</Link>
@@ -38,10 +27,6 @@ export default function App() {
       <footer>
         <div className="container">© {year} CareBee</div>
       </footer>
-    </>
-  )
-}
- main
     </>
   )
 }
