@@ -4,11 +4,22 @@ import { useTranslation } from 'react-i18next'
 export default function Home() {
   const { t } = useTranslation()
   return (
-    <div>
-      <h1>{t('title')}</h1>
-      <p>{t('tagline')}</p>
+import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+
+export default function Home() {
+  const { t } = useTranslation()
+  return (
+    <div className="home">
+      <h1>{t('title', 'CareBee')}</h1>
+      <p>{t('tagline', 'Quick help at your fingertips.')}</p>
       <Link to="/sos">
-        <button>{t('goToSOS')}</button>
+        <button className="sos-button">{t('goToSOS', 'SOS')}</button>
+      </Link>
+    </div>
+  )
+}
+ main
       </Link>
     </div>
   )
