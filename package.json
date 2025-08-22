@@ -26,5 +26,9 @@
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.3.0",
     "vite": "^7.1.2"
-  }
+  },
+  "react-router-dom": "^6.23.0",
+"i18next": "^23.11.0",
+"react-i18next": "^13.5.0"
+
 }
