@@ -10,7 +10,7 @@ export default function Home() {
         <h1>{t('title', 'CareBee')}</h1>
         <p>{t('tagline', 'Quick help at your fingertips.')}</p>
         <Link to="/sos">
-          <button className="sos-button">{t('goToSOS', 'Go to SOS')}</button>
+          <button className="sos-button">{t('goToSOS', 'SOS')}</button>
         </Link>
       </div>
     </div>
