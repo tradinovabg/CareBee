@@ -3,28 +3,31 @@ import { useTranslation } from 'react-i18next'
 
 export default function Sos() {
   const { t } = useTranslation()
+
+  // Поля формы
   const [form, setForm] = useState({ name: '', email: '', message: '' })
-// состояния формы и статусы
-const [loading, setLoading] = useState(false)
-const [error, setError] = useState('')
 
-// статус геолокации: getting | denied | done
-const [locStatus, setLocStatus] = useState('getting')
+  // Состояния процесса
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
-useEffect(() => {
-  if (!('geolocation' in navigator)) {
-    setLocStatus('denied')
-    return
-  }
-  navigator.geolocation.getCurrentPosition(
-    () => setLocStatus('done'),
-    (err) => {
-      if (err.code === err.PERMISSION_DENIED) setLocStatus('denied')
-      else setLocStatus('done')
+  // Статус геолокации: getting | denied | done
+  const [locStatus, setLocStatus] = useState('getting')
+
+  // Проверяем доступ к геолокации при входе на страницу
+  useEffect(() => {
+    if (!('geolocation' in navigator)) {
+      setLocStatus('denied')
+      return
     }
-  )
-}, [])
- main
+    navigator.geolocation.getCurrentPosition(
+      () => setLocStatus('done'),
+      (err) => {
+        if (err.code === err.PERMISSION_DENIED) setLocStatus('denied')
+        else setLocStatus('done')
+      }
+    )
+  }, [])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -34,8 +37,10 @@ useEffect(() => {
   const sendSOS = async () => {
     setLoading(true)
     setError('')
+
     const { name, email, message } = form
 
+    // Пытаемся получить координаты (ещё раз — чтобы включить их в текст)
     let coords
     try {
       coords = await new Promise((resolve, reject) => {
@@ -45,11 +50,13 @@ useEffect(() => {
         )
       })
     } catch (err) {
-      setError(err.message)
+      // Если не вышло — просто покажем ошибку и продолжим без координат
+      setError(err.message || '')
     }
 
     const mapLink = coords ? `https://maps.google.com/?q=${coords.lat},${coords.lon}` : ''
-    const text = `SOS from CareBee: ${name} ${email}. ${message}.` +
+    const text =
+      `SOS from CareBee: ${name} ${email}. ${message}.` +
       (coords ? ` Location: ${coords.lat},${coords.lon} ${mapLink}` : '')
 
     try {
@@ -59,15 +66,17 @@ useEffect(() => {
         return
       }
     } catch {
-      // fall back to mailto
+      // игнорируем и падаем в mailto
     }
 
+    // Фолбэк: открываем письмо и копируем текст в буфер
     const mailto = `mailto:?subject=SOS%20CareBee&body=${encodeURIComponent(text)}`
     window.location.href = mailto
-
     try {
       await navigator.clipboard.writeText(text)
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
 
     setLoading(false)
   }
@@ -78,60 +87,55 @@ useEffect(() => {
   }
 
   return (
-<form onSubmit={handleSubmit} className="sos-form">
-<form onSubmit={handleSubmit} className="sos-form">
-  {/* Статус геолокации */}
-  <div role="status" aria-live="polite">
-    {locStatus === 'getting' && <p>{t('sos.gettingLocation')}</p>}
-    {locStatus === 'denied' && <p>{t('errors.locationDenied')}</p>}
-  </div>
+    <form onSubmit={handleSubmit} className="sos-form">
+      {/* Сообщения о статусе геолокации */}
+      <div role="status" aria-live="polite">
+        {locStatus === 'getting' && <p>{t('sos.gettingLocation')}</p>}
+        {locStatus === 'denied' && <p>{t('errors.locationDenied')}</p>}
+      </div>
 
-  <div className="field">
-    <label htmlFor="name">{t('sos.name')}</label>
-    <input
-      id="name"
-      name="name"
-      value={form.name}
-      onChange={handleChange}
-      required
-    />
-  </div>
+      <div className="field">
+        <label htmlFor="name">{t('sos.name')}</label>
+        <input
+          id="name"
+          name="name"
+          value={form.name}
+          onChange={handleChange}
+          required
+        />
+      </div>
 
-  <div className="field">
-    <label htmlFor="email">E-mail</label>
-    {/* если есть ключ перевода, можно: {t('sos.email')} */}
-    <input
-      id="email"
-      type="email"
-      name="email"
-      value={form.email}
-      onChange={handleChange}
-      required
-    />
-  </div>
+      <div className="field">
+        <label htmlFor="email">E-mail</label>
+        {/* при желании можно заменить на {t('sos.email')} */}
+        <input
+          id="email"
+          type="email"
+          name="email"
+          value={form.email}
+          onChange={handleChange}
+          required
+        />
+      </div>
 
-  <div className="field">
-    <label htmlFor="message">{t('sos.message')}</label>
-    <textarea
-      id="message"
-      name="message"
-      value={form.message}
-      onChange={handleChange}
-      required
-    />
-  </div>
+      <div className="field">
+        <label htmlFor="message">{t('sos.message')}</label>
+        <textarea
+          id="message"
+          name="message"
+          value={form.message}
+          onChange={handleChange}
+          required
+        />
+      </div>
 
-  {/* Сообщения процесса/ошибки */}
-  {loading && <p aria-live="polite">{t('sos.loading', 'Loading…')}</p>}
-  {error && <p role="alert">{error}</p>}
+      {loading && <p aria-live="polite">{t('sos.loading', 'Loading…')}</p>}
+      {error && <p role="alert">{error}</p>}
 
-  <button type="submit" disabled={loading}>
-    {t('sos.send')}
-  </button>
-</form>
- main
-</form>
- main
+      <button type="submit" disabled={loading}>
+        {t('sos.send')}
+      </button>
     </form>
   )
 }
+
