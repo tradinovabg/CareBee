@@ -1,10 +1,28 @@
 # CareBee
 
-A minimal Python application.
+A simple web application built with [Vite](https://vitejs.dev/) and [React](https://react.dev/).
 
-## Running
+## Development
+
+Install dependencies:
 
 ```bash
-python src/main.py
+npm install
 ```
 
+Start the development server:
+
+```bash
+npm run dev
+```
+
+Build for production:
+
+```bash
+npm run build
+```
+
+## Features
+
+- Home page with "CareBee" title and an SOS button.
+- `/sos` page containing a form with name, e-mail, and message fields.
