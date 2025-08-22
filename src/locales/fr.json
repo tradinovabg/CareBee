@@ -11,8 +11,7 @@
     "gettingLocation": "Récupération de votre position…",
     "loading": "Chargement…"
   },
-  "errors": { "locationDenied": "Accès à la localisation refusé." }
-  ,
+  "errors": { "locationDenied": "Accès à la localisation refusé." },
   "nav": { "profile": "Profil", "meds": "Médicaments", "visits": "Visites" },
   "profile": {
     "title": "Profil du patient",
@@ -23,10 +22,39 @@
     "saved": "Enregistré"
   },
   "meds": {
+    "title": "Prise des médicaments",
+    "add": "Ajouter un médicament",
+    "name": "Nom",
     "chooseTimes": "Choisir les heures",
     "morning": "Matin",
     "noon": "Midi",
     "evening": "Soir",
-    "mealMode": "Par rapport au repas"
-  }
+    "mealMode": "Par rapport au repas",
+    "meal_before": "avant repas",
+    "meal_with": "pendant repas",
+    "meal_after": "après repas",
+    "active": "Actif",
+    "today": "Aujourd’hui",
+    "empty": "Aucun médicament actif",
+    "all": "Tous les médicaments",
+    "meal_short": "repas",
+    "status_active": "actif",
+    "status_inactive": "inactif",
+    "deactivate": "Désactiver",
+    "activate": "Activer"
+  },
+  "visits": {
+    "title": "Visites chez le médecin",
+    "add": "Ajouter une visite",
+    "doctor": "Médecin",
+    "place": "Lieu",
+    "upcoming": "À venir",
+    "empty": "Aucune visite",
+    "addToCalendar": "Ajouter au calendrier"
+  },
+  "date": "Date",
+  "time": "Heure",
+  "notes": "Notes",
+  "save": "Enregistrer",
+  "delete": "Supprimer"
 }
