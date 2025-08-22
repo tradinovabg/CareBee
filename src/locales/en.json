@@ -12,5 +12,54 @@
   },
   "errors": {
     "locationDenied": "Location access denied"
+    {
+  "visits": {
+    "title": "Doctor visits",
+    "add": "Add visit",
+    "doctor": "Doctor",
+    "place": "Place",
+    "addToCalendar": "Add to calendar",
+    "upcoming": "Upcoming",
+    "empty": "No visits"
+  },
+  "date": "Date",
+  "time": "Time",
+  "notes": "Notes",
+  "save": "Save",
+  "delete": "Delete"
+}
+{
+  "visits": {
+    "title": "Визиты к врачу",
+    "add": "Добавить визит",
+    "doctor": "Врач",
+    "place": "Место",
+    "addToCalendar": "Добавить в календарь",
+    "upcoming": "Ближайшие",
+    "empty": "Нет визитов"
+  },
+  "date": "Дата",
+  "time": "Время",
+  "notes": "Заметки",
+  "save": "Сохранить",
+  "delete": "Удалить"
+}
+{
+  "visits": {
+    "title": "Rendez-vous médicaux",
+    "add": "Ajouter un rendez-vous",
+    "doctor": "Médecin",
+    "place": "Lieu",
+    "addToCalendar": "Ajouter au calendrier",
+    "upcoming": "À venir",
+    "empty": "Aucun rendez-vous"
+  },
+  "date": "Date",
+  "time": "Heure",
+  "notes": "Notes",
+  "save": "Enregistrer",
+  "delete": "Supprimer"
+}
+
   }
 }
