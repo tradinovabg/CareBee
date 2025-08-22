@@ -3,18 +3,11 @@ import { useTranslation } from 'react-i18next'
 
 export default function Sos() {
   const { t } = useTranslation()
-
-  // Поля формы
   const [form, setForm] = useState({ name: '', email: '', message: '' })
-
-  // Состояния процесса
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [locStatus, setLocStatus] = useState('getting') // getting | denied | done
 
-  // Статус геолокации: getting | denied | done
-  const [locStatus, setLocStatus] = useState('getting')
-
-  // Проверяем доступ к геолокации при входе на страницу
   useEffect(() => {
     if (!('geolocation' in navigator)) {
       setLocStatus('denied')
@@ -40,7 +33,7 @@ export default function Sos() {
 
     const { name, email, message } = form
 
-    // Пытаемся получить координаты (ещё раз — чтобы включить их в текст)
+    // попытка получить координаты на момент отправки
     let coords
     try {
       coords = await new Promise((resolve, reject) => {
@@ -50,8 +43,7 @@ export default function Sos() {
         )
       })
     } catch (err) {
-      // Если не вышло — просто покажем ошибку и продолжим без координат
-      setError(err.message || '')
+      setError(err?.message || '')
     }
 
     const mapLink = coords ? `https://maps.google.com/?q=${coords.lat},${coords.lon}` : ''
@@ -66,17 +58,15 @@ export default function Sos() {
         return
       }
     } catch {
-      // игнорируем и падаем в mailto
+      // падаем на mailto
     }
 
-    // Фолбэк: открываем письмо и копируем текст в буфер
     const mailto = `mailto:?subject=SOS%20CareBee&body=${encodeURIComponent(text)}`
     window.location.href = mailto
+
     try {
       await navigator.clipboard.writeText(text)
-    } catch {
-      /* ignore */
-    }
+    } catch {}
 
     setLoading(false)
   }
@@ -88,53 +78,25 @@ export default function Sos() {
 
   return (
     <form onSubmit={handleSubmit} className="sos-form">
-      {/* Сообщения о статусе геолокации */}
       <div role="status" aria-live="polite">
         {locStatus === 'getting' && <p>{t('sos.gettingLocation')}</p>}
         {locStatus === 'denied' && <p>{t('errors.locationDenied')}</p>}
       </div>
 
-      <div className="field">
-        <label htmlFor="name">{t('sos.name')}</label>
-        <input
-          id="name"
-          name="name"
-          value={form.name}
-          onChange={handleChange}
-          required
-        />
-      </div>
+      <label htmlFor="name">{t('sos.name')}</label>
+      <input id="name" name="name" value={form.name} onChange={handleChange} required />
 
-      <div className="field">
-        <label htmlFor="email">E-mail</label>
-        {/* при желании можно заменить на {t('sos.email')} */}
-        <input
-          id="email"
-          type="email"
-          name="email"
-          value={form.email}
-          onChange={handleChange}
-          required
-        />
-      </div>
+      <label htmlFor="email">{t('sos.email')}</label>
+      <input id="email" type="email" name="email" value={form.email} onChange={handleChange} required />
 
-      <div className="field">
-        <label htmlFor="message">{t('sos.message')}</label>
-        <textarea
-          id="message"
-          name="message"
-          value={form.message}
-          onChange={handleChange}
-          required
-        />
-      </div>
+      <label htmlFor="message">{t('sos.message')}</label>
+      <textarea id="message" name="message" value={form.message} onChange={handleChange} required />
 
-      {loading && <p aria-live="polite">{t('sos.loading', 'Loading…')}</p>}
+      {loading && <p aria-live="polite">{t('sos.loading')}</p>}
       {error && <p role="alert">{error}</p>}
 
-      <button type="submit" disabled={loading}>
-        {t('sos.send')}
-      </button>
+      <button type="submit" disabled={loading}>{t('sos.send')}</button>
     </form>
   )
 }
+
