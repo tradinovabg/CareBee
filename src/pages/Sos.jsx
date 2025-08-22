@@ -14,25 +14,16 @@ export default function Sos() {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>
-          Name
-          <input name="name" value={form.name} onChange={handleChange} />
-        </label>
-      </div>
-      <div>
-        <label>
-          E-mail
-          <input type="email" name="email" value={form.email} onChange={handleChange} />
-        </label>
-      </div>
-      <div>
-        <label>
-          Message
-          <textarea name="message" value={form.message} onChange={handleChange} />
-        </label>
-      </div>
+    <form onSubmit={handleSubmit} className="sos-form">
+      <label htmlFor="name">Name</label>
+      <input id="name" name="name" value={form.name} onChange={handleChange} required />
+
+      <label htmlFor="email">E-mail</label>
+      <input id="email" type="email" name="email" value={form.email} onChange={handleChange} required />
+
+      <label htmlFor="message">Message</label>
+      <textarea id="message" name="message" value={form.message} onChange={handleChange} required />
+
       <button type="submit">Send</button>
     </form>
   )
