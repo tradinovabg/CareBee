@@ -12,4 +12,21 @@
     "loading": "Loading…"
   },
   "errors": { "locationDenied": "Location access was denied." }
+  ,
+  "nav": { "profile": "Profile", "meds": "Meds", "visits": "Visits" },
+  "profile": {
+    "title": "Patient profile",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "age": "Age",
+    "phone": "Phone",
+    "saved": "Saved"
+  },
+  "meds": {
+    "chooseTimes": "Choose times",
+    "morning": "Morning",
+    "noon": "Noon",
+    "evening": "Evening",
+    "mealMode": "Meal timing"
+  }
 }

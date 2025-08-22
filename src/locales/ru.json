@@ -12,4 +12,21 @@
     "loading": "Загрузка…"
   },
   "errors": { "locationDenied": "Доступ к местоположению запрещён." }
+  ,
+  "nav": { "profile": "Профиль", "meds": "Лекарства", "visits": "Визиты" },
+  "profile": {
+    "title": "Профиль пациента",
+    "firstName": "Имя",
+    "lastName": "Фамилия",
+    "age": "Возраст",
+    "phone": "Телефон",
+    "saved": "Сохранено"
+  },
+  "meds": {
+    "chooseTimes": "Выберите время",
+    "morning": "Утро",
+    "noon": "День",
+    "evening": "Вечер",
+    "mealMode": "Относительно еды"
+  }
 }
