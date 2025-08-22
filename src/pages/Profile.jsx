@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 const KEY = 'carebee.profile'
 const load = () => { try { const v = localStorage.getItem(KEY); return v ? JSON.parse(v) : {} } catch { return {} } }
-const save = (obj) => { try { localStorage.setItem(KEY, JSON.stringify(obj)) } catch {} }
+const save = (obj) => { try { localStorage.setItem(KEY, JSON.stringify(obj)) } catch { /* ignore */ } }
 
 export default function Profile() {
   const { t } = useTranslation()
