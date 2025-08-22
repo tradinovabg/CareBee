@@ -1,37 +1,8 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-export default function Visits(){
-  const { t } = useTranslation()
-  // ...
-  return (
-    <div className="container" style={{maxWidth:760, margin:'0 auto', padding:'1rem'}}>
-      <h1>{t('visits.title','Doctor visits')}</h1>
-
-      <div className="card" style={{background:'#fff', padding:'1rem', borderRadius:12, margin:'1rem 0', border:'1px solid #e5e7eb'}}>
-        <h2 style={{marginTop:0}}>{t('visits.add','Add visit')}</h2>
-        <div style={{display:'grid', gap:8}}>
-          <label>{t('visits.doctor','Doctor')}<input ... /></label>
-          <label>{t('visits.place','Place')}<input ... /></label>
-          <div style={{display:'flex', gap:8}}>
-            <label style={{flex:1}}>{t('date','Date')}<input type="date" ... /></label>
-            <label style={{flex:1}}>{t('time','Time')}<input ... /></label>
-          </div>
-          <label>{t('notes','Notes')}<textarea ... /></label>
-          <button onClick={add}>{t('save','Save')}</button>
-        </div>
-      </div>
-
-      <h2>{t('visits.upcoming','Upcoming')}</h2>
-      {/* ... */}
-      <button onClick={()=>downloadICS(v)}>{t('visits.addToCalendar','Add to calendar')}</button>
-      <button onClick={()=>remove(v.id)}>{t('delete','Delete')}</button>
-    </div>
-  )
-}
-
 const STORAGE = 'carebee.visits'
-const load = (k, def) => { try { const v=localStorage.getItem(k); return v?JSON.parse(v):def } catch { return def } }
+const load = (k, def) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : def } catch { return def } }
 const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)) } catch {} }
 const todayISO = () => { const d=new Date(); const y=d.getFullYear(); const m=String(d.getMonth()+1).padStart(2,'0'); const day=String(d.getDate()).padStart(2,'0'); return `${y}-${m}-${day}` }
 
@@ -46,6 +17,7 @@ function toICSDateTime(isoDate, hhmm){
 
 export default function Visits(){
   const { t } = useTranslation()
+
   const [list, setList] = useState(()=> load(STORAGE, []))
   const [doctor, setDoctor] = useState('')
   const [place, setPlace] = useState('')
@@ -53,17 +25,21 @@ export default function Visits(){
   const [time, setTime] = useState('09:00')
   const [notes, setNotes] = useState('')
 
-  useEffect(()=>save(STORAGE, list), [list])
+  useEffect(()=> save(STORAGE, list), [list])
 
   const add = () => {
     if(!doctor.trim()) return
     const id = Date.now().toString()
-    setList(prev=> [...prev, { id, doctor: doctor.trim(), place: place.trim(), date, time, notes: notes.trim() }])
+    setList(prev => [...prev, { id, doctor: doctor.trim(), place: place.trim(), date, time, notes: notes.trim() }])
     setDoctor(''); setPlace(''); setNotes('')
   }
-  const remove = (id) => setList(prev=> prev.filter(x=>x.id!==id))
 
-  const upcoming = useMemo(()=> [...list].sort((a,b)=> (a.date+a.time).localeCompare(b.date+b.time)), [list])
+  const remove = (id) => setList(prev => prev.filter(x=>x.id!==id))
+
+  const upcoming = useMemo(
+    () => [...list].sort((a,b)=> (a.date+a.time).localeCompare(b.date+b.time)),
+    [list]
+  )
 
   const downloadICS = (v) => {
     const uid = `${v.id}@carebee`
