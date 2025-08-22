@@ -57,28 +57,47 @@ export default function Sos() {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>
-          Name
-          <input name="name" value={form.name} onChange={handleChange} />
-        </label>
-      </div>
-      <div>
-        <label>
-          E-mail
-          <input type="email" name="email" value={form.email} onChange={handleChange} />
-        </label>
-      </div>
-      <div>
-        <label>
-          Message
-          <textarea name="message" value={form.message} onChange={handleChange} />
-        </label>
-      </div>
-      {loading && <p>Loading...</p>}
-      {error && <p>{error}</p>}
-      <button type="submit" disabled={loading}>Send</button>
+<form onSubmit={handleSubmit} className="sos-form">
+  <div className="field">
+    <label htmlFor="name">Name</label>
+    <input
+      id="name"
+      name="name"
+      value={form.name}
+      onChange={handleChange}
+      required
+    />
+  </div>
+
+  <div className="field">
+    <label htmlFor="email">E-mail</label>
+    <input
+      id="email"
+      type="email"
+      name="email"
+      value={form.email}
+      onChange={handleChange}
+      required
+    />
+  </div>
+
+  <div className="field">
+    <label htmlFor="message">Message</label>
+    <textarea
+      id="message"
+      name="message"
+      value={form.message}
+      onChange={handleChange}
+      required
+    />
+  </div>
+
+  {loading && <p aria-live="polite">Loading…</p>}
+  {error && <p role="alert">{error}</p>}
+
+  <button type="submit" disabled={loading}>Send</button>
+</form>
+ main
     </form>
   )
 }
