@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 const STORAGE = 'carebee.meds'
 const load = (k, def) => { try { const v=localStorage.getItem(k); return v?JSON.parse(v):def } catch { return def } }
-const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)) } catch {} }
+const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)) } catch { /* ignore */ } }
 
 export default function Meds(){
   const { t } = useTranslation()
