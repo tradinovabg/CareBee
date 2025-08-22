@@ -21,6 +21,10 @@ Build for production:
 ```bash
 npm run build
 ```
+## Live
+
+- App: https://tradinovabg.github.io/CareBee/
+- Short link: https://tinyurl.com/carebee24
 
 ## Features
 
