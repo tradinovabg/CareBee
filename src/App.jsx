@@ -2,6 +2,9 @@ import { Routes, Route, Link } from 'react-router-dom'
 import Home from './pages/Home.jsx'
 import Sos from './pages/Sos.jsx'
 import LanguageSwitcher from './components/LanguageSwitcher.jsx'
+import Meds from './pages/Meds.jsx'
+import Visits from './pages/Visits.jsx'
+
 
 export default function App() {
   const year = new Date().getFullYear()
