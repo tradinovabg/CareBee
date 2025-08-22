@@ -2,6 +2,7 @@ import { Routes, Route, Link } from 'react-router-dom'
 import Home from './pages/Home.jsx'
 import Sos from './pages/Sos.jsx'
 import LanguageSwitcher from './components/LanguageSwitcher.jsx'
+import ShareLink from './components/ShareLink.jsx'
 
 export default function App() {
   const year = new Date().getFullYear()
@@ -11,7 +12,10 @@ export default function App() {
       <header>
         <div className="container header-bar">
           <Link to="/" className="brand">CareBee</Link>
-          <LanguageSwitcher />
+          <div className="header-actions">
+            <ShareLink />
+            <LanguageSwitcher />
+          </div>
         </div>
       </header>
 

@@ -1,11 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-
-export default function Home() {
-  const { t } = useTranslation()
-  return (
-import { Link } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
+import { SHORT_LINK } from '../config/links.js'
 
 export default function Home() {
   const { t } = useTranslation()
@@ -16,11 +11,11 @@ export default function Home() {
       <Link to="/sos">
         <button className="sos-button">{t('goToSOS', 'SOS')}</button>
       </Link>
-    </div>
-  )
-}
- main
-      </Link>
+      <p className="short-link">
+        <a href={SHORT_LINK} target="_blank" rel="noopener noreferrer">
+          {SHORT_LINK}
+        </a>
+      </p>
     </div>
   )
 }

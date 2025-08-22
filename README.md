@@ -2,6 +2,14 @@
 
 A simple web application built with [Vite](https://vitejs.dev/) and [React](https://react.dev/).
 
+## Live
+
+https://tradinovabg.github.io/CareBee/
+
+## Short link
+
+https://tinyurl.com/carebee24
+
 ## Development
 
 Install dependencies:
@@ -37,7 +45,4 @@ deployed on GitHub Pages the site is served over HTTPS, but desktop browsers may
 block `navigator.share` or clipboard access. In those cases the app falls back
 to creating a `mailto:` link with the prepared SOS message.
 
-## Deployment
-
-The application is deployed via GitHub Pages at https://tradinovabg.github.io/CareBee/
 
