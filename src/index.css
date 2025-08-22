@@ -7,11 +7,48 @@
 body {
   margin: 0;
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  background: var(--yellow);
-  color: var(--black);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+
+  /* === CareBee palette — белый фон и пастельная карточка === */
+:root{
+  --brand-blue: #1d8fe1;      /* цвет шапки/подвала */
+  --page-bg: #ffffff;         /* фон страницы */
+  --text: #111;
+
+  /* выберите один: мягкий жёлтый ИЛИ мягкий оранжевый */
+  --card-bg: #fff6bf;         /* пастельный жёлтый (можно: #fff3bf, #fff8c5) */
+  /* --card-bg: #ffedd5; */   /* мягкий оранжевый (amber/orange-100) */
+
+  --card-border: #f0e7a6;     /* тонкая граница карточки */
+}
+
+html, body { background: var(--page-bg); color: var(--text); }
+
+header, footer { background: var(--brand-blue); color: #fff; }
+
+/* контейнер главного блока на главной */
+.home{
+  min-height: calc(100dvh - 140px); /* чтобы красиво центрировалось между шапкой/подвалом */
+  display: flex; align-items: center; justify-content: center;
+  padding: clamp(24px, 6vw, 80px);
+  background: var(--page-bg);
+}
+
+/* само «окошко» */
+.hero-card{
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 24px;
+  padding: clamp(24px, 4vw, 56px);
+  box-shadow: 0 8px 22px rgba(0,0,0,.05);
+  text-align: center;
+}
+
+/* (необязательно) кнопка SOS как была — чёрная с тёплым текстом */
+.sos-button{ background:#111; color:#ffdf4d; }
+
 }
 
 header,
