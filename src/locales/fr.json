@@ -12,4 +12,21 @@
     "loading": "Chargement…"
   },
   "errors": { "locationDenied": "Accès à la localisation refusé." }
+  ,
+  "nav": { "profile": "Profil", "meds": "Médicaments", "visits": "Visites" },
+  "profile": {
+    "title": "Profil du patient",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "age": "Âge",
+    "phone": "Téléphone",
+    "saved": "Enregistré"
+  },
+  "meds": {
+    "chooseTimes": "Choisir les heures",
+    "morning": "Matin",
+    "noon": "Midi",
+    "evening": "Soir",
+    "mealMode": "Par rapport au repas"
+  }
 }

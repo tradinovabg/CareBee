@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+
+const loadProfile = () => { try { const v = localStorage.getItem('carebee.profile'); return v? JSON.parse(v) : {} } catch { return {} } }
+
 export default function Sos() {
   const { t } = useTranslation()
   const [form, setForm] = useState({ name: '', email: '', message: '' })
@@ -27,8 +30,11 @@ export default function Sos() {
       })
     } catch (err) { setError(err?.message || '') }
     const mapLink = coords ? `https://maps.google.com/?q=${coords.lat},${coords.lon}` : ''
+    const prof = loadProfile()
+    const fullName = [prof.firstName, prof.lastName].filter(Boolean).join(' ')
+    const phone = prof.phone ? `, ${prof.phone}` : ''
     const text =
-      `SOS from CareBee: ${name} ${email}. ${message}.` +
+      `SOS from CareBee: ${fullName || name} ${phone || ''} ${email ? ' ' + email : ''}. ${message}.` +
       (coords ? ` Location: ${coords.lat},${coords.lon} ${mapLink}` : '')
     try {
       if (navigator.share) {
