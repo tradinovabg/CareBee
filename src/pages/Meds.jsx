@@ -36,14 +36,13 @@ export default function Meds(){
 
   const remove = (id) => setItems(prev => prev.filter(x=>x.id!==id))
   const toggleActive = (id) => setItems(prev => prev.map(x=> x.id===id? {...x, active: !x.active } : x))
+  const toggleTaken = (key) => setTaken(prev => ({ ...prev, [key]: !prev[key] }))
 
   const todayDoses = useMemo(()=> {
     const list=[]
     items.filter(x=>x.active).forEach(m => m.times.forEach(t => list.push({ key:`${m.id}@${t}`, label:`${m.name} — ${t}` })))
     return list.sort((a,b)=>a.label.localeCompare(b.label))
   }, [items])
-
-  const toggleTaken = (key) => setTaken(prev => ({ ...prev, [key]: !prev[key] }))
 
   return (
     <div className="container" style={{maxWidth:760, margin:'0 auto', padding:'1rem'}}>
