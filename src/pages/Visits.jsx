@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 const STORAGE = 'carebee.visits'
@@ -23,6 +23,7 @@ export default function Visits(){
   const [date, setDate] = useState(todayISO())
   const [time, setTime] = useState('09:00')
   const [notes, setNotes] = useState('')
+  const fileRef = useRef(null)
 
   useEffect(()=>save(STORAGE, list), [list])
 
@@ -59,6 +60,37 @@ END:VCALENDAR`
     a.download = `visit-${v.date}-${v.time}.ics`
     a.click()
     URL.revokeObjectURL(a.href)
+  }
+
+  const exportJson = () => {
+    const blob = new Blob([JSON.stringify(list, null, 2)], { type: 'application/json' })
+    const a = document.createElement('a')
+    a.href = URL.createObjectURL(blob)
+    a.download = 'visits-backup.json'
+    a.click()
+    URL.revokeObjectURL(a.href)
+  }
+
+  const importJson = (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = () => {
+      try {
+        const data = JSON.parse(reader.result)
+        const valid = Array.isArray(data) && data.every(obj => obj && typeof obj === 'object' &&
+          'id' in obj && 'doctor' in obj && 'place' in obj && 'date' in obj && 'time' in obj && 'notes' in obj)
+        if (valid) {
+          setList(data)
+        } else {
+          alert(t('visits.invalidFile'))
+        }
+      } catch {
+        alert(t('visits.invalidFile'))
+      }
+    }
+    reader.readAsText(file)
+    e.target.value = ''
   }
 
   return (
@@ -107,6 +139,13 @@ END:VCALENDAR`
           </li>
         ))}
       </ul>
+      <div style={{marginTop:'1rem', display:'flex', gap:8}}>
+        <button onClick={exportJson}>{t('visits.exportJson','Export JSON')}</button>
+        <div>
+          <input type="file" accept="application/json" ref={fileRef} onChange={importJson} style={{display:'none'}} />
+          <button type="button" onClick={()=>fileRef.current?.click()}>{t('visits.importJson','Import JSON')}</button>
+        </div>
+      </div>
     </div>
   )
 }

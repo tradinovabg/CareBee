@@ -48,6 +48,9 @@
     "add": "Добавить визит",
     "doctor": "Врач",
     "place": "Место",
+    "exportJson": "Экспорт JSON",
+    "importJson": "Импорт JSON",
+    "invalidFile": "Неверный файл",
     "upcoming": "Ближайшие",
     "empty": "Нет визитов",
     "addToCalendar": "В календарь"
