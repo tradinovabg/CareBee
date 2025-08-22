@@ -4,6 +4,8 @@ import LanguageSwitcher from './components/LanguageSwitcher.jsx'
 import Home from './pages/Home.jsx'
 import Sos from './pages/Sos.jsx'
 import Profile from './pages/Profile.jsx'
+import Meds from './pages/Meds.jsx'
+import Visits from './pages/Visits.jsx'
 export default function App() {
   const { t } = useTranslation()
   const year = new Date().getFullYear()
@@ -12,8 +14,10 @@ export default function App() {
       <header>
         <div className="container header-bar">
           <Link to="/" className="brand">CareBee</Link>
-          <nav style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+          <nav className="main-nav" style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
             <Link to="/profile">{t('nav.profile', 'Profile')}</Link>
+            <Link to="/meds">{t('nav.meds', 'Meds')}</Link>
+            <Link to="/visits">{t('nav.visits', 'Visits')}</Link>
             <LanguageSwitcher />
           </nav>
         </div>
@@ -24,6 +28,8 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/sos" element={<Sos />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/meds" element={<Meds />} />
+            <Route path="/visits" element={<Visits />} />
           </Routes>
         </div>
       </main>

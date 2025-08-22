@@ -11,8 +11,7 @@
     "gettingLocation": "Getting your location…",
     "loading": "Loading…"
   },
-  "errors": { "locationDenied": "Location access was denied." }
-  ,
+  "errors": { "locationDenied": "Location access was denied." },
   "nav": { "profile": "Profile", "meds": "Meds", "visits": "Visits" },
   "profile": {
     "title": "Patient profile",
@@ -23,10 +22,39 @@
     "saved": "Saved"
   },
   "meds": {
+    "title": "Medicine schedule",
+    "add": "Add medicine",
+    "name": "Name",
     "chooseTimes": "Choose times",
     "morning": "Morning",
     "noon": "Noon",
     "evening": "Evening",
-    "mealMode": "Meal timing"
-  }
+    "mealMode": "Meal timing",
+    "meal_before": "before food",
+    "meal_with": "with food",
+    "meal_after": "after food",
+    "active": "Active",
+    "today": "Today",
+    "empty": "No active medicines",
+    "all": "All medicines",
+    "meal_short": "meal",
+    "status_active": "active",
+    "status_inactive": "inactive",
+    "deactivate": "Deactivate",
+    "activate": "Activate"
+  },
+  "visits": {
+    "title": "Doctor visits",
+    "add": "Add visit",
+    "doctor": "Doctor",
+    "place": "Place",
+    "upcoming": "Upcoming",
+    "empty": "No visits",
+    "addToCalendar": "Add to calendar"
+  },
+  "date": "Date",
+  "time": "Time",
+  "notes": "Notes",
+  "save": "Save",
+  "delete": "Delete"
 }
