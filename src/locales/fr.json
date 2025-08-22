@@ -1,0 +1,16 @@
+{
+  "title": "CareBee",
+  "tagline": "L'aide est à portée de main",
+  "goToSOS": "Aller à SOS",
+  "sos": {
+    "title": "Demande SOS",
+    "name": "Nom",
+    "email": "E-mail",
+    "message": "Message",
+    "send": "Envoyer",
+    "gettingLocation": "Obtention de la localisation..."
+  },
+  "errors": {
+    "locationDenied": "Accès à la localisation refusé"
+  }
+}

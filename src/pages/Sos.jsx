@@ -1,9 +1,30 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export default function Sos() {
+  const { t } = useTranslation()
   const [form, setForm] = useState({ name: '', email: '', message: '' })
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+// состояния формы и статусы
+const [loading, setLoading] = useState(false)
+const [error, setError] = useState('')
+
+// статус геолокации: getting | denied | done
+const [locStatus, setLocStatus] = useState('getting')
+
+useEffect(() => {
+  if (!('geolocation' in navigator)) {
+    setLocStatus('denied')
+    return
+  }
+  navigator.geolocation.getCurrentPosition(
+    () => setLocStatus('done'),
+    (err) => {
+      if (err.code === err.PERMISSION_DENIED) setLocStatus('denied')
+      else setLocStatus('done')
+    }
+  )
+}, [])
+ main
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -58,8 +79,15 @@ export default function Sos() {
 
   return (
 <form onSubmit={handleSubmit} className="sos-form">
+<form onSubmit={handleSubmit} className="sos-form">
+  {/* Статус геолокации */}
+  <div role="status" aria-live="polite">
+    {locStatus === 'getting' && <p>{t('sos.gettingLocation')}</p>}
+    {locStatus === 'denied' && <p>{t('errors.locationDenied')}</p>}
+  </div>
+
   <div className="field">
-    <label htmlFor="name">Name</label>
+    <label htmlFor="name">{t('sos.name')}</label>
     <input
       id="name"
       name="name"
@@ -71,6 +99,7 @@ export default function Sos() {
 
   <div className="field">
     <label htmlFor="email">E-mail</label>
+    {/* если есть ключ перевода, можно: {t('sos.email')} */}
     <input
       id="email"
       type="email"
@@ -82,7 +111,7 @@ export default function Sos() {
   </div>
 
   <div className="field">
-    <label htmlFor="message">Message</label>
+    <label htmlFor="message">{t('sos.message')}</label>
     <textarea
       id="message"
       name="message"
@@ -92,10 +121,15 @@ export default function Sos() {
     />
   </div>
 
-  {loading && <p aria-live="polite">Loading…</p>}
+  {/* Сообщения процесса/ошибки */}
+  {loading && <p aria-live="polite">{t('sos.loading', 'Loading…')}</p>}
   {error && <p role="alert">{error}</p>}
 
-  <button type="submit" disabled={loading}>Send</button>
+  <button type="submit" disabled={loading}>
+    {t('sos.send')}
+  </button>
+</form>
+ main
 </form>
  main
     </form>

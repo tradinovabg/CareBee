@@ -1,0 +1,16 @@
+{
+  "title": "CareBee",
+  "tagline": "Help is just a buzz away",
+  "goToSOS": "Go to SOS",
+  "sos": {
+    "title": "SOS Request",
+    "name": "Name",
+    "email": "E-mail",
+    "message": "Message",
+    "send": "Send",
+    "gettingLocation": "Getting location..."
+  },
+  "errors": {
+    "locationDenied": "Location access denied"
+  }
+}

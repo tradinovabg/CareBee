@@ -1,0 +1,16 @@
+{
+  "title": "CareBee",
+  "tagline": "Помощь совсем рядом",
+  "goToSOS": "Перейти к SOS",
+  "sos": {
+    "title": "SOS запрос",
+    "name": "Имя",
+    "email": "E-mail",
+    "message": "Сообщение",
+    "send": "Отправить",
+    "gettingLocation": "Получение геопозиции..."
+  },
+  "errors": {
+    "locationDenied": "Доступ к геопозиции запрещен"
+  }
+}
