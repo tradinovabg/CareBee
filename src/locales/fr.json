@@ -29,6 +29,8 @@
     "saved": "Enregistré"
   },
   "qr": {
+    "title": "Code QR",
+    "imgAlt": "Code QR",
     "allergies": "Allergies",
     "allergies_placeholder": "pénicilline, arachides…",
     "conditions": "Conditions importantes",
@@ -45,7 +47,15 @@
     "includeICE": "Inclure ICE",
     "generate": "Générer QR",
     "download": "Télécharger PNG",
-    "print": "Imprimer"
+    "print": "Imprimer",
+    "payload": {
+      "name": "Nom",
+      "age": "Âge",
+      "allergies": "Allergies",
+      "meds": "Médicaments",
+      "ice": "ICE",
+      "notes": "Notes"
+    }
   },
   "meds": {
     "title": "Prise des médicaments",
