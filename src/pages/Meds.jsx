@@ -2,120 +2,199 @@ import { useState, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 const STORAGE = 'carebee.meds'
-const load = (k, def) => { try { const v=localStorage.getItem(k); return v?JSON.parse(v):def } catch { return def } }
-const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)) } catch { /* ignore */ } }
 
-export default function Meds(){
+const load = (k, def) => {
+  try {
+    const v = localStorage.getItem(k)
+    return v ? JSON.parse(v) : def
+  } catch {
+    return def
+  }
+}
+
+const save = (k, v) => {
+  try { localStorage.setItem(k, JSON.stringify(v)) } catch { /* ignore */ }
+}
+
+const addDays = (d, n) => {
+  const x = new Date(d)
+  x.setDate(x.getDate() + n)
+  return x.toISOString().slice(0, 10)
+}
+
+export default function Meds () {
   const { t } = useTranslation()
   const [items, setItems] = useState(() => load(STORAGE, []))
 
-  // форма
   const [name, setName] = useState('')
-  // галочки утро/день/вечер
-  const [morning, setMorning] = useState(true)
-  const [noon, setNoon] = useState(false)
-  const [evening, setEvening] = useState(true)
-  // редактируемые часы
-  const [tmMorning, setTmMorning] = useState('08:00')
-  const [tmNoon, setTmNoon] = useState('13:00')
-  const [tmEvening, setTmEvening] = useState('20:00')
-  // приём относительно еды
-  const [meal, setMeal] = useState('with') // before | with | after
-  // активность курса
-  const [active, setActive] = useState(true)
+  const [mode, setMode] = useState('once')
+  const today = () => new Date().toISOString().slice(0, 10)
+  const [onceDate, setOnceDate] = useState(today())
+  const [onceTime, setOnceTime] = useState('08:00')
+  const [start, setStart] = useState(today())
+  const [end, setEnd] = useState('')
+  const [duration, setDuration] = useState('')
+  const [times, setTimes] = useState('08:00')
+  const [days, setDays] = useState(7)
 
-  useEffect(()=>save(STORAGE, items), [items])
+  useEffect(() => save(STORAGE, items), [items])
 
   const add = () => {
-    if(!name.trim()) return
-    const times = []
-    if (morning) times.push(tmMorning)
-    if (noon) times.push(tmNoon)
-    if (evening) times.push(tmEvening)
-    if (!times.length) return
-    const id = Date.now().toString()
-    setItems(prev => [...prev, { id, name: name.trim(), times, meal, active }])
-    // reset
-    setName(''); setMorning(true); setNoon(false); setEvening(true)
-    setTmMorning('08:00'); setTmNoon('13:00'); setTmEvening('20:00')
-    setMeal('with'); setActive(true)
+    if (!name.trim()) return
+    if (mode === 'once') {
+      setItems(p => [...p, { id: Date.now().toString(), name: name.trim(), mode, once: { date: onceDate, time: onceTime } }])
+    } else {
+      if (!start) return
+      if (!end && !duration) return
+      const timesArr = times.split(',').map(s => s.trim()).filter(Boolean)
+      if (!timesArr.length) return
+      let endDate = end
+      if (!endDate && duration) endDate = addDays(start, parseInt(duration) - 1)
+      setItems(p => [...p, { id: Date.now().toString(), name: name.trim(), mode, daily: { start, end: endDate, times: timesArr } }])
+    }
+    setName('')
+    setMode('once')
+    setOnceDate(today())
+    setOnceTime('08:00')
+    setStart(today())
+    setEnd('')
+    setDuration('')
+    setTimes('08:00')
   }
 
-  const remove = (id) => setItems(prev => prev.filter(x=>x.id!==id))
-  const toggleActive = (id) => setItems(prev => prev.map(x=> x.id===id? {...x, active: !x.active } : x))
+  const remove = id => setItems(p => p.filter(i => i.id !== id))
+  const extend = id => setItems(p => p.map(i => i.id === id ? { ...i, daily: { ...i.daily, end: addDays(i.daily.end || today(), 7) } } : i))
 
-  const todayDoses = useMemo(()=> {
-    const list=[]
-    items.filter(x=>x.active).forEach(m => m.times.forEach(t => list.push({ key:`${m.id}@${t}`, label:`${m.name} — ${t}` })))
-    return list.sort((a,b)=>a.label.localeCompare(b.label))
+  const renewals = useMemo(() => {
+    const now = today()
+    return items.filter(i => i.mode === 'daily' && i.daily?.end && (new Date(i.daily.end) - new Date(now)) / 86400000 <= 3)
   }, [items])
 
+  const schedule = useMemo(() => {
+    const list = []
+    const base = today()
+    for (let i = 0; i < days; i++) {
+      const date = addDays(base, i)
+      const entries = []
+      items.forEach(m => {
+        if (m.mode === 'once') {
+          if (m.once.date === date) entries.push(`${m.name} ${m.once.time}`)
+        } else {
+          const d = m.daily
+          const within = (!d.start || date >= d.start) && (!d.end || date <= d.end)
+          if (within) d.times.forEach(t => entries.push(`${m.name} ${t}`))
+        }
+      })
+      list.push({ date, entries })
+    }
+    return list
+  }, [items, days])
+
+  const downloadICS = m => {
+    const dt = `${m.once.date.replace(/-/g, '')}T${m.once.time.replace(':', '')}00`
+    const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nUID:${m.id}\nDTSTAMP:${dt}\nDTSTART:${dt}\nSUMMARY:${m.name}\nEND:VEVENT\nEND:VCALENDAR`
+    const blob = new Blob([ics], { type: 'text/calendar' })
+    const a = document.createElement('a')
+    a.href = URL.createObjectURL(blob)
+    a.download = `${m.name}.ics`
+    a.click()
+    URL.revokeObjectURL(a.href)
+  }
+
   return (
-    <div className="container" style={{maxWidth:760, margin:'0 auto', padding:'1rem'}}>
-      <h1>{t('meds.title','Medicine schedule')}</h1>
+    <div className='container'>
+      <h1>{t('meds.title', 'Meds')}</h1>
 
-      <div className="card" style={{background:'#fff', padding:'1rem', borderRadius:12, margin:'1rem 0', border:'1px solid #e5e7eb'}}>
-        <h2 style={{marginTop:0}}>{t('meds.add','Add medicine')}</h2>
+      {renewals.map(r => (
+        <div key={r.id} className='card'>
+          <div className='row' style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div>{t('meds.renew', 'Course ends')} {r.name} {t('meds.on', 'on')} {r.daily.end}</div>
+            <button className='btn btn-primary' onClick={() => extend(r.id)}>{t('meds.extend', 'Extend')}</button>
+          </div>
+        </div>
+      ))}
 
-        <div style={{display:'grid', gap:8}}>
-          <label>{t('meds.name','Name')}
-            <input value={name} onChange={e=>setName(e.target.value)} placeholder="Amlodipine" />
+      <div className='card'>
+        <h2>{t('meds.add', 'Add medicine')}</h2>
+        <div className='field'>
+          <label>{t('meds.name', 'Name')}
+            <input value={name} onChange={e => setName(e.target.value)} />
           </label>
+        </div>
+        <div className='row' style={{ display: 'flex', gap: 8 }}>
+          <label><input type='radio' value='once' checked={mode === 'once'} onChange={e => setMode(e.target.value)} /> {t('meds.once', 'Once')}</label>
+          <label><input type='radio' value='daily' checked={mode === 'daily'} onChange={e => setMode(e.target.value)} /> {t('meds.daily', 'Daily')}</label>
+        </div>
 
-          <fieldset style={{border:'1px solid #e5e7eb', borderRadius:8, padding:'8px 12px'}}>
-            <legend style={{padding:'0 6px'}}>{t('meds.chooseTimes','Choose times')}</legend>
-            <div style={{display:'grid', gap:8}}>
-              <label><input type="checkbox" checked={morning} onChange={e=>setMorning(e.target.checked)} /> {t('meds.morning','Morning')}
-                {morning && <input value={tmMorning} onChange={e=>setTmMorning(e.target.value)} style={{marginLeft:8, width:100}} />}
+        {mode === 'once' ? (
+          <div className='row' style={{ display: 'flex', gap: 8 }}>
+            <label>{t('meds.date', 'Date')}
+              <input type='date' value={onceDate} onChange={e => setOnceDate(e.target.value)} />
+            </label>
+            <label>{t('meds.time', 'Time')}
+              <input type='time' value={onceTime} onChange={e => setOnceTime(e.target.value)} />
+            </label>
+          </div>
+        ) : (
+          <>
+            <div className='row' style={{ display: 'flex', gap: 8 }}>
+              <label>{t('meds.start', 'Start')}
+                <input type='date' value={start} onChange={e => setStart(e.target.value)} />
               </label>
-              <label><input type="checkbox" checked={noon} onChange={e=>setNoon(e.target.checked)} /> {t('meds.noon','Noon')}
-                {noon && <input value={tmNoon} onChange={e=>setTmNoon(e.target.value)} style={{marginLeft:8, width:100}} />}
+              <label>{t('meds.end', 'End')}
+                <input type='date' value={end} onChange={e => setEnd(e.target.value)} />
               </label>
-              <label><input type="checkbox" checked={evening} onChange={e=>setEvening(e.target.checked)} /> {t('meds.evening','Evening')}
-                {evening && <input value={tmEvening} onChange={e=>setTmEvening(e.target.value)} style={{marginLeft:8, width:100}} />}
+              <label>{t('meds.duration', 'Days')}
+                <input type='number' min='1' value={duration} onChange={e => setDuration(e.target.value)} />
               </label>
             </div>
-          </fieldset>
-
-          <fieldset style={{border:'1px solid #e5e7eb', borderRadius:8, padding:'8px 12px'}}>
-            <legend style={{padding:'0 6px'}}>{t('meds.mealMode','Meal timing')}</legend>
-            <div style={{display:'flex', gap:16, flexWrap:'wrap'}}>
-              <label><input type="radio" name="meal" value="before" checked={meal==='before'} onChange={e=>setMeal(e.target.value)} /> {t('meds.meal_before','before food')}</label>
-              <label><input type="radio" name="meal" value="with" checked={meal==='with'} onChange={e=>setMeal(e.target.value)} /> {t('meds.meal_with','with food')}</label>
-              <label><input type="radio" name="meal" value="after" checked={meal==='after'} onChange={e=>setMeal(e.target.value)} /> {t('meds.meal_after','after food')}</label>
+            <div className='field'>
+              <label>{t('meds.times', 'Times (comma separated)')}
+                <input value={times} onChange={e => setTimes(e.target.value)} />
+              </label>
             </div>
-          </fieldset>
+          </>
+        )}
 
-          <label><input type="checkbox" checked={active} onChange={e=>setActive(e.target.checked)} /> {t('meds.active','Active')}</label>
-
-          <button onClick={add}>{t('save','Save')}</button>
+        <div className='row' style={{ display: 'flex', gap: 8 }}>
+          <button className='btn btn-primary' onClick={add}>{t('save', 'Save')}</button>
         </div>
       </div>
 
-      <h2>{t('meds.today','Today')}</h2>
-      <ul>
-        {todayDoses.length===0 && <li>{t('meds.empty','No active medicines')}</li>}
-        {todayDoses.map(d=>(
-          <li key={d.key} style={{margin:'6px 0'}}>
-            <label>
-              <input type="checkbox" />{' '}{d.label}
-            </label>
-          </li>
-        ))}
-      </ul>
+      <h2>{t('meds.schedule', 'Schedule')}</h2>
+      <div className='card'>
+        <ul>
+          {schedule.map(d => (
+            <li key={d.date}>
+              <strong>{d.date}</strong>
+              {d.entries.length ? (
+                <ul>
+                  {d.entries.map((e, i) => <li key={i}>{e}</li>)}
+                </ul>
+              ) : <span> — </span>}
+            </li>
+          ))}
+        </ul>
+        <button className='btn btn-outline' onClick={() => setDays(d => d === 7 ? 14 : 7)}>
+          {days === 7 ? t('meds.expand', 'Show 14 days') : t('meds.collapse', 'Show 7 days')}
+        </button>
+      </div>
 
-      <h2 style={{marginTop:'1.5rem'}}>{t('meds.all','All medicines')}</h2>
+      <h2>{t('meds.all', 'All medicines')}</h2>
       <ul>
-        {items.map(m=>(
-          <li key={m.id} style={{margin:'8px 0', padding:'8px', border:'1px solid #eee', borderRadius:8}}>
-            <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+        {items.map(m => (
+          <li key={m.id} className='card'>
+            <div className='row' style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
-                <strong>{m.name}</strong> • {m.times.join(', ')} • {t('meds.meal_short','meal')}: {m.meal}
-                {' '}• {m.active ? t('meds.status_active','active') : t('meds.status_inactive','inactive')}
+                <strong>{m.name}</strong>
+                {' '}
+                {m.mode === 'once'
+                  ? `${m.once.date} ${m.once.time}`
+                  : `${m.daily.start}${m.daily.end ? '–' + m.daily.end : ''} ${m.daily.times.join(', ')}`}
               </div>
-              <div style={{display:'flex', gap:8}}>
-                <button onClick={()=>toggleActive(m.id)}>{m.active? t('meds.deactivate','Deactivate') : t('meds.activate','Activate')}</button>
-                <button onClick={()=>remove(m.id)}>{t('delete','Delete')}</button>
+              <div className='row' style={{ display: 'flex', gap: 8 }}>
+                {m.mode === 'once' && <button className='btn btn-outline' onClick={() => downloadICS(m)}>ICS</button>}
+                <button className='btn btn-danger' onClick={() => remove(m.id)}>{t('delete', 'Delete')}</button>
               </div>
             </div>
           </li>
@@ -124,3 +203,4 @@ export default function Meds(){
     </div>
   )
 }
+
