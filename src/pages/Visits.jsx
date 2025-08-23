@@ -6,12 +6,8 @@ const load = (k, def) => { try { const v=localStorage.getItem(k); return v?JSON.
 const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)) } catch { /* ignore */ } }
 
 const todayISO = () => { const d=new Date(); const y=d.getFullYear(); const m=String(d.getMonth()+1).padStart(2,'0'); const day=String(d.getDate()).padStart(2,'0'); return `${y}-${m}-${day}` }
-const formatUTC = dt => dt.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z')
-const toUTC = (isoDate, hhmm, addMinutes = 0) => {
-  const [h, m] = (hhmm || '09:00').split(':').map(Number)
-  const dt = new Date(`${isoDate}T${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:00`)
-  dt.setMinutes(dt.getMinutes() + addMinutes)
-  return formatUTC(dt)
+function toICSDateTime (isoDate, hhmm) {
+  return new Date(`${isoDate}T${hhmm || '09:00'}:00`).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'
 }
 
 const esc = v => (v || '').replace(/[\n,;]/g, ' ')
@@ -39,41 +35,15 @@ export default function Visits(){
   const upcoming = useMemo(()=> [...list].sort((a,b)=> (a.date+a.time).localeCompare(b.date+b.time)), [list])
 
   const downloadICS = (v) => {
-codex/normalize-text-in-ics-download-templates
     const uid = `${v.id}@carebee`
-    const dtstart = toICSDateTime(v.date, v.time)
-    const now = toICSDateTime(todayISO(), new Date().toTimeString().slice(0,5))
-    const ics =
-`BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//CareBee//EN
-BEGIN:VEVENT
-UID:${uid}
-DTSTAMP:${now}
-DTSTART:${dtstart}
-SUMMARY:${esc(`Visit — ${v.doctor}`)}
-LOCATION:${esc(v.place)}
-DESCRIPTION:${esc(v.notes)}
-END:VEVENT
-END:VCALENDAR`
-    const blob = new Blob([ics], {type:'text/calendar;charset=utf-8'})
+    const dt = toICSDateTime(v.date, v.time) || ''
+    const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//CareBee//EN\nBEGIN:VEVENT\nUID:${uid}\nDTSTAMP:${dt}\nDTSTART:${dt}\nSUMMARY:${esc(`Visit — ${v.doctor}`) || ''}\nLOCATION:${esc(v.place) || ''}\nDESCRIPTION:${esc(v.notes)}\nEND:VEVENT\nEND:VCALENDAR`
+    const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' })
     const a = document.createElement('a')
     a.href = URL.createObjectURL(blob)
     a.download = `visit-${v.date}-${v.time}.ics`
     a.click()
     URL.revokeObjectURL(a.href)
-=======
-    const startUTC = toUTC(v.date, v.time)
-    const endUTC = toUTC(v.date, v.time, 60)
-    const summary = v.doctor ? `Visit — ${v.doctor}` : 'Visit'
-    const location = v.place?.trim()
-    const url = new URL('https://calendar.google.com/calendar/render')
-    url.searchParams.set('action', 'TEMPLATE')
-    url.searchParams.set('dates', `${startUTC}/${endUTC}`)
-    url.searchParams.set('text', summary)
-    if (location) url.searchParams.set('location', location)
-    window.open(url.toString(), '_blank')
-main
   }
 
   const exportJson = () => {

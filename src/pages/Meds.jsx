@@ -23,30 +23,11 @@ const addDays = (d, n) => {
   return x.toISOString().slice(0, 10)
 }
 
-codex/normalize-text-in-ics-download-templates
 const esc = v => (v || '').replace(/[\n,;]/g, ' ')
-=======
-codex/update-ics-download-to-use-google-calendar-link
-const formatUTC = dt => dt.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z')
-const toUTC = (isoDate, hhmm, addMinutes = 0) => {
-  const [h, m] = (hhmm || '08:00').split(':').map(Number)
-  const dt = new Date(`${isoDate}T${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:00`)
-  dt.setMinutes(dt.getMinutes() + addMinutes)
-  return formatUTC(dt)
-=======
+
 function toICSDateTime (isoDate, hhmm) {
-  const [h, m] = (hhmm || '09:00').split(':')
-  const dt = new Date(`${isoDate}T${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:00`)
-  const y = dt.getFullYear()
-  const mo = String(dt.getMonth() + 1).padStart(2, '0')
-  const d = String(dt.getDate()).padStart(2, '0')
-  const H = String(dt.getHours()).padStart(2, '0')
-  const M = String(dt.getMinutes()).padStart(2, '0')
-  const S = String(dt.getSeconds()).padStart(2, '0')
-  return `${y}${mo}${d}T${H}${M}${S}`
-main
+  return new Date(`${isoDate}T${hhmm || '09:00'}:00`).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'
 }
-main
 
 export default function Meds () {
   const { t } = useTranslation()
@@ -143,73 +124,14 @@ export default function Meds () {
   }, [items, days])
 
   const downloadICS = m => {
-codex/normalize-text-in-ics-download-templates
-    const dt = `${m.startDate.replace(/-/g, '')}T${m.onceTime.replace(':', '')}00`
-    const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nUID:${m.id}\nDTSTAMP:${dt}\nDTSTART:${dt}\nSUMMARY:${esc(m.name)}\nEND:VEVENT\nEND:VCALENDAR`
-=======
-codex/update-ics-structure-in-downloadics-function
-    const dt = new Date(`${m.startDate}T${m.onceTime}`).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z')
-    const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//CareBee//EN\nBEGIN:VEVENT\nUID:${m.id}\nDTSTAMP:${dt}\nDTSTART:${dt}\nSUMMARY:${m.name}\nEND:VEVENT\nEND:VCALENDAR`
-main
-    const blob = new Blob([ics], { type: 'text/calendar' })
-=======
-codex/update-ics-download-to-use-google-calendar-link
-    const startUTC = toUTC(m.startDate, m.onceTime)
-    const endUTC = toUTC(m.startDate, m.onceTime, 60)
-    const summary = m.name || 'Medicine'
-    const url = new URL('https://calendar.google.com/calendar/render')
-    url.searchParams.set('action', 'TEMPLATE')
-    url.searchParams.set('dates', `${startUTC}/${endUTC}`)
-    url.searchParams.set('text', summary)
-    window.open(url.toString(), '_blank')
-=======
-    const uidBase = `${m.id}@carebee`
-    const now = toICSDateTime(today(), new Date().toTimeString().slice(0, 5))
-    const summary = `${m.name} — ${t('meds.meal_' + m.mealTiming)}`
-
-    const formatEvent = (date, time, uid, rrule) => {
-      const startDate = new Date(`${date}T${time}:00`)
-      const end = new Date(startDate.getTime() + 30 * 60000)
-      const dtstart = toICSDateTime(date, time)
-      const dtend = toICSDateTime(
-        end.toISOString().slice(0, 10),
-        `${String(end.getHours()).padStart(2, '0')}:${String(end.getMinutes()).padStart(2, '0')}`
-      )
-      return [
-        'BEGIN:VEVENT',
-        `UID:${uid}`,
-        `DTSTAMP:${now}`,
-        `DTSTART:${dtstart}`,
-        `DTEND:${dtend}`,
-        `SUMMARY:${summary}`,
-        rrule,
-        'END:VEVENT'
-      ]
-        .filter(Boolean)
-        .join('\r\n')
-    }
-
-    let events = []
-    if (m.mode === 'once') {
-      events.push(formatEvent(m.startDate, m.onceTime, uidBase, ''))
-    } else {
-      Object.entries(m.slots || {}).forEach(([slot, time]) => {
-        if (!time) return
-        const uid = `${m.id}-${slot}@carebee`
-        const rrule = `RRULE:FREQ=DAILY${m.endDate ? `;UNTIL=${toICSDateTime(m.endDate, time)}` : ''}`
-        events.push(formatEvent(m.startDate, time, uid, rrule))
-      })
-    }
-
-    const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//CareBee//EN', ...events, 'END:VCALENDAR'].join('\r\n')
+    const dt = toICSDateTime(m.startDate, m.onceTime) || ''
+    const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//CareBee//EN\nBEGIN:VEVENT\nUID:${m.id}\nDTSTAMP:${dt}\nDTSTART:${dt}\nSUMMARY:${esc(m.name) || ''}\nEND:VEVENT\nEND:VCALENDAR`
     const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' })
-main
     const a = document.createElement('a')
     a.href = URL.createObjectURL(blob)
     a.download = `${m.name}.ics`
     a.click()
     URL.revokeObjectURL(a.href)
-main
   }
 
   const toggleSlot = s => e => {
@@ -310,30 +232,18 @@ main
         {items.map(m => (
           <li key={m.id} className='card'>
             <div className='row' style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div>
-                <strong>{m.name}</strong>
-                {' '}
-                {m.mode === 'once'
-                  ? `${m.startDate} ${m.onceTime} ${m.mealTiming}`
-                  : `${m.startDate}${m.endDate ? '–' + m.endDate : ''} ${Object.values(m.slots || {}).filter(Boolean).join(', ')} ${m.mealTiming}`}
-              </div>
-codex/update-ics-download-to-use-google-calendar-link
+                <div>
+                  <strong>{m.name}</strong>
+                  {' '}
+                  {m.mode === 'once'
+                    ? `${m.startDate} ${m.onceTime} ${m.mealTiming}`
+                    : `${m.startDate}${m.endDate ? '–' + m.endDate : ''} ${Object.values(m.slots || {}).filter(Boolean).join(', ')} ${m.mealTiming}`}
+                </div>
                 <div className='row' style={{ display: 'flex', gap: 8 }}>
-                  {m.mode === 'once' && <button className='btn btn-outline' onClick={() => downloadICS(m)}>{t('visits.addToCalendar', 'Add to calendar')}</button>}
+                  {m.mode === 'once' && <button className='btn btn-outline' onClick={() => downloadICS(m)}>{t('meds.addToCalendar', 'Add to calendar')}</button>}
                   <button className='btn btn-outline' onClick={() => edit(m)}>{t('edit', 'Edit')}</button>
                   <button className='btn btn-danger' onClick={() => remove(m.id)}>{t('delete', 'Delete')}</button>
                 </div>
-=======
-              <div className='row' style={{ display: 'flex', gap: 8 }}>
-codex/add-medication-localization-keys
-                {m.mode === 'once' && <button className='btn btn-outline' onClick={() => downloadICS(m)}>{t('meds.addToCalendar', 'Add to calendar')}</button>}
-=======
-                <button className='btn btn-outline' onClick={() => downloadICS(m)}>{t('meds.addToCalendar', 'Add to calendar')}</button>
-main
-                <button className='btn btn-outline' onClick={() => edit(m)}>{t('edit', 'Edit')}</button>
-                <button className='btn btn-danger' onClick={() => remove(m.id)}>{t('delete', 'Delete')}</button>
-              </div>
-main
             </div>
           </li>
         ))}
