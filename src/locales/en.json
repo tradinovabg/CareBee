@@ -17,7 +17,8 @@
   "nav": {
     "profile": "Profile",
     "meds": "Meds",
-    "visits": "Visits"
+    "visits": "Visits",
+    "calendar": "Calendar"
   },
   "profile": {
     "title": "Patient profile",
@@ -88,6 +89,17 @@
     "upcoming": "Upcoming",
     "empty": "No visits",
     "addToCalendar": "Add to calendar"
+  },
+  "calendar": {
+    "title": "Calendar",
+    "day": "Day",
+    "week": "Week",
+    "month": "Month",
+    "showVisits": "Visits & Events",
+    "showMeds": "Meds schedule",
+    "visit": "Visit",
+    "med": "Med",
+    "empty": "Nothing scheduled"
   },
   "date": "Date",
   "time": "Time",
