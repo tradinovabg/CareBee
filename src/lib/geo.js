@@ -24,8 +24,8 @@ async function overpassFetch(body){
 }
 
 export async function overpassAround(lat, lon, radiusKm, qlBlocks){
-  const around = Math.round(radiusKm * 1000)
-  const any = qlBlocks.map(q => `nwr(around:${around},${lat},${lon})${q};`).join("\n")
+  const radiusM = Math.round(radiusKm * 1000)
+  const any = qlBlocks.map(q => `nwr(around:${radiusM},${lat},${lon})${q};`).join("\n")
   const body = `[out:json][timeout:25];(${any});out center tags;`
   const data = await overpassFetch(body)
   return (data.elements||[]).map(el=>{
