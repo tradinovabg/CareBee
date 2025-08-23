@@ -25,7 +25,18 @@
     "lastName": "Last name",
     "age": "Age",
     "phone": "Phone",
-    "saved": "Saved"
+    "saved": "Saved",
+    "autoSend": "Auto-send daily summary",
+    "sendSummary": "Send summary now",
+    "copySummary": "Copy",
+    "shareSummary": "Share",
+    "summaryCopied": "Summary copied"
+  },
+  "summary": {
+    "visits": "Visits today",
+    "noVisits": "No visits",
+    "meds": "Meds today",
+    "noMeds": "No medicines"
   },
   "qr": {
     "allergies": "Allergies",

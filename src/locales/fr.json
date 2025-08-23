@@ -25,7 +25,18 @@
     "lastName": "Nom",
     "age": "Âge",
     "phone": "Téléphone",
-    "saved": "Enregistré"
+    "saved": "Enregistré",
+    "autoSend": "Envoi automatique du résumé",
+    "sendSummary": "Envoyer le résumé",
+    "copySummary": "Copier",
+    "shareSummary": "Partager",
+    "summaryCopied": "Résumé copié"
+  },
+  "summary": {
+    "visits": "Visites aujourd'hui",
+    "noVisits": "Aucune visite",
+    "meds": "Médicaments aujourd'hui",
+    "noMeds": "Aucun médicament"
   },
   "qr": {
     "allergies": "Allergies",
