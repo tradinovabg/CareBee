@@ -281,7 +281,11 @@ export default function Meds () {
                   : `${m.startDate}${m.endDate ? '–' + m.endDate : ''} ${Object.values(m.slots || {}).filter(Boolean).join(', ')} ${m.mealTiming}`}
               </div>
               <div className='row' style={{ display: 'flex', gap: 8 }}>
+codex/add-medication-localization-keys
+                {m.mode === 'once' && <button className='btn btn-outline' onClick={() => downloadICS(m)}>{t('meds.addToCalendar', 'Add to calendar')}</button>}
+=======
                 <button className='btn btn-outline' onClick={() => downloadICS(m)}>{t('meds.addToCalendar', 'Add to calendar')}</button>
+main
                 <button className='btn btn-outline' onClick={() => edit(m)}>{t('edit', 'Edit')}</button>
                 <button className='btn btn-danger' onClick={() => remove(m.id)}>{t('delete', 'Delete')}</button>
               </div>
