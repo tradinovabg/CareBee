@@ -129,10 +129,12 @@ export default function Meds () {
       const entries = []
       items.forEach(m => {
         if (m.mode === 'once') {
-          if (m.startDate === date) entries.push(`${m.name} ${m.onceTime} ${m.mealTiming}`)
+          if (m.startDate === date) entries.push({ name: m.name, time: m.onceTime, meal: m.mealTiming })
         } else {
           const within = (!m.startDate || date >= m.startDate) && (!m.endDate || date <= m.endDate)
-          if (within) Object.values(m.slots || {}).forEach(t => { if (t) entries.push(`${m.name} ${t} ${m.mealTiming}`) })
+          if (within) Object.values(m.slots || {}).forEach(t => {
+            if (t) entries.push({ name: m.name, time: t, meal: m.mealTiming })
+          })
         }
       })
       list.push({ date, entries })
@@ -292,7 +294,7 @@ main
               <strong>{d.date}</strong>
               {d.entries.length ? (
                 <ul>
-                  {d.entries.map((e, i) => <li key={i}>{e}</li>)}
+                  {d.entries.map((e, i) => <li key={i}>{e.name} {e.time} {t('meds.meal_' + e.meal)}</li>)}
                 </ul>
               ) : <span> — </span>}
             </li>
