@@ -23,17 +23,28 @@ export default function Visits(){
   const [date, setDate] = useState(todayISO())
   const [time, setTime] = useState('09:00')
   const [notes, setNotes] = useState('')
+  const [editingId, setEditingId] = useState(null)
   const fileRef = useRef(null)
 
   useEffect(()=>save(STORAGE, list), [list])
 
   const add = () => {
     if(!doctor.trim()) return
-    const id = Date.now().toString()
-    setList(prev=> [...prev, { id, doctor: doctor.trim(), place: place.trim(), date, time, notes: notes.trim() }])
-    setDoctor(''); setPlace(''); setNotes('')
+    const id = editingId || Date.now().toString()
+    const newVisit = { id, doctor: doctor.trim(), place: place.trim(), date, time, notes: notes.trim() }
+    setList(prev=> editingId ? prev.map(x=> x.id===editingId ? newVisit : x) : [...prev, newVisit])
+    setDoctor(''); setPlace(''); setNotes(''); setEditingId(null)
   }
   const remove = (id) => setList(prev=> prev.filter(x=>x.id!==id))
+
+  const startEdit = (v) => {
+    setEditingId(v.id)
+    setDoctor(v.doctor)
+    setPlace(v.place)
+    setDate(v.date)
+    setTime(v.time)
+    setNotes(v.notes||'')
+  }
 
   const upcoming = useMemo(()=> [...list].sort((a,b)=> (a.date+a.time).localeCompare(b.date+b.time)), [list])
 
@@ -98,7 +109,7 @@ END:VCALENDAR`
       <h1>{t('visits.title','Doctor visits')}</h1>
 
       <div className="card" style={{background:'#fff', padding:'1rem', borderRadius:12, margin:'1rem 0', border:'1px solid #e5e7eb'}}>
-        <h2 style={{marginTop:0}}>{t('visits.add','Add visit')}</h2>
+        <h2 style={{marginTop:0}}>{editingId ? t('visits.edit','Edit visit') : t('visits.add','Add visit')}</h2>
         <div style={{display:'grid', gap:8}}>
           <label>{t('visits.doctor','Doctor')}
             <input value={doctor} onChange={e=>setDoctor(e.target.value)} placeholder="Dr Martin" />
@@ -117,7 +128,7 @@ END:VCALENDAR`
           <label>{t('notes','Notes')}
             <textarea value={notes} onChange={e=>setNotes(e.target.value)} rows={3} />
           </label>
-          <button onClick={add}>{t('save','Save')}</button>
+          <button onClick={add}>{editingId ? t('update','Update') : t('save','Save')}</button>
         </div>
       </div>
 
@@ -133,6 +144,7 @@ END:VCALENDAR`
               </div>
               <div style={{display:'flex', gap:8}}>
                 <button onClick={()=>downloadICS(v)}>{t('visits.addToCalendar','Add to calendar')}</button>
+                <button onClick={()=>startEdit(v)}>{t('edit','Edit')}</button>
                 <button onClick={()=>remove(v.id)}>{t('delete','Delete')}</button>
               </div>
             </div>

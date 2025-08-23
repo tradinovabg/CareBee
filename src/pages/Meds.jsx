@@ -36,13 +36,15 @@ export default function Meds () {
   const [duration, setDuration] = useState('')
   const [times, setTimes] = useState('08:00')
   const [days, setDays] = useState(7)
+  const [editingId, setEditingId] = useState(null)
 
   useEffect(() => save(STORAGE, items), [items])
 
   const add = () => {
     if (!name.trim()) return
     if (mode === 'once') {
-      setItems(p => [...p, { id: Date.now().toString(), name: name.trim(), mode, once: { date: onceDate, time: onceTime } }])
+      const newItem = { id: editingId || Date.now().toString(), name: name.trim(), mode, once: { date: onceDate, time: onceTime } }
+      setItems(p => editingId ? p.map(i => i.id === editingId ? newItem : i) : [...p, newItem])
     } else {
       if (!start) return
       if (!end && !duration) return
@@ -50,7 +52,8 @@ export default function Meds () {
       if (!timesArr.length) return
       let endDate = end
       if (!endDate && duration) endDate = addDays(start, parseInt(duration) - 1)
-      setItems(p => [...p, { id: Date.now().toString(), name: name.trim(), mode, daily: { start, end: endDate, times: timesArr } }])
+      const newItem = { id: editingId || Date.now().toString(), name: name.trim(), mode, daily: { start, end: endDate, times: timesArr } }
+      setItems(p => editingId ? p.map(i => i.id === editingId ? newItem : i) : [...p, newItem])
     }
     setName('')
     setMode('once')
@@ -60,10 +63,26 @@ export default function Meds () {
     setEnd('')
     setDuration('')
     setTimes('08:00')
+    setEditingId(null)
   }
 
   const remove = id => setItems(p => p.filter(i => i.id !== id))
   const extend = id => setItems(p => p.map(i => i.id === id ? { ...i, daily: { ...i.daily, end: addDays(i.daily.end || today(), 7) } } : i))
+
+  const startEdit = m => {
+    setEditingId(m.id)
+    setName(m.name)
+    setMode(m.mode)
+    if (m.mode === 'once') {
+      setOnceDate(m.once.date)
+      setOnceTime(m.once.time)
+    } else {
+      setStart(m.daily.start)
+      setEnd(m.daily.end || '')
+      setDuration('')
+      setTimes(m.daily.times.join(', '))
+    }
+  }
 
   const renewals = useMemo(() => {
     const now = today()
@@ -115,7 +134,7 @@ export default function Meds () {
       ))}
 
       <div className='card'>
-        <h2>{t('meds.add', 'Add medicine')}</h2>
+        <h2>{editingId ? t('meds.edit', 'Edit medicine') : t('meds.add', 'Add medicine')}</h2>
         <div className='field'>
           <label>{t('meds.name', 'Name')}
             <input value={name} onChange={e => setName(e.target.value)} />
@@ -157,7 +176,7 @@ export default function Meds () {
         )}
 
         <div className='row' style={{ display: 'flex', gap: 8 }}>
-          <button className='btn btn-primary' onClick={add}>{t('save', 'Save')}</button>
+          <button className='btn btn-primary' onClick={add}>{editingId ? t('update', 'Update') : t('save', 'Save')}</button>
         </div>
       </div>
 
@@ -194,6 +213,7 @@ export default function Meds () {
               </div>
               <div className='row' style={{ display: 'flex', gap: 8 }}>
                 {m.mode === 'once' && <button className='btn btn-outline' onClick={() => downloadICS(m)}>ICS</button>}
+                <button className='btn btn-outline' onClick={() => startEdit(m)}>{t('edit', 'Edit')}</button>
                 <button className='btn btn-danger' onClick={() => remove(m.id)}>{t('delete', 'Delete')}</button>
               </div>
             </div>
