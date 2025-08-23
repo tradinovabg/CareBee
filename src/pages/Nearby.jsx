@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { haversineKm, overpassAround, geocodeAddress, fetchNearbyPharmacies } from '../lib/geo'
 
-const KM = m => (m/1000).toFixed(2)
+const KM = m => (m/1000).toFixed(1)
 
 export default function Nearby(){
   const { t, i18n } = useTranslation()
