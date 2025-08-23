@@ -50,6 +50,21 @@ export function sendSummary () {
   const subj = encodeURIComponent('CareBee Daily Summary')
   const url = `mailto:${to}?subject=${subj}&body=${body}`
   window.open(url)
-  try { localStorage.setItem(LAST_KEY, new Date().toISOString().slice(0, 10)) } catch { /* ignore */ }
+  try { localStorage.setItem(LAST_KEY, new Date().toISOString()) } catch { /* ignore */ }
+}
+
+const AUTO_KEY = 'carebee.autoDailySummary'
+
+export const getAutoSendSettings = () => load(AUTO_KEY, { enabled: false, time: '09:00' })
+
+export const setAutoSendSettings = (s) => {
+  try { localStorage.setItem(AUTO_KEY, JSON.stringify(s)) } catch { /* ignore */ }
+}
+
+export const getLastSummaryAt = () => load(LAST_KEY, null)
+
+export const sendDailySummaryNow = () => {
+  sendSummary()
+  return getLastSummaryAt()
 }
 
