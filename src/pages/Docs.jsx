@@ -60,7 +60,7 @@ export default function Docs(){
         await addFileRec(new File([blob], f.name, { type: f.type }), f)
       }
       refresh()
-    }catch{ alert('Invalid file') } }
+    }catch(e){ void e; alert('Invalid file') } }
     r.readAsText(file)
   }
 
@@ -72,7 +72,7 @@ export default function Docs(){
       }else{
         open(f)
       }
-    }catch{}
+      }catch(e){ /* ignore */ void e; }
   }
 
   return (

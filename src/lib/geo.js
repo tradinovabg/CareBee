@@ -23,15 +23,19 @@ async function overpassFetch(body){
   throw lastErr
 }
 
-export async function overpassAround(lat, lon, radius, qlBlocks){
-  const around = (k,v)=>`nwr(around:${radius},${lat},${lon})["${k}"="${v}"];`
-  const any = qlBlocks.join("\n")
+export async function overpassAround(lat, lon, radiusKm, qlBlocks){
+  const around = Math.round(radiusKm * 1000)
+  const any = qlBlocks.map(q => `nwr(around:${around},${lat},${lon})${q};`).join("\n")
   const body = `[out:json][timeout:25];(${any});out center tags;`
   const data = await overpassFetch(body)
   return (data.elements||[]).map(el=>{
     const latc = el.center?.lat ?? el.lat, lonc = el.center?.lon ?? el.lon
     return { id: `${el.type}/${el.id}`, lat: latc, lon: lonc, tags: el.tags||{} }
   })
+}
+
+export async function fetchNearbyPharmacies(lat, lon, radiusKm = 1){
+  return overpassAround(lat, lon, radiusKm, ['["amenity"="pharmacy"]'])
 }
 
 // Nominatim — геокодинг адреса → {lat, lon}
