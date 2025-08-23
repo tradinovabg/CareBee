@@ -132,7 +132,7 @@ export default function Visits () {
               </div>
               <div style={{ display: 'flex', gap: 8 }}>
                 <button onClick={() => window.open(buildGoogleCalLink({ title: `Visit — ${v.doctor}`, date: v.date, time: v.time, description: v.notes, location: v.place }))}>{t('calendar.addToGoogle', 'Add to Google')}</button>
-                <button onClick={() => downloadICS(v)}>{t('visits.downloadICS', 'Download ICS')}</button>
+                <button type="button" onClick={() => downloadICS(v)}>{t('visits.downloadICS', 'Download ICS')}</button>
                 <button onClick={() => remove(v.id)}>{t('delete', 'Delete')}</button>
               </div>
             </div>
