@@ -29,6 +29,8 @@
     "saved": "Сохранено"
   },
   "qr": {
+    "title": "QR — {{profile}}",
+    "imgAlt": "QR-код",
     "allergies": "Аллергии",
     "allergies_placeholder": "пенициллин, арахис…",
     "conditions": "Важные состояния",
