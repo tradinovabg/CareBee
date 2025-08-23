@@ -14,6 +14,8 @@ const toUTC = (isoDate, hhmm, addMinutes = 0) => {
   return formatUTC(dt)
 }
 
+const esc = v => (v || '').replace(/[\n,;]/g, ' ')
+
 export default function Visits(){
   const { t } = useTranslation()
   const [list, setList] = useState(()=> load(STORAGE, []))
@@ -37,6 +39,30 @@ export default function Visits(){
   const upcoming = useMemo(()=> [...list].sort((a,b)=> (a.date+a.time).localeCompare(b.date+b.time)), [list])
 
   const downloadICS = (v) => {
+codex/normalize-text-in-ics-download-templates
+    const uid = `${v.id}@carebee`
+    const dtstart = toICSDateTime(v.date, v.time)
+    const now = toICSDateTime(todayISO(), new Date().toTimeString().slice(0,5))
+    const ics =
+`BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//CareBee//EN
+BEGIN:VEVENT
+UID:${uid}
+DTSTAMP:${now}
+DTSTART:${dtstart}
+SUMMARY:${esc(`Visit — ${v.doctor}`)}
+LOCATION:${esc(v.place)}
+DESCRIPTION:${esc(v.notes)}
+END:VEVENT
+END:VCALENDAR`
+    const blob = new Blob([ics], {type:'text/calendar;charset=utf-8'})
+    const a = document.createElement('a')
+    a.href = URL.createObjectURL(blob)
+    a.download = `visit-${v.date}-${v.time}.ics`
+    a.click()
+    URL.revokeObjectURL(a.href)
+=======
     const startUTC = toUTC(v.date, v.time)
     const endUTC = toUTC(v.date, v.time, 60)
     const summary = v.doctor ? `Visit — ${v.doctor}` : 'Visit'
@@ -47,6 +73,7 @@ export default function Visits(){
     url.searchParams.set('text', summary)
     if (location) url.searchParams.set('location', location)
     window.open(url.toString(), '_blank')
+main
   }
 
   const exportJson = () => {

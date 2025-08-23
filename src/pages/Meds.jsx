@@ -23,6 +23,9 @@ const addDays = (d, n) => {
   return x.toISOString().slice(0, 10)
 }
 
+codex/normalize-text-in-ics-download-templates
+const esc = v => (v || '').replace(/[\n,;]/g, ' ')
+=======
 codex/update-ics-download-to-use-google-calendar-link
 const formatUTC = dt => dt.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z')
 const toUTC = (isoDate, hhmm, addMinutes = 0) => {
@@ -43,6 +46,7 @@ function toICSDateTime (isoDate, hhmm) {
   return `${y}${mo}${d}T${H}${M}${S}`
 main
 }
+main
 
 export default function Meds () {
   const { t } = useTranslation()
@@ -137,9 +141,14 @@ export default function Meds () {
   }, [items, days])
 
   const downloadICS = m => {
+codex/normalize-text-in-ics-download-templates
+    const dt = `${m.startDate.replace(/-/g, '')}T${m.onceTime.replace(':', '')}00`
+    const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nUID:${m.id}\nDTSTAMP:${dt}\nDTSTART:${dt}\nSUMMARY:${esc(m.name)}\nEND:VEVENT\nEND:VCALENDAR`
+=======
 codex/update-ics-structure-in-downloadics-function
     const dt = new Date(`${m.startDate}T${m.onceTime}`).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z')
     const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//CareBee//EN\nBEGIN:VEVENT\nUID:${m.id}\nDTSTAMP:${dt}\nDTSTART:${dt}\nSUMMARY:${m.name}\nEND:VEVENT\nEND:VCALENDAR`
+main
     const blob = new Blob([ics], { type: 'text/calendar' })
 =======
 codex/update-ics-download-to-use-google-calendar-link
