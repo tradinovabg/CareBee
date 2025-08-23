@@ -12,6 +12,20 @@ const load = (k, def) => {
 
 const loadProfile = () => load(PROFILE_KEY, {})
 
+export function shouldAutoSend () {
+  try {
+    const p = loadProfile()
+    if (!p.autosendEnabled) return false
+    const now = new Date()
+    const hhmm = now.toTimeString().slice(0, 5)
+    const today = now.toISOString().slice(0, 10)
+    const last = localStorage.getItem(LAST_KEY)
+    return hhmm >= (p.autosendTime || '00:00') && last !== today
+  } catch {
+    return false
+  }
+}
+
 export function buildDailySummary () {
   const today = new Date().toISOString().slice(0, 10)
   const visits = load('carebee.visits', []).filter(v => v.date === today)
@@ -66,5 +80,9 @@ export const getLastSummaryAt = () => load(LAST_KEY, null)
 export const sendDailySummaryNow = () => {
   sendSummary()
   return getLastSummaryAt()
+}
+
+export function maybeSendDailySummary () {
+  if (shouldAutoSend() && confirm('Send daily summary now?')) sendSummary()
 }
 
