@@ -4,7 +4,11 @@ import { buildGoogleCalLink, buildICSEvent, fromDateAndTimeLocal, toICSDateTimeU
 
 const STORAGE = 'carebee.visits'
 const load = (k, def) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : def } catch { return def } }
+codex/refactor-meds.jsx-and-verify-medication-rendering
+const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)) } catch { /* ignore */ } }
+=======
 const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)) } catch { /* empty */ } }
+main
 
 const todayISO = () => { const d = new Date(); const y = d.getFullYear(); const m = String(d.getMonth() + 1).padStart(2, '0'); const day = String(d.getDate()).padStart(2, '0'); return `${y}-${m}-${day}`; }
 

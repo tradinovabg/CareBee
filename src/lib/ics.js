@@ -4,6 +4,37 @@ export const icsEscape = (v = '') => String(v)
   .replace(/,/g, '\\,')
   .replace(/;/g, '\\;')
 
+codex/refactor-meds.jsx-and-verify-medication-rendering
+export const buildICSEvent = ({
+  uid,
+  dtstamp,
+  dtstart,
+  dtend,
+  title = '',
+  desc = '',
+  loc = '',
+  method = 'PUBLISH'
+}) => {
+  const lines = [
+    'BEGIN:VCALENDAR',
+    'PRODID:-//CareBee//EN',
+    'VERSION:2.0',
+    `METHOD:${method}`,
+    'BEGIN:VEVENT',
+    `UID:${uid}`,
+    `DTSTAMP:${dtstamp}`,
+    `DTSTART:${dtstart}`
+  ]
+  if (dtend) lines.push(`DTEND:${dtend}`)
+  if (title) lines.push(`SUMMARY:${icsEscape(title)}`)
+  if (desc) lines.push(`DESCRIPTION:${icsEscape(desc)}`)
+  if (loc) lines.push(`LOCATION:${icsEscape(loc)}`)
+  lines.push('END:VEVENT', 'END:VCALENDAR')
+  return lines.join('\r\n') + '\r\n'
+}
+
+=======
+main
 export const fromDateAndTimeLocal = (date, time = '09:00') => {
   return new Date(`${date}T${time || '09:00'}:00`)
 }
@@ -52,6 +83,8 @@ export const genUID = (domain = 'carebee') => {
     : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`
   return `${rnd}@${domain}`
 }
+codex/refactor-meds.jsx-and-verify-medication-rendering
+=======
 
 export const buildICSEvent = ({
   uid,
@@ -81,3 +114,4 @@ export const buildICSEvent = ({
   return lines.join('\r\n') + '\r\n'
 }
 
+main

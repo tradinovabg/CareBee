@@ -2,11 +2,7 @@ import { useMemo, useState, useEffect } from 'react'
 import { Line } from 'react-chartjs-2'
 import { CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend, Chart as ChartJS } from 'chart.js'
 import { useTranslation } from 'react-i18next'
-codex/add-auto-send-settings-ui-in-vitals
-import { getAutoSendSettings, setAutoSendSettings, getLastSummaryAt, sendDailySummaryNow } from '../lib/dailySummary.js'
-=======
-import { maybeSendDailySummary } from '../lib/dailySummary.js'
-main
+import { getAutoSendSettings, setAutoSendSettings, getLastSummaryAt, sendDailySummaryNow, maybeSendDailySummary } from '../lib/dailySummary.js'
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend)
 
 const KEY='carebee.vitals'
