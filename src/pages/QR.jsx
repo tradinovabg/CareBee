@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next'
 import QRCode from 'qrcode'
 
 const KEY = 'carebee.qr'
-const load = () => { try { const v=localStorage.getItem(KEY); return v?JSON.parse(v):{} } catch (e) { void e; return {} } }
-const save = (o) => { try { localStorage.setItem(KEY, JSON.stringify(o)) } catch (e) { /* ignore */ void e; } }
-const loadProfile = () => { try { const v=localStorage.getItem('carebee.profile'); return v?JSON.parse(v):{} } catch (e) { void e; return {} } }
+const load = () => { try { const v=localStorage.getItem(KEY); return v?JSON.parse(v):{} } catch { return {} } }
+const save = (o) => { try { localStorage.setItem(KEY, JSON.stringify(o)) } catch (e) { console.error(e) } }
+const loadProfile = () => { try { const v=localStorage.getItem('carebee.profile'); return v?JSON.parse(v):{} } catch { return {} } }
 
 export default function QR(){
   const { t } = useTranslation()
