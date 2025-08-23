@@ -1,5 +1,6 @@
 const PROFILE_KEY = 'carebee.profile'
 const LAST_KEY = 'carebee.lastDailySent'
+const AUTO_KEY = 'carebee.autosend'
 
 const load = (k, def) => {
   try {
@@ -12,6 +13,26 @@ const load = (k, def) => {
 
 const loadProfile = () => load(PROFILE_KEY, {})
 
+codex/add-daily-summary-helpers-in-dailysummary.js
+export function getAutoSendSettings () {
+  return load(AUTO_KEY, { enabled: false, time: '08:00' })
+}
+
+export function setAutoSendSettings (settings) {
+  try {
+    localStorage.setItem(AUTO_KEY, JSON.stringify(settings))
+  } catch {
+    /* ignore */
+  }
+}
+
+export function getLastSummaryAt () {
+  try {
+    const v = localStorage.getItem(LAST_KEY)
+    return v ? new Date(`${v}T00:00:00`) : null
+  } catch {
+    return null
+=======
 export function shouldAutoSend () {
   try {
     const p = loadProfile()
@@ -23,6 +44,7 @@ export function shouldAutoSend () {
     return hhmm >= (p.autosendTime || '00:00') && last !== today
   } catch {
     return false
+main
   }
 }
 
@@ -67,7 +89,13 @@ export function sendSummary () {
   try { localStorage.setItem(LAST_KEY, new Date().toISOString().slice(0, 10)) } catch { /* ignore */ }
 }
 
+codex/add-daily-summary-helpers-in-dailysummary.js
+export function sendDailySummaryNow () {
+  sendSummary()
+  try { localStorage.setItem(LAST_KEY, new Date().toISOString().slice(0, 10)) } catch { /* ignore */ }
+=======
 export function maybeSendDailySummary () {
   if (shouldAutoSend() && confirm('Send daily summary now?')) sendSummary()
+main
 }
 
