@@ -29,7 +29,11 @@
     "saved": "Enregistré"
   },
   "qr": {
+codex/update-localization-files-with-new-keys
     "title": "Code QR",
+=======
+    "title": "QR — {{profile}}",
+main
     "imgAlt": "Code QR",
     "allergies": "Allergies",
     "allergies_placeholder": "pénicilline, arachides…",
@@ -62,19 +66,27 @@
     "add": "Ajouter un médicament",
     "name": "Nom",
     "name_placeholder": "Amlodipine",
+    "once": "Une fois",
+    "daily": "Quotidien",
+    "start": "Début",
+    "end": "Fin",
+    "time": "Heure",
     "chooseTimes": "Choisir les heures",
     "morning": "Matin",
     "noon": "Midi",
     "evening": "Soir",
-    "mealMode": "Par rapport au repas",
-    "meal_before": "avant repas",
-    "meal_with": "pendant repas",
-    "meal_after": "après repas",
+    "meal": "Repas",
+    "before": "avant repas",
+    "with": "avec repas",
+    "after": "après repas",
     "active": "Actif",
     "today": "Aujourd’hui",
+    "schedule": "Planning",
+    "expand": "Afficher 14 jours",
+    "collapse": "Afficher 7 jours",
+    "addToCalendar": "Ajouter au calendrier",
     "empty": "Aucun médicament actif",
     "all": "Tous les médicaments",
-    "meal_short": "repas",
     "status_active": "actif",
     "status_inactive": "inactif",
     "deactivate": "Désactiver",
@@ -116,6 +128,16 @@
   "notes": "Notes",
   "save": "Enregistrer",
   "delete": "Supprimer",
+  "vitals": {
+    "title": "Signes vitaux",
+    "auto": {
+      "title": "Envoi automatique",
+      "enable": "Activer l'envoi automatique",
+      "last": "Dernier envoi {{time}}",
+      "never": "Jamais envoyé",
+      "sendNow": "Envoyer maintenant"
+    }
+  },
   "nearby": {
     "title": "À proximité",
     "useMyLocation": "Utiliser ma position",

@@ -29,7 +29,11 @@
     "saved": "Сохранено"
   },
   "qr": {
+codex/update-localization-files-with-new-keys
     "title": "QR-код",
+=======
+    "title": "QR — {{profile}}",
+main
     "imgAlt": "QR-код",
     "allergies": "Аллергии",
     "allergies_placeholder": "пенициллин, арахис…",
@@ -62,19 +66,27 @@
     "add": "Добавить препарат",
     "name": "Название",
     "name_placeholder": "Амлодипин",
+    "once": "Разово",
+    "daily": "Ежедневно",
+    "start": "Начало",
+    "end": "Конец",
+    "time": "Время",
     "chooseTimes": "Выберите время",
     "morning": "Утро",
     "noon": "День",
     "evening": "Вечер",
-    "mealMode": "Относительно еды",
-    "meal_before": "до еды",
-    "meal_with": "во время еды",
-    "meal_after": "после еды",
+    "meal": "Еда",
+    "before": "до еды",
+    "with": "во время еды",
+    "after": "после еды",
     "active": "Активно",
     "today": "Сегодня",
+    "schedule": "Расписание",
+    "expand": "Показать 14 дней",
+    "collapse": "Показать 7 дней",
+    "addToCalendar": "В календарь",
     "empty": "Нет активных препаратов",
     "all": "Все препараты",
-    "meal_short": "приём",
     "status_active": "активен",
     "status_inactive": "неактивен",
     "deactivate": "Выключить",
@@ -108,6 +120,16 @@
   "notes": "Заметки",
   "save": "Сохранить",
   "delete": "Удалить",
+  "vitals": {
+    "title": "Жизненные показатели",
+    "auto": {
+      "title": "Автоотправка",
+      "enable": "Включить автоотправку",
+      "last": "Последняя отправка {{time}}",
+      "never": "Никогда не отправлялось",
+      "sendNow": "Отправить сейчас"
+    }
+  },
   "nearby": {
     "title": "Рядом",
     "useMyLocation": "Определить местоположение",

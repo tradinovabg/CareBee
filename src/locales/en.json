@@ -29,7 +29,11 @@
     "saved": "Saved"
   },
   "qr": {
+codex/update-localization-files-with-new-keys
     "title": "QR Code",
+=======
+    "title": "QR — {{profile}}",
+main
     "imgAlt": "QR Code",
     "allergies": "Allergies",
     "allergies_placeholder": "penicillin, peanuts…",
@@ -62,19 +66,27 @@
     "add": "Add medicine",
     "name": "Name",
     "name_placeholder": "Amlodipine",
+    "once": "Once",
+    "daily": "Daily",
+    "start": "Start",
+    "end": "End",
+    "time": "Time",
     "chooseTimes": "Choose times",
     "morning": "Morning",
     "noon": "Noon",
     "evening": "Evening",
-    "mealMode": "Meal timing",
-    "meal_before": "before food",
-    "meal_with": "with food",
-    "meal_after": "after food",
+    "meal": "Meal",
+    "before": "Before food",
+    "with": "With food",
+    "after": "After food",
     "active": "Active",
     "today": "Today",
+    "schedule": "Schedule",
+    "expand": "Show 14 days",
+    "collapse": "Show 7 days",
+    "addToCalendar": "Add to calendar",
     "empty": "No active medicines",
     "all": "All medicines",
-    "meal_short": "meal",
     "status_active": "active",
     "status_inactive": "inactive",
     "deactivate": "Deactivate",
@@ -116,6 +128,16 @@
   "notes": "Notes",
   "save": "Save",
   "delete": "Delete",
+  "vitals": {
+    "title": "Vitals",
+    "auto": {
+      "title": "Auto sending",
+      "enable": "Enable auto sending",
+      "last": "Last sent {{time}}",
+      "never": "Never sent",
+      "sendNow": "Send now"
+    }
+  },
   "nearby": {
     "title": "Nearby",
     "useMyLocation": "Use my location",

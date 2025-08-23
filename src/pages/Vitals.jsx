@@ -2,11 +2,16 @@ import { useMemo, useState, useEffect } from 'react'
 import { Line } from 'react-chartjs-2'
 import { CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend, Chart as ChartJS } from 'chart.js'
 import { useTranslation } from 'react-i18next'
+codex/add-auto-send-settings-ui-in-vitals
+import { getAutoSendSettings, setAutoSendSettings, getLastSummaryAt, sendDailySummaryNow } from '../lib/dailySummary.js'
+=======
+import { maybeSendDailySummary } from '../lib/dailySummary.js'
+main
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend)
 
 const KEY='carebee.vitals'
-const load=()=>{try{const v=localStorage.getItem(KEY);return v?JSON.parse(v):[]}catch(e){void e;return[]}}
-const save=(arr)=>{try{localStorage.setItem(KEY,JSON.stringify(arr))}catch(e){/* ignore */ void e;}}
+const load=()=>{try{const v=localStorage.getItem(KEY);return v?JSON.parse(v):[]}catch{return[]}}
+const save=(arr)=>{try{localStorage.setItem(KEY,JSON.stringify(arr))}catch(e){console.error(e)}}
 const nowISO = ()=> new Date().toISOString()
 
 export default function Vitals(){
@@ -15,8 +20,11 @@ export default function Vitals(){
   const [type,setType]=useState('bp') // bp | temp | glu
   const [sys,setSys]=useState(''); const [dia,setDia]=useState(''); const [pulse,setPulse]=useState('')
   const [temp,setTemp]=useState(''); const [glu,setGlu]=useState(''); const [ts,setTs]=useState(()=>nowISO().slice(0,16))
+  const [auto,setAuto]=useState(()=>getAutoSendSettings())
+  const [lastSent,setLastSent]=useState(()=>getLastSummaryAt())
 
   useEffect(()=>save(list),[list])
+  useEffect(()=>{ maybeSendDailySummary() },[])
 
   const add=()=>{
     const time = ts ? new Date(ts) : new Date()
@@ -54,7 +62,7 @@ export default function Vitals(){
       const reader=new FileReader()
       reader.onload=()=>{ try{
         const arr=JSON.parse(reader.result); if(!Array.isArray(arr)) throw new Error();
-        setList(arr); }catch(e){ void e; alert('Invalid file') } }
+        setList(arr); }catch{ alert('Invalid file') } }
       reader.readAsText(file)
     }
 
@@ -92,6 +100,19 @@ export default function Vitals(){
             Import JSON
             <input type="file" accept="application/json" style={{display:'none'}} onChange={e=>e.target.files[0] && importJSON(e.target.files[0])} />
           </label>
+        </div>
+      </div>
+      
+        <h2 className="h2" style={{marginTop:16}}>{t('vitals.auto.title')}</h2>
+      <div className="card">
+        <div className="row">
+          <label><input type="checkbox" checked={auto.enabled} onChange={e=>setAuto({...auto, enabled:e.target.checked})} /> {t('vitals.auto.enable')}</label>
+          <div className="field"><label>{t('time')}</label><input type="time" value={auto.time} onChange={e=>setAuto({...auto, time:e.target.value})} /></div>
+        </div>
+        <div className="row" style={{marginTop:8}}>
+          <div>{t('vitals.auto.lastSent','Last sent')}: {lastSent? new Date(lastSent).toLocaleString() : t('vitals.auto.never')}</div>
+          <button className="btn btn-outline" onClick={()=>setLastSent(sendDailySummaryNow())}>{t('vitals.auto.sendNow')}</button>
+          <button className="btn btn-primary" onClick={()=>setAutoSendSettings(auto)}>{t('save')}</button>
         </div>
       </div>
 
