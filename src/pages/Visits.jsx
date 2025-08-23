@@ -1,6 +1,10 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+codex/implement-google-calendar-link-feature
+import { buildGoogleCalLink } from '../lib/ics'
+=======
 import { fromDateAndTimeLocal, toICSDateTimeUTC } from '../lib/ics'
+main
 
 const STORAGE = 'carebee.visits'
 const load = (k, def) => { try { const v=localStorage.getItem(k); return v?JSON.parse(v):def } catch { return def } }
@@ -122,6 +126,7 @@ export default function Visits(){
               </div>
               <div style={{display:'flex', gap:8}}>
                 <button onClick={()=>downloadICS(v)}>{t('visits.addToCalendar','Add to calendar')}</button>
+                <button onClick={()=>window.open(buildGoogleCalLink({ title: `Visit — ${v.doctor}`, date: v.date, time: v.time, description: v.notes, location: v.place }))}>{t('calendar.addToGoogle','Add to Google')}</button>
                 <button onClick={()=>remove(v.id)}>{t('delete','Delete')}</button>
               </div>
             </div>
