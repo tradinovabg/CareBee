@@ -8,18 +8,23 @@ test('icsEscape escapes special characters', () => {
   assert.equal(icsEscape(input), expected)
 })
 
-test('buildICSEvent uses escaped fields', () => {
+test('buildICSEvent builds CRLF ICS with escaped fields', () => {
   const dt = '20240101T000000Z'
   const ics = buildICSEvent({
     uid: '1',
-    start: dt,
-    title: icsEscape('tit,le;\\one\n'),
-    details: icsEscape('det,ail;\\two\n'),
-    location: icsEscape('loc,ation;\\three\n')
+    dtstamp: dt,
+    dtstart: dt,
+    dtend: dt,
+    title: 'tit,le;\\one\n',
+    desc: 'det,ail;\\two\n',
+    loc: 'loc,ation;\\three\n'
   })
+  assert.ok(ics.includes('PRODID:-//CareBee//EN'))
   assert.ok(ics.includes('SUMMARY:tit\\,le\\;\\\\one\\n'))
   assert.ok(ics.includes('DESCRIPTION:det\\,ail\\;\\\\two\\n'))
   assert.ok(ics.includes('LOCATION:loc\\,ation\\;\\\\three\\n'))
+  assert.ok(ics.includes('\r\n'))
+  assert.ok(ics.endsWith('\r\n'))
 })
 
 test('toICSDateTimeUTC returns null for invalid date', () => {

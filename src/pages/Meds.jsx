@@ -1,22 +1,14 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-codex/escape-special-characters-in-ics-event-strings
-import { icsEscape, buildICSEvent } from '../lib/ics'
-=======
-codex/extend-ics.js-for-ics-events
-import { buildICSEvent, genUID, icsEscape } from '../lib/ics'
-=======
-codex/implement-google-calendar-link-feature
-import { buildGoogleCalLink } from '../lib/ics'
-=======
-import { fromDateAndTimeLocal, toICSDateTimeUTC } from '../lib/ics'
-main
-main
-main
+import { buildGoogleCalLink, buildICSEvent, fromDateAndTimeLocal, toICSDateTimeUTC } from '../lib/ics'
 
 const STORAGE = 'carebee.meds'
 const SLOT_DEFAULTS = { morning: '08:00', noon: '13:00', evening: '20:00' }
 
+codex/add-ics-utility-functions-and-buttons
+const load = (k, def) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : def } catch { return def } }
+const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)) } catch { } }
+=======
 const load = (k, def) => {
   try {
     const v = localStorage.getItem(k)
@@ -42,16 +34,9 @@ const addDays = (d, n) => {
 }
 
 codex/escape-special-characters-in-ics-event-strings
+main
 
-=======
-codex/extend-ics.js-for-ics-events
-main
-function toICSDateTime (isoDate, hhmm) {
-  return new Date(`${isoDate}T${hhmm || '09:00'}:00`).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'
-}
-=======
-const esc = v => (v || '').replace(/[\n,;]/g, ' ')
-main
+const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x.toISOString().slice(0, 10) }
 
 export default function Meds () {
   const { t } = useTranslation()
@@ -67,7 +52,7 @@ export default function Meds () {
   const [endDate, setEndDate] = useState('')
   const [onceTime, setOnceTime] = useState('08:00')
   const [slots, setSlots] = useState(emptySlots)
-  const [mealTiming, setMealTiming] = useState('after')
+  const [meal, setMeal] = useState('after')
   const [days, setDays] = useState(7)
 
   useEffect(() => save(STORAGE, items), [items])
@@ -80,24 +65,19 @@ export default function Meds () {
     setEndDate('')
     setOnceTime('08:00')
     setSlots(emptySlots)
-    setMealTiming('after')
+    setMeal('after')
   }
 
   const saveItem = () => {
     if (!name.trim()) return
-    const base = {
-      id: editId || Date.now().toString(),
-      name: name.trim(),
-      mode,
-      startDate,
-      mealTiming
-    }
+    const base = { id: editId || Date.now().toString(), name: name.trim(), mode, startDate, meal }
     let item
     if (mode === 'once') {
-      item = { ...base, onceTime }
+      item = { ...base, times: [onceTime], onceTime }
     } else {
-      if (!Object.values(slots).some(Boolean)) return
-      item = { ...base, endDate: endDate || undefined, slots }
+      const times = Object.values(slots).filter(Boolean)
+      if (!times.length) return
+      item = { ...base, endDate: endDate || undefined, slots, times }
     }
     setItems(p => editId ? p.map(i => i.id === editId ? item : i) : [...p, item])
     reset()
@@ -109,9 +89,9 @@ export default function Meds () {
     setMode(m.mode)
     setStartDate(m.startDate)
     setEndDate(m.endDate || '')
-    setMealTiming(m.mealTiming || 'after')
+    setMeal(m.meal || 'after')
     if (m.mode === 'once') {
-      setOnceTime(m.onceTime)
+      setOnceTime(m.times?.[0] || '08:00')
       setSlots(emptySlots)
     } else {
       setSlots({ ...emptySlots, ...m.slots })
@@ -134,12 +114,10 @@ export default function Meds () {
       const entries = []
       items.forEach(m => {
         if (m.mode === 'once') {
-          if (m.startDate === date) entries.push({ name: m.name, time: m.onceTime, meal: m.mealTiming })
+          if (m.startDate === date) entries.push({ name: m.name, time: m.times[0], meal: m.meal })
         } else {
           const within = (!m.startDate || date >= m.startDate) && (!m.endDate || date <= m.endDate)
-          if (within) Object.values(m.slots || {}).forEach(t => {
-            if (t) entries.push({ name: m.name, time: t, meal: m.mealTiming })
-          })
+          if (within) m.times.forEach(t => entries.push({ name: m.name, time: t, meal: m.meal }))
         }
       })
       list.push({ date, entries })
@@ -148,27 +126,11 @@ export default function Meds () {
   }, [items, days])
 
   const downloadICS = m => {
- codex/extend-ics.js-for-ics-events
-    const dt = toICSDateTime(m.startDate, m.onceTime) || ''
-    const ics = buildICSEvent({
-codex/escape-special-characters-in-ics-event-strings
-      uid: m.id,
-      start: dt,
-      title: icsEscape(m.name)
-    })
-=======
-      uid: genUID(),
-      dtstamp: dt,
-      dtstart: dt,
-      title: icsEscape(m.name)
-    })
-=======
-    const start = fromDateAndTimeLocal(m.startDate, m.onceTime)
-    const dtStart = toICSDateTimeUTC(start)
-    const dtStamp = toICSDateTimeUTC(new Date())
-    const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//CareBee//EN\nBEGIN:VEVENT\nUID:${m.id}\nDTSTAMP:${dtStamp}\nDTSTART:${dtStart}\nSUMMARY:${esc(m.name) || ''}\nEND:VEVENT\nEND:VCALENDAR`
-main
-main
+    const uid = `${m.id}@carebee`
+    const start = fromDateAndTimeLocal(m.startDate, m.times[0])
+    const dt = toICSDateTimeUTC(start)
+    const stamp = toICSDateTimeUTC(new Date())
+    const ics = buildICSEvent({ uid, dtstamp: stamp, dtstart: dt, dtend: dt, title: m.name })
     const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' })
     const a = document.createElement('a')
     a.href = URL.createObjectURL(blob)
@@ -237,7 +199,7 @@ main
 
         <div className='field'>
           <label>{t('meds.meal', 'Meal')}
-            <select value={mealTiming} onChange={e => setMealTiming(e.target.value)}>
+            <select value={meal} onChange={e => setMeal(e.target.value)}>
               <option value='before'>{t('meds.before', 'Before food')}</option>
               <option value='with'>{t('meds.with', 'With food')}</option>
               <option value='after'>{t('meds.after', 'After food')}</option>
@@ -259,7 +221,7 @@ main
               <strong>{d.date}</strong>
               {d.entries.length ? (
                 <ul>
-                  {d.entries.map((e, i) => <li key={i}>{e.name} {e.time} {t('meds.meal_' + e.meal)}</li>)}
+                  {d.entries.map((e, i) => <li key={i}>{e.time} {e.name}{e.meal ? ' • ' + t('meds.meal_' + e.meal) : ''}</li>)}
                 </ul>
               ) : <span> — </span>}
             </li>
@@ -275,21 +237,17 @@ main
         {items.map(m => (
           <li key={m.id} className='card'>
             <div className='row' style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div>
-                  <strong>{m.name}</strong>
-                  {' '}
-                  {m.mode === 'once'
-                    ? `${m.startDate} ${m.onceTime} ${m.mealTiming}`
-                    : `${m.startDate}${m.endDate ? '–' + m.endDate : ''} ${Object.values(m.slots || {}).filter(Boolean).join(', ')} ${m.mealTiming}`}
-                </div>
-                <div className='row' style={{ display: 'flex', gap: 8 }}>
-                  {m.mode === 'once' && <>
-                    <button className='btn btn-outline' onClick={() => downloadICS(m)}>{t('meds.addToCalendar', 'Add to calendar')}</button>
-                    <button className='btn btn-outline' onClick={() => window.open(buildGoogleCalLink({ title: m.name, date: m.startDate, time: m.onceTime }))}>{t('calendar.addToGoogle', 'Add to Google')}</button>
-                  </>}
-                  <button className='btn btn-outline' onClick={() => edit(m)}>{t('edit', 'Edit')}</button>
-                  <button className='btn btn-danger' onClick={() => remove(m.id)}>{t('delete', 'Delete')}</button>
-                </div>
+              <div>
+                <strong>{m.name}</strong> — {m.times.join(', ')}{m.meal ? ` • ${t('meds.meal_' + m.meal)}` : ''}
+              </div>
+              <div className='row' style={{ display: 'flex', gap: 8 }}>
+                {m.mode === 'once' && <>
+                  <button className='btn btn-outline' onClick={() => downloadICS(m)}>{t('meds.addToCalendar', 'Add to calendar')}</button>
+                  <button className='btn btn-outline' onClick={() => window.open(buildGoogleCalLink({ title: m.name, date: m.startDate, time: m.times[0] }))}>{t('calendar.addToGoogle', 'Add to Google')}</button>
+                </>}
+                <button className='btn btn-outline' onClick={() => edit(m)}>{t('edit', 'Edit')}</button>
+                <button className='btn btn-danger' onClick={() => remove(m.id)}>{t('delete', 'Delete')}</button>
+              </div>
             </div>
           </li>
         ))}
@@ -297,4 +255,3 @@ main
     </div>
   )
 }
-
