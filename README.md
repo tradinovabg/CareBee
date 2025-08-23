@@ -22,6 +22,14 @@ Build for production:
 npm run build
 ```
 
+### Environment
+
+The Vite configuration reads the `NODE_ENV` variable to determine the base
+URL for assets. When `NODE_ENV` is `production` (the default during
+`npm run build`), assets are served from `/CareBee/` to match the GitHub Pages
+deployment. In other environments such as development (`npm run dev`), the
+base path falls back to `/`.
+
 ## Localization
 
 Translations live in the `src/locales` directory. Each language has its own
