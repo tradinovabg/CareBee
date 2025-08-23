@@ -44,7 +44,9 @@
     "includeICE": "Указать ICE",
     "generate": "Сгенерировать QR",
     "download": "Скачать PNG",
-    "print": "Печать"
+    "print": "Печать",
+    "link": "Смотреть профиль на {{site}}",
+    "restart": "Начать заново"
   },
   "meds": {
     "title": "График приёма лекарств",
@@ -67,7 +69,9 @@
     "status_active": "активен",
     "status_inactive": "неактивен",
     "deactivate": "Выключить",
-    "activate": "Включить"
+    "activate": "Включить",
+    "nextDose": "Следующий приём в {{start}}",
+    "site": "Подробнее на {{site}}"
   },
   "visits": {
     "title": "Визиты к врачу",

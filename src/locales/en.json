@@ -44,7 +44,9 @@
     "includeICE": "Include ICE",
     "generate": "Generate QR",
     "download": "Download PNG",
-    "print": "Print"
+    "print": "Print",
+    "link": "View this profile on {{site}}",
+    "restart": "Start over"
   },
   "meds": {
     "title": "Medicine schedule",
@@ -67,7 +69,9 @@
     "status_active": "active",
     "status_inactive": "inactive",
     "deactivate": "Deactivate",
-    "activate": "Activate"
+    "activate": "Activate",
+    "nextDose": "Next dose at {{start}}",
+    "site": "More info at {{site}}"
   },
   "visits": {
     "title": "Doctor visits",
