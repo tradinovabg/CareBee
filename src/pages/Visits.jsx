@@ -1,9 +1,13 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+codex/extend-ics.js-for-ics-events
+import { buildICSEvent, genUID, icsEscape } from '../lib/ics'
+=======
 codex/implement-google-calendar-link-feature
 import { buildGoogleCalLink } from '../lib/ics'
 =======
 import { fromDateAndTimeLocal, toICSDateTimeUTC } from '../lib/ics'
+main
 main
 
 const STORAGE = 'carebee.visits'
@@ -11,8 +15,6 @@ const load = (k, def) => { try { const v=localStorage.getItem(k); return v?JSON.
 const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)) } catch { /* ignore */ } }
 
 const todayISO = () => { const d=new Date(); const y=d.getFullYear(); const m=String(d.getMonth()+1).padStart(2,'0'); const day=String(d.getDate()).padStart(2,'0'); return `${y}-${m}-${day}` }
-
-const esc = v => (v || '').replace(/[\n,;]/g, ' ')
 
 export default function Visits(){
   const { t } = useTranslation()
@@ -42,11 +44,24 @@ export default function Visits(){
   )
 
   const downloadICS = (v) => {
+codex/extend-ics.js-for-ics-events
+    const uid = genUID()
+    const dt = toICSDateTime(v.date, v.time) || ''
+    const ics = buildICSEvent({
+      uid,
+      dtstamp: dt,
+      dtstart: dt,
+      title: icsEscape(`Visit — ${v.doctor}`),
+      desc: icsEscape(v.notes),
+      loc: icsEscape(v.place)
+    })
+=======
     const uid = `${v.id}@carebee`
     const start = fromDateAndTimeLocal(v.date, v.time)
     const dtStart = toICSDateTimeUTC(start)
     const dtStamp = toICSDateTimeUTC(new Date())
     const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//CareBee//EN\nBEGIN:VEVENT\nUID:${uid}\nDTSTAMP:${dtStamp}\nDTSTART:${dtStart}\nSUMMARY:${esc(`Visit — ${v.doctor}`) || ''}\nLOCATION:${esc(v.place) || ''}\nDESCRIPTION:${esc(v.notes)}\nEND:VEVENT\nEND:VCALENDAR`
+main
     const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' })
     const a = document.createElement('a')
     a.href = URL.createObjectURL(blob)
