@@ -4,9 +4,9 @@ import { buildGoogleCalLink, buildICSEvent, fromDateAndTimeLocal, toICSDateTimeU
 
 const STORAGE = 'carebee.visits'
 const load = (k, def) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : def } catch { return def } }
-const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)) } catch { } }
+const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)) } catch { /* empty */ } }
 
-const todayISO = () => { const d = new Date(); const y = d.getFullYear(); const m = String(d.getMonth() + 1).padStart(2, '0'); const day = String(d.getDate()).padStart(2, '0'); return `${y}-${m}-${day}` }
+const todayISO = () => { const d = new Date(); const y = d.getFullYear(); const m = String(d.getMonth() + 1).padStart(2, '0'); const day = String(d.getDate()).padStart(2, '0'); return `${y}-${m}-${day}`; }
 
 export default function Visits () {
   const { t } = useTranslation()
