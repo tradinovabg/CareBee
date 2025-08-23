@@ -104,7 +104,9 @@ export default function Calendar () {
         const list = eventsByDate[d]
         return (
           <div key={d} className='card' style={{ marginBottom: 12 }}>
-            <strong>{d}</strong>
+            <strong className={d === today ? 'today-highlight' : ''}>
+              {d === today ? t('today', 'Today') : d}
+            </strong>
             {list.length ? (
               <ul>
                 {list.map((e, i) => (
