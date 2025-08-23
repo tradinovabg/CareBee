@@ -143,7 +143,7 @@ main
     "useMyLocation": "Utiliser ma position",
     "searchAddress": "Rechercher une adresse",
     "addressPlaceholder": "Rue, ville…",
-    "radius": "Rayon (m)",
+    "radius": "Rayon",
     "tabPharmacies": "Pharmacies",
     "tabSpecialists": "Spécialistes & services",
     "load": "Charger",

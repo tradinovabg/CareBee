@@ -135,7 +135,7 @@ main
     "useMyLocation": "Определить местоположение",
     "searchAddress": "Поиск адреса",
     "addressPlaceholder": "Улица, город…",
-    "radius": "Радиус (м)",
+    "radius": "Радиус",
     "tabPharmacies": "Аптеки",
     "tabSpecialists": "Специалисты и сервисы",
     "load": "Загрузить",
