@@ -10,8 +10,13 @@ const load = (k, def) => {
   }
 }
 
+const parseISODate = iso => {
+  const [y, m, d] = iso.split('-').map(Number)
+  return new Date(y, m - 1, d)
+}
+
 const addDays = (date, n) => {
-  const d = new Date(date)
+  const d = parseISODate(date)
   d.setDate(d.getDate() + n)
   return d.toISOString().slice(0, 10)
 }

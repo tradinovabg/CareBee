@@ -30,8 +30,13 @@ const save = (k, v) => {
   try { localStorage.setItem(k, JSON.stringify(v)) } catch { /* ignore */ }
 }
 
+const parseISODate = iso => {
+  const [y, m, d] = iso.split('-').map(Number)
+  return new Date(y, m - 1, d)
+}
+
 const addDays = (d, n) => {
-  const x = new Date(d)
+  const x = parseISODate(d)
   x.setDate(x.getDate() + n)
   return x.toISOString().slice(0, 10)
 }
@@ -118,7 +123,7 @@ export default function Meds () {
 
   const renewals = useMemo(() => {
     const now = today()
-    return items.filter(i => i.mode === 'daily' && i.endDate && (new Date(i.endDate) - new Date(now)) / 86400000 <= 3)
+    return items.filter(i => i.mode === 'daily' && i.endDate && (parseISODate(i.endDate) - parseISODate(now)) / 86400000 <= 3)
   }, [items])
 
   const schedule = useMemo(() => {
