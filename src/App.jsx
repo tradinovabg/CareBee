@@ -6,6 +6,9 @@ import Sos from './pages/Sos.jsx'
 import Profile from './pages/Profile.jsx'
 import Meds from './pages/Meds.jsx'
 import Visits from './pages/Visits.jsx'
+import QR from './pages/QR.jsx'
+import Vitals from './pages/Vitals.jsx'
+import Docs from './pages/Docs.jsx'
 export default function App() {
   const { t } = useTranslation()
   const year = new Date().getFullYear()
@@ -18,6 +21,9 @@ export default function App() {
             <Link to="/profile">{t('nav.profile', 'Profile')}</Link>
             <Link to="/meds">{t('nav.meds', 'Meds')}</Link>
             <Link to="/visits">{t('nav.visits', 'Visits')}</Link>
+            <Link to="/qr">QR</Link>
+            <Link to="/vitals">Vitals</Link>
+            <Link to="/docs">Docs</Link>
             <LanguageSwitcher />
           </nav>
         </div>
@@ -30,6 +36,9 @@ export default function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/meds" element={<Meds />} />
             <Route path="/visits" element={<Visits />} />
+            <Route path="/qr" element={<QR />} />
+            <Route path="/vitals" element={<Vitals />} />
+            <Route path="/docs" element={<Docs />} />
           </Routes>
         </div>
       </main>
