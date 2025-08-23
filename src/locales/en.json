@@ -17,7 +17,11 @@
   "nav": {
     "profile": "Profile",
     "meds": "Meds",
-    "visits": "Visits"
+    "visits": "Visits",
+    "calendar": "Calendar"
+  },
+  "calendar": {
+    "title": "Calendar"
   },
   "profile": {
     "title": "Patient profile",
@@ -67,7 +71,21 @@
     "status_active": "active",
     "status_inactive": "inactive",
     "deactivate": "Deactivate",
-    "activate": "Activate"
+    "activate": "Activate",
+    "renew": "Course ends",
+    "on": "on",
+    "extend": "Extend",
+    "once": "Once",
+    "daily": "Daily",
+    "date": "Date",
+    "time": "Time",
+    "start": "Start",
+    "end": "End",
+    "duration": "Days",
+    "times": "Times (comma separated)",
+    "schedule": "Schedule",
+    "expand": "Show 14 days",
+    "collapse": "Show 7 days"
   },
   "visits": {
     "title": "Doctor visits",
@@ -94,6 +112,11 @@
   "notes": "Notes",
   "save": "Save",
   "delete": "Delete",
+  "edit": "Edit",
+  "update": "Update",
+  "cancel": "Cancel",
+  "googleCalendar": "Google Calendar",
+  "downloadIcs": "Download .ics",
   "nearby": {
     "title": "Nearby",
     "useMyLocation": "Use my location",

@@ -17,7 +17,11 @@
   "nav": {
     "profile": "Profil",
     "meds": "Médicaments",
-    "visits": "Visites"
+    "visits": "Visites",
+    "calendar": "Calendrier"
+  },
+  "calendar": {
+    "title": "Calendrier"
   },
   "profile": {
     "title": "Profil du patient",
@@ -67,7 +71,21 @@
     "status_active": "actif",
     "status_inactive": "inactif",
     "deactivate": "Désactiver",
-    "activate": "Activer"
+    "activate": "Activer",
+    "renew": "Fin du traitement",
+    "on": "le",
+    "extend": "Prolonger",
+    "once": "Une fois",
+    "daily": "Quotidien",
+    "date": "Date",
+    "time": "Heure",
+    "start": "Début",
+    "end": "Fin",
+    "duration": "Jours",
+    "times": "Heures (séparées par des virgules)",
+    "schedule": "Planning",
+    "expand": "Afficher 14 jours",
+    "collapse": "Afficher 7 jours"
   },
   "visits": {
     "title": "Visites médicales",
@@ -94,6 +112,11 @@
   "notes": "Notes",
   "save": "Enregistrer",
   "delete": "Supprimer",
+  "edit": "Modifier",
+  "update": "Mettre à jour",
+  "cancel": "Annuler",
+  "googleCalendar": "Google Agenda",
+  "downloadIcs": "Télécharger .ics",
   "nearby": {
     "title": "À proximité",
     "useMyLocation": "Utiliser ma position",

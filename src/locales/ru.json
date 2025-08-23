@@ -17,7 +17,11 @@
   "nav": {
     "profile": "Профиль",
     "meds": "Лекарства",
-    "visits": "Визиты"
+    "visits": "Визиты",
+    "calendar": "Календарь"
+  },
+  "calendar": {
+    "title": "Календарь"
   },
   "profile": {
     "title": "Профиль пациента",
@@ -67,13 +71,35 @@
     "status_active": "активен",
     "status_inactive": "неактивен",
     "deactivate": "Выключить",
-    "activate": "Включить"
+    "activate": "Включить",
+    "renew": "Курс заканчивается",
+    "on": "в",
+    "extend": "Продлить",
+    "once": "Один раз",
+    "daily": "Ежедневно",
+    "date": "Дата",
+    "time": "Время",
+    "start": "Начало",
+    "end": "Конец",
+    "duration": "Дней",
+    "times": "Время (через запятую)",
+    "schedule": "Расписание",
+    "expand": "Показать 14 дней",
+    "collapse": "Показать 7 дней"
   },
   "visits": {
     "title": "Визиты к врачу",
     "add": "Добавить визит",
     "doctor": "Врач",
     "place": "Место",
+    "date": "Дата",
+    "time": "Время",
+    "notes": "Заметки",
+    "save": "Сохранить",
+    "update": "Обновить",
+    "cancel": "Отмена",
+    "delete": "Удалить",
+    "edit": "Редактировать",
     "exportJson": "Экспорт JSON",
     "importJson": "Импорт JSON",
     "invalidFile": "Неверный файл",
@@ -86,6 +112,11 @@
   "notes": "Заметки",
   "save": "Сохранить",
   "delete": "Удалить",
+  "edit": "Редактировать",
+  "update": "Обновить",
+  "cancel": "Отмена",
+  "googleCalendar": "Google Календарь",
+  "downloadIcs": "Скачать .ics",
   "nearby": {
     "title": "Рядом",
     "useMyLocation": "Определить местоположение",
