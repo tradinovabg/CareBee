@@ -1,3 +1,5 @@
+import { t } from 'i18next'
+
 const PROFILE_KEY = 'carebee.profile'
 const LAST_KEY = 'carebee.lastDailySent'
 const AUTO_KEY = 'carebee.autosend'
@@ -95,5 +97,5 @@ export function sendDailySummaryNow () {
 }
 
 export function maybeSendDailySummary () {
-  if (shouldAutoSend() && confirm('Send daily summary now?')) sendSummary()
+  if (shouldAutoSend() && confirm(t('daily.confirmSend', 'Send daily summary now?'))) sendSummary()
 }

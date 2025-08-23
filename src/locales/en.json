@@ -163,5 +163,8 @@
     "finessHint": "Load official CSV to search registered facilities.",
     "clear": "Clear",
     "category": "Category"
+  },
+  "daily": {
+    "confirmSend": "Send daily summary now?"
   }
 }
