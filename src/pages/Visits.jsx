@@ -1,5 +1,8 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+codex/escape-special-characters-in-ics-event-strings
+import { icsEscape, buildICSEvent } from '../lib/ics'
+=======
 codex/extend-ics.js-for-ics-events
 import { buildICSEvent, genUID, icsEscape } from '../lib/ics'
 =======
@@ -9,12 +12,20 @@ import { buildGoogleCalLink } from '../lib/ics'
 import { fromDateAndTimeLocal, toICSDateTimeUTC } from '../lib/ics'
 main
 main
+main
 
 const STORAGE = 'carebee.visits'
 const load = (k, def) => { try { const v=localStorage.getItem(k); return v?JSON.parse(v):def } catch { return def } }
 const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)) } catch { /* ignore */ } }
 
 const todayISO = () => { const d=new Date(); const y=d.getFullYear(); const m=String(d.getMonth()+1).padStart(2,'0'); const day=String(d.getDate()).padStart(2,'0'); return `${y}-${m}-${day}` }
+codex/escape-special-characters-in-ics-event-strings
+function toICSDateTime (isoDate, hhmm) {
+  return new Date(`${isoDate}T${hhmm || '09:00'}:00`).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'
+}
+
+=======
+main
 
 export default function Visits(){
   const { t } = useTranslation()
@@ -49,6 +60,13 @@ codex/extend-ics.js-for-ics-events
     const dt = toICSDateTime(v.date, v.time) || ''
     const ics = buildICSEvent({
       uid,
+codex/escape-special-characters-in-ics-event-strings
+      start: dt,
+      title: icsEscape(`Visit — ${v.doctor}`),
+      details: icsEscape(v.notes),
+      location: icsEscape(v.place)
+    })
+=======
       dtstamp: dt,
       dtstart: dt,
       title: icsEscape(`Visit — ${v.doctor}`),
@@ -61,6 +79,7 @@ codex/extend-ics.js-for-ics-events
     const dtStart = toICSDateTimeUTC(start)
     const dtStamp = toICSDateTimeUTC(new Date())
     const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//CareBee//EN\nBEGIN:VEVENT\nUID:${uid}\nDTSTAMP:${dtStamp}\nDTSTART:${dtStart}\nSUMMARY:${esc(`Visit — ${v.doctor}`) || ''}\nLOCATION:${esc(v.place) || ''}\nDESCRIPTION:${esc(v.notes)}\nEND:VEVENT\nEND:VCALENDAR`
+main
 main
     const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' })
     const a = document.createElement('a')

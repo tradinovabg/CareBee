@@ -1,5 +1,8 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+codex/escape-special-characters-in-ics-event-strings
+import { icsEscape, buildICSEvent } from '../lib/ics'
+=======
 codex/extend-ics.js-for-ics-events
 import { buildICSEvent, genUID, icsEscape } from '../lib/ics'
 =======
@@ -7,6 +10,7 @@ codex/implement-google-calendar-link-feature
 import { buildGoogleCalLink } from '../lib/ics'
 =======
 import { fromDateAndTimeLocal, toICSDateTimeUTC } from '../lib/ics'
+main
 main
 main
 
@@ -32,7 +36,11 @@ const addDays = (d, n) => {
   return x.toISOString().slice(0, 10)
 }
 
+codex/escape-special-characters-in-ics-event-strings
+
+=======
 codex/extend-ics.js-for-ics-events
+main
 function toICSDateTime (isoDate, hhmm) {
   return new Date(`${isoDate}T${hhmm || '09:00'}:00`).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'
 }
@@ -138,6 +146,12 @@ export default function Meds () {
  codex/extend-ics.js-for-ics-events
     const dt = toICSDateTime(m.startDate, m.onceTime) || ''
     const ics = buildICSEvent({
+codex/escape-special-characters-in-ics-event-strings
+      uid: m.id,
+      start: dt,
+      title: icsEscape(m.name)
+    })
+=======
       uid: genUID(),
       dtstamp: dt,
       dtstart: dt,
@@ -148,6 +162,7 @@ export default function Meds () {
     const dtStart = toICSDateTimeUTC(start)
     const dtStamp = toICSDateTimeUTC(new Date())
     const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//CareBee//EN\nBEGIN:VEVENT\nUID:${m.id}\nDTSTAMP:${dtStamp}\nDTSTART:${dtStart}\nSUMMARY:${esc(m.name) || ''}\nEND:VEVENT\nEND:VCALENDAR`
+main
 main
     const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' })
     const a = document.createElement('a')
