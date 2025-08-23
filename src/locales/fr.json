@@ -29,6 +29,8 @@
     "saved": "Enregistré"
   },
   "qr": {
+    "title": "QR — {{profile}}",
+    "imgAlt": "Code QR",
     "allergies": "Allergies",
     "allergies_placeholder": "pénicilline, arachides…",
     "conditions": "Conditions importantes",

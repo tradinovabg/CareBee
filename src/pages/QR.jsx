@@ -49,46 +49,46 @@ export default function QR(){
 
   return (
     <div className="container" style={{maxWidth:760, margin:'0 auto'}}>
-      <h1 className="h1">QR — {t('profile.title','Patient profile')}</h1>
+      <h1 className="h1">{t('qr.title', { profile: t('profile.title') })}</h1>
 
       <div className="card">
-        <div className="field"><label>Allergies</label>
-          <textarea name="allergies" value={form.allergies} onChange={onChange} rows={2} placeholder="penicillin, peanuts…" />
+        <div className="field"><label>{t('qr.allergies')}</label>
+          <textarea name="allergies" value={form.allergies} onChange={onChange} rows={2} placeholder={t('qr.allergies_placeholder')} />
         </div>
-        <div className="field"><label>Important conditions</label>
-          <textarea name="conditions" value={form.conditions} onChange={onChange} rows={2} placeholder="diabetes I, pacemaker…" />
+        <div className="field"><label>{t('qr.conditions')}</label>
+          <textarea name="conditions" value={form.conditions} onChange={onChange} rows={2} placeholder={t('qr.conditions_placeholder')} />
         </div>
-        <div className="field"><label>Critical meds</label>
-          <textarea name="meds" value={form.meds} onChange={onChange} rows={2} placeholder="Warfarin 5mg…" />
+        <div className="field"><label>{t('qr.meds')}</label>
+          <textarea name="meds" value={form.meds} onChange={onChange} rows={2} placeholder={t('qr.meds_placeholder')} />
         </div>
         <div className="row">
           <div className="field" style={{flex:1}}>
-            <label>ICE name</label>
-            <input name="iceName" value={form.iceName} onChange={onChange} placeholder="Emergency contact" />
+            <label>{t('qr.iceName')}</label>
+            <input name="iceName" value={form.iceName} onChange={onChange} placeholder={t('qr.iceName_placeholder')} />
           </div>
           <div className="field" style={{flex:1}}>
-            <label>ICE phone</label>
-            <input name="icePhone" value={form.icePhone} onChange={onChange} placeholder="+33…" />
+            <label>{t('qr.icePhone')}</label>
+            <input name="icePhone" value={form.icePhone} onChange={onChange} placeholder={t('qr.icePhone_placeholder')} />
           </div>
         </div>
 
         <div className="row" style={{marginTop:8}}>
-          <label><input type="checkbox" name="includeAge" checked={form.includeAge} onChange={onChange}/> Include age</label>
-          <label><input type="checkbox" name="includeAllergies" checked={form.includeAllergies} onChange={onChange}/> Include allergies</label>
-          <label><input type="checkbox" name="includeMeds" checked={form.includeMeds} onChange={onChange}/> Include meds</label>
-          <label><input type="checkbox" name="includeICE" checked={form.includeICE} onChange={onChange}/> Include ICE</label>
+          <label><input type="checkbox" name="includeAge" checked={form.includeAge} onChange={onChange}/> {t('qr.includeAge')}</label>
+          <label><input type="checkbox" name="includeAllergies" checked={form.includeAllergies} onChange={onChange}/> {t('qr.includeAllergies')}</label>
+          <label><input type="checkbox" name="includeMeds" checked={form.includeMeds} onChange={onChange}/> {t('qr.includeMeds')}</label>
+          <label><input type="checkbox" name="includeICE" checked={form.includeICE} onChange={onChange}/> {t('qr.includeICE')}</label>
         </div>
 
         <div className="row" style={{marginTop:8}}>
-          <button className="btn btn-primary" onClick={generate}>Generate QR</button>
-          <button className="btn btn-outline" onClick={downloadPNG} disabled={!png}>Download PNG</button>
-          <button className="btn btn-outline" onClick={()=>window.print()} disabled={!png}>Print</button>
+          <button className="btn btn-primary" onClick={generate}>{t('qr.generate')}</button>
+          <button className="btn btn-outline" onClick={downloadPNG} disabled={!png}>{t('qr.download')}</button>
+          <button className="btn btn-outline" onClick={()=>window.print()} disabled={!png}>{t('qr.print')}</button>
         </div>
       </div>
 
       {png && (
         <div style={{textAlign:'center', marginTop:16}}>
-          <img src={png} alt="QR Code" style={{maxWidth:'320px'}} />
+          <img src={png} alt={t('qr.imgAlt')} style={{maxWidth:'320px'}} />
           <pre style={{textAlign:'left', whiteSpace:'pre-wrap', background:'#fff', padding:12, borderRadius:8, border:'1px solid #eee', marginTop:12}}>{payload}</pre>
         </div>
       )}

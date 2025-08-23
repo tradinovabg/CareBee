@@ -29,6 +29,8 @@
     "saved": "Saved"
   },
   "qr": {
+    "title": "QR — {{profile}}",
+    "imgAlt": "QR Code",
     "allergies": "Allergies",
     "allergies_placeholder": "penicillin, peanuts…",
     "conditions": "Important conditions",
