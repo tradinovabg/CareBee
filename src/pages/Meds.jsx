@@ -1,7 +1,11 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { buildGoogleCalLink, buildICSEvent, fromDateAndTimeLocal, toICSDateTimeUTC } from '../lib/ics'
+codex/add-normalization-to-times-array
+import { normalizeTimes } from '../lib/normalizeTimes'
+=======
 import { MEAL_LABEL } from '../locale/mealLabel'
+main
 
 const STORAGE = 'carebee.meds'
 const SLOT_DEFAULTS = { morning: '08:00', noon: '13:00', evening: '20:00' }
@@ -67,7 +71,7 @@ export default function Meds () {
     if (mode === 'once') {
       item = { ...base, times: [onceTime], onceTime }
     } else {
-      const times = Object.values(slots).filter(Boolean)
+      const times = normalizeTimes(Object.values(slots).filter(Boolean))
       if (!times.length) return
       item = { ...base, endDate: endDate || undefined, slots, times }
     }

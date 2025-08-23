@@ -9,6 +9,8 @@ export const icsEscape = (v = '') => String(v)
   .replace(/,/g, '\\,')
   .replace(/;/g, '\\;')
 
+codex/add-normalization-to-times-array
+=======
 codex/create-localization-for-meal-labels
 =======
 codex/update-googlecallink-dates-formatting
@@ -61,6 +63,8 @@ export const buildICSEvent = ({
 }
 codex/validate-hhmm-and-plusminutes-parameters
 
+ codex/add-normalization-to-times-array
+=======
 codex/create-localization-for-meal-labels
 =======
 codex/update-googlecallink-dates-formatting
@@ -175,6 +179,8 @@ export const genUID = (domain = 'carebee') => {
     : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`
   return `${rnd}@${domain}`
 }
+codex/add-normalization-to-times-array
+=======
 codex/create-localization-for-meal-labels
 =======
 codex/update-googlecallink-dates-formatting
