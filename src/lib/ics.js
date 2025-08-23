@@ -9,6 +9,7 @@ export const icsEscape = (v = '') => String(v)
   .replace(/,/g, '\\,')
   .replace(/;/g, '\\;')
 
+codex/validate-hhmm-and-plusminutes-parameters
 /**
  * Build a minimal ICS event string.
  * @param {Object} params
@@ -22,6 +23,10 @@ export const icsEscape = (v = '') => String(v)
  * @param {string} [params.method='PUBLISH']
  * @returns {string}
  */
+=======
+codex/refactor-toutcstamp-for-utc-date-creation
+=======
+main
 export const buildICSEvent = ({
   uid,
   dtstamp,
@@ -49,6 +54,7 @@ export const buildICSEvent = ({
   lines.push('END:VEVENT', 'END:VCALENDAR')
   return lines.join('\r\n') + '\r\n'
 }
+codex/validate-hhmm-and-plusminutes-parameters
 
 /**
  * Create a Date from separate ISO date and `HH:MM` time.
@@ -56,6 +62,9 @@ export const buildICSEvent = ({
  * @param {string} [time='09:00']
  * @returns {Date}
  */
+=======
+main
+main
 export const fromDateAndTimeLocal = (date, time = '09:00') => {
   return new Date(`${date}T${time || '09:00'}:00`)
 }
@@ -72,6 +81,7 @@ export const toICSDateTimeUTC = (date) => {
   return d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'
 }
 
+codex/validate-hhmm-and-plusminutes-parameters
 /**
  * Convert an `HH:MM` time string and offset to a UTC timestamp.
  *
@@ -100,6 +110,15 @@ export const toUTCStamp = (hhmm, plusMinutes) => {
  * @param {string} [params.location]
  * @returns {string}
  */
+=======
+export const toUTCStamp = (dateISO, H = 0, M = 0, durationMin = 60) => {
+  const [y, m, d] = dateISO.split('-').map(Number)
+  const start = new Date(Date.UTC(y, m - 1, d, Number(H), Number(M), 0))
+  const end = new Date(start.getTime() + durationMin * 60000)
+  return [toICSDateTimeUTC(start), toICSDateTimeUTC(end)]
+}
+
+main
 export const buildGoogleCalLink = ({
   title = '',
   date,
@@ -147,4 +166,38 @@ export const genUID = (domain = 'carebee') => {
     : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`
   return `${rnd}@${domain}`
 }
+codex/validate-hhmm-and-plusminutes-parameters
 
+=======
+codex/refactor-toutcstamp-for-utc-date-creation
+
+export const buildICSEvent = ({
+  uid,
+  dtstamp,
+  dtstart,
+  dtend,
+  title = '',
+  desc = '',
+  loc = '',
+  method = 'PUBLISH'
+}) => {
+  const lines = [
+    'BEGIN:VCALENDAR',
+    'PRODID:-//CareBee//EN',
+    'VERSION:2.0',
+    `METHOD:${method}`,
+    'BEGIN:VEVENT',
+    `UID:${uid}`,
+    `DTSTAMP:${dtstamp}`,
+    `DTSTART:${dtstart}`,
+    `DTEND:${dtend}`
+  ]
+  if (title) lines.push(`SUMMARY:${icsEscape(title)}`)
+  if (desc) lines.push(`DESCRIPTION:${icsEscape(desc)}`)
+  if (loc) lines.push(`LOCATION:${icsEscape(loc)}`)
+  lines.push('END:VEVENT', 'END:VCALENDAR')
+  return lines.join('\r\n') + '\r\n'
+}
+
+=======
+main
