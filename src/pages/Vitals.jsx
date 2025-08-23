@@ -5,13 +5,13 @@ import { useTranslation } from 'react-i18next'
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend)
 
 const KEY='carebee.vitals'
-const load=()=>{try{const v=localStorage.getItem(KEY);return v?JSON.parse(v):[]}catch{return[]}}
-const save=(arr)=>{try{localStorage.setItem(KEY,JSON.stringify(arr))}catch{}}
+const load=()=>{try{const v=localStorage.getItem(KEY);return v?JSON.parse(v):[]}catch(e){void e;return[]}}
+const save=(arr)=>{try{localStorage.setItem(KEY,JSON.stringify(arr))}catch(e){/* ignore */ void e;}}
 const nowISO = ()=> new Date().toISOString()
 
 export default function Vitals(){
-  const { t } = useTranslation()
-  const [list,setList]=useState(()=>load())
+    const { t } = useTranslation()
+    const [list,setList]=useState(()=>load())
   const [type,setType]=useState('bp') // bp | temp | glu
   const [sys,setSys]=useState(''); const [dia,setDia]=useState(''); const [pulse,setPulse]=useState('')
   const [temp,setTemp]=useState(''); const [glu,setGlu]=useState(''); const [ts,setTs]=useState(()=>nowISO().slice(0,16))
@@ -50,17 +50,17 @@ export default function Vitals(){
     const blob=new Blob([[head,...rows].join('\n')],{type:'text/csv'})
     const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='vitals.csv'; a.click(); URL.revokeObjectURL(a.href)
   }
-  const importJSON = (file) => {
-    const reader=new FileReader()
-    reader.onload=()=>{ try{
-      const arr=JSON.parse(reader.result); if(!Array.isArray(arr)) throw new Error();
-      setList(arr); }catch{ alert('Invalid file') } }
-    reader.readAsText(file)
-  }
+    const importJSON = (file) => {
+      const reader=new FileReader()
+      reader.onload=()=>{ try{
+        const arr=JSON.parse(reader.result); if(!Array.isArray(arr)) throw new Error();
+        setList(arr); }catch(e){ void e; alert('Invalid file') } }
+      reader.readAsText(file)
+    }
 
   return (
     <div className="container" style={{maxWidth:900, margin:'0 auto'}}>
-      <h1 className="h1">Vitals</h1>
+        <h1 className="h1">{t('vitals.title','Vitals')}</h1>
 
       <div className="card">
         <div className="row">
@@ -95,12 +95,12 @@ export default function Vitals(){
         </div>
       </div>
 
-      <h2 className="h2" style={{marginTop:16}}>Charts (last 20)</h2>
+        <h2 className="h2" style={{marginTop:16}}>{t('vitals.charts','Charts (last 20)')}</h2>
       <div className="card"><Line data={bpData} /></div>
       <div className="card" style={{marginTop:12}}><Line data={tempData} /></div>
       <div className="card" style={{marginTop:12}}><Line data={gluData} /></div>
 
-      <h2 className="h2" style={{marginTop:16}}>Latest</h2>
+        <h2 className="h2" style={{marginTop:16}}>{t('vitals.latest','Latest')}</h2>
       <ul>
         {last.map(x=>(
           <li key={x.id} className="card" style={{marginTop:8, padding:'12px'}}>

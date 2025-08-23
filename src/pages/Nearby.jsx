@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { haversineKm, overpassAround, geocodeAddress } from '../lib/geo'
+import { haversineKm, overpassAround, geocodeAddress, fetchNearbyPharmacies } from '../lib/geo'
 
 const KM = m => (m/1000).toFixed(2)
 
@@ -8,7 +8,7 @@ export default function Nearby(){
   const { t, i18n } = useTranslation()
   const [loc, setLoc] = useState({ status:'getting', lat:null, lon:null })
   const [addr, setAddr] = useState('')
-  const [radius, setRadius] = useState(1500)
+  const [radiusKm, setRadiusKm] = useState(1.5)
   const [tab, setTab] = useState('pharm') // pharm | spec
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(false)
@@ -31,16 +31,16 @@ export default function Nearby(){
         origin = await geocodeAddress(addr.trim(), i18n.resolvedLanguage || i18n.language || 'en')
       }
       if (!origin) { setErr(t('nearby.geolocDenied')); setItems([]); return }
+      const radius = parseFloat(radiusKm)
       const blocks = tab==='pharm'
-        ? [
-            `nwr(around:${radius},${origin.lat},${origin.lon})["amenity"="pharmacy"];`
-          ]
+        ? null
         : [
-            `nwr(around:${radius},${origin.lat},${origin.lon})["amenity"="doctors"];`,
-            `nwr(around:${radius},${origin.lat},${origin.lon})["healthcare"~"clinic|physiotherapist|rehabilitation|speech_therapist|occupational_therapist"];`
+            '["amenity"="doctors"]',
+            '["healthcare"~"clinic|physiotherapist|rehabilitation|speech_therapist|occupational_therapist"]'
           ]
-      // Перепакуем в общий запрос (функция сама вставляет around)
-      const raw = await overpassAround(origin.lat, origin.lon, radius, blocks)
+      const raw = tab==='pharm'
+        ? await fetchNearbyPharmacies(origin.lat, origin.lon, radius)
+        : await overpassAround(origin.lat, origin.lon, radius, blocks)
       const enriched = raw.map(o=>{
         const km = origin ? haversineKm(origin, {lat:o.lat, lon:o.lon}) : null
         const name = o.tags.name || (tab==='pharm' ? 'Pharmacy' : 'Medical')
@@ -73,8 +73,8 @@ export default function Nearby(){
           </div>
           <div className="row">
             <label className="field" style={{minWidth:160}}>
-              <span>{t('nearby.radius')}</span>
-              <input type="number" min="200" step="100" value={radius} onChange={e=>setRadius(parseInt(e.target.value||'1500',10))}/>
+              <span>{t('nearby.radius')} (km)</span>
+              <input type="number" min="0.2" step="0.1" value={radiusKm} onChange={e=>setRadiusKm(parseFloat(e.target.value||'1.5'))}/>
             </label>
             <button className="btn btn-primary" onClick={runSearch}>{t('nearby.load','Load')}</button>
           </div>
