@@ -1,5 +1,6 @@
 const PROFILE_KEY = 'carebee.profile'
 const LAST_KEY = 'carebee.lastDailySent'
+const AUTO_KEY = 'carebee.autosend'
 
 const load = (k, def) => {
   try {
@@ -11,6 +12,41 @@ const load = (k, def) => {
 }
 
 const loadProfile = () => load(PROFILE_KEY, {})
+
+codex/add-daily-summary-helpers-in-dailysummary.js
+export function getAutoSendSettings () {
+  return load(AUTO_KEY, { enabled: false, time: '08:00' })
+}
+
+export function setAutoSendSettings (settings) {
+  try {
+    localStorage.setItem(AUTO_KEY, JSON.stringify(settings))
+  } catch {
+    /* ignore */
+  }
+}
+
+export function getLastSummaryAt () {
+  try {
+    const v = localStorage.getItem(LAST_KEY)
+    return v ? new Date(`${v}T00:00:00`) : null
+  } catch {
+    return null
+=======
+export function shouldAutoSend () {
+  try {
+    const p = loadProfile()
+    if (!p.autosendEnabled) return false
+    const now = new Date()
+    const hhmm = now.toTimeString().slice(0, 5)
+    const today = now.toISOString().slice(0, 10)
+    const last = localStorage.getItem(LAST_KEY)
+    return hhmm >= (p.autosendTime || '00:00') && last !== today
+  } catch {
+    return false
+main
+  }
+}
 
 export function buildDailySummary () {
   const today = new Date().toISOString().slice(0, 10)
@@ -50,6 +86,31 @@ export function sendSummary () {
   const subj = encodeURIComponent('CareBee Daily Summary')
   const url = `mailto:${to}?subject=${subj}&body=${body}`
   window.open(url)
+  try { localStorage.setItem(LAST_KEY, new Date().toISOString()) } catch { /* ignore */ }
+}
+
+const AUTO_KEY = 'carebee.autoDailySummary'
+
+export const getAutoSendSettings = () => load(AUTO_KEY, { enabled: false, time: '09:00' })
+
+export const setAutoSendSettings = (s) => {
+  try { localStorage.setItem(AUTO_KEY, JSON.stringify(s)) } catch { /* ignore */ }
+}
+
+export const getLastSummaryAt = () => load(LAST_KEY, null)
+
+export const sendDailySummaryNow = () => {
+  sendSummary()
+  return getLastSummaryAt()
+}
+
+codex/add-daily-summary-helpers-in-dailysummary.js
+export function sendDailySummaryNow () {
+  sendSummary()
   try { localStorage.setItem(LAST_KEY, new Date().toISOString().slice(0, 10)) } catch { /* ignore */ }
+=======
+export function maybeSendDailySummary () {
+  if (shouldAutoSend() && confirm('Send daily summary now?')) sendSummary()
+main
 }
 
