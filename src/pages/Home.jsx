@@ -7,7 +7,7 @@ export default function Home() {
       <div className="hero-card">
         <h1>{t('title')}</h1>
         <p>{t('tagline')}</p>
-        <Link to="/sos"><button className="sos-button">{t('goToSOS')}</button></Link>
+        <Link to="/sos" className="sos-button">{t('goToSOS')}</Link>
       </div>
     </div>
   )
