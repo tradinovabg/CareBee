@@ -29,11 +29,7 @@
     "saved": "Enregistré"
   },
   "qr": {
-codex/update-localization-files-with-new-keys
-    "title": "Code QR",
-=======
     "title": "QR — {{profile}}",
-main
     "imgAlt": "Code QR",
     "allergies": "Allergies",
     "allergies_placeholder": "pénicilline, arachides…",
@@ -120,10 +116,11 @@ main
     "today": "Aujourd’hui",
     "showVisits": "Visites & événements",
     "showMeds": "Planning médicaments",
-    "visit": "Visite",
-    "med": "Médicament",
-    "empty": "Rien de prévu"
-  },
+      "visit": "Visite",
+      "med": "Médicament",
+      "empty": "Rien de prévu",
+      "addToGoogle": "Ajouter à Google Agenda"
+    },
   "date": "Date",
   "time": "Heure",
   "notes": "Notes",
