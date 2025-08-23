@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { icsEscape, buildICSEvent } from '../lib/ics'
 
 const STORAGE = 'carebee.meds'
 const SLOT_DEFAULTS = { morning: '08:00', noon: '13:00', evening: '20:00' }
@@ -23,7 +24,6 @@ const addDays = (d, n) => {
   return x.toISOString().slice(0, 10)
 }
 
-const esc = v => (v || '').replace(/[\n,;]/g, ' ')
 
 function toICSDateTime (isoDate, hhmm) {
   return new Date(`${isoDate}T${hhmm || '09:00'}:00`).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'
@@ -125,7 +125,11 @@ export default function Meds () {
 
   const downloadICS = m => {
     const dt = toICSDateTime(m.startDate, m.onceTime) || ''
-    const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//CareBee//EN\nBEGIN:VEVENT\nUID:${m.id}\nDTSTAMP:${dt}\nDTSTART:${dt}\nSUMMARY:${esc(m.name) || ''}\nEND:VEVENT\nEND:VCALENDAR`
+    const ics = buildICSEvent({
+      uid: m.id,
+      start: dt,
+      title: icsEscape(m.name)
+    })
     const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' })
     const a = document.createElement('a')
     a.href = URL.createObjectURL(blob)
