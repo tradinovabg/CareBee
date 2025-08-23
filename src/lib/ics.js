@@ -9,6 +9,8 @@ export const icsEscape = (v = '') => String(v)
   .replace(/,/g, '\\,')
   .replace(/;/g, '\\;')
 
+codex/update-googlecallink-dates-formatting
+=======
 codex/validate-hhmm-and-plusminutes-parameters
 /**
  * Build a minimal ICS event string.
@@ -56,6 +58,8 @@ export const buildICSEvent = ({
 }
 codex/validate-hhmm-and-plusminutes-parameters
 
+codex/update-googlecallink-dates-formatting
+=======
 /**
  * Create a Date from separate ISO date and `HH:MM` time.
  * @param {string} date
@@ -63,7 +67,6 @@ codex/validate-hhmm-and-plusminutes-parameters
  * @returns {Date}
  */
 =======
-main
 main
 export const fromDateAndTimeLocal = (date, time = '09:00') => {
   return new Date(`${date}T${time || '09:00'}:00`)
@@ -132,14 +135,14 @@ export const buildGoogleCalLink = ({
   const start = toICSDateTimeUTC(fromDateAndTimeLocal(date, time))
   const end = toICSDateTimeUTC(fromDateAndTimeLocal(endDate || date, endTime || time))
   if (!start || !end) return ''
+  const dates = encodeURIComponent(`${start}/${end}`)
   const params = new URLSearchParams({
     action: 'TEMPLATE',
-    text: title,
-    dates: `${start}/${end}`
+    text: title
   })
   if (description) params.set('details', description)
   if (location) params.set('location', location)
-  return `https://calendar.google.com/calendar/render?${params.toString()}`
+  return `https://calendar.google.com/calendar/render?${params.toString()}&dates=${dates}`
 }
 
 /**
@@ -166,6 +169,9 @@ export const genUID = (domain = 'carebee') => {
     : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`
   return `${rnd}@${domain}`
 }
+codex/update-googlecallink-dates-formatting
+
+=======
 codex/validate-hhmm-and-plusminutes-parameters
 
 =======
