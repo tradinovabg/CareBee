@@ -21,6 +21,17 @@ Build for production:
 ```bash
 npm run build
 ```
+
+## Localization
+
+Translations live in the `src/locales` directory. Each language has its own
+JSON file (e.g. `en.json`). To extend translations with new meal labels or
+other strings:
+
+1. Add the keys and values to every locale JSON file.
+2. If you introduce new meal types, also update `src/locale/mealLabel.js` so
+   components can reference the new translation keys.
+
 ## Live
 
 - App: https://tradinovabg.github.io/CareBee/
