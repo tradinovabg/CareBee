@@ -137,6 +137,11 @@ export default function Meds () {
   }, [items, days])
 
   const downloadICS = m => {
+codex/update-ics-structure-in-downloadics-function
+    const dt = new Date(`${m.startDate}T${m.onceTime}`).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z')
+    const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//CareBee//EN\nBEGIN:VEVENT\nUID:${m.id}\nDTSTAMP:${dt}\nDTSTART:${dt}\nSUMMARY:${m.name}\nEND:VEVENT\nEND:VCALENDAR`
+    const blob = new Blob([ics], { type: 'text/calendar' })
+=======
 codex/update-ics-download-to-use-google-calendar-link
     const startUTC = toUTC(m.startDate, m.onceTime)
     const endUTC = toUTC(m.startDate, m.onceTime, 60)
@@ -187,6 +192,7 @@ codex/update-ics-download-to-use-google-calendar-link
 
     const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//CareBee//EN', ...events, 'END:VCALENDAR'].join('\r\n')
     const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' })
+main
     const a = document.createElement('a')
     a.href = URL.createObjectURL(blob)
     a.download = `${m.name}.ics`
