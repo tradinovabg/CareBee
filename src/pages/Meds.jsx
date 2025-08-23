@@ -116,8 +116,8 @@ export default function Meds () {
   }, [items, days])
 
   const downloadICS = m => {
-    const dt = `${m.startDate.replace(/-/g, '')}T${m.onceTime.replace(':', '')}00`
-    const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nUID:${m.id}\nDTSTAMP:${dt}\nDTSTART:${dt}\nSUMMARY:${m.name}\nEND:VEVENT\nEND:VCALENDAR`
+    const dt = new Date(`${m.startDate}T${m.onceTime}`).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z')
+    const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//CareBee//EN\nBEGIN:VEVENT\nUID:${m.id}\nDTSTAMP:${dt}\nDTSTART:${dt}\nSUMMARY:${m.name}\nEND:VEVENT\nEND:VCALENDAR`
     const blob = new Blob([ics], { type: 'text/calendar' })
     const a = document.createElement('a')
     a.href = URL.createObjectURL(blob)
