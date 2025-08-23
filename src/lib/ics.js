@@ -68,8 +68,18 @@ export const fromDateAndTimeLocal = (date, time = '09:00') => {
   return new Date(`${date}T${time || '09:00'}:00`)
 }
 
+codex/validate-date-in-toicsdatetimeutc
+export const toICSDateTimeUTC = (date) => {
+  const d = date instanceof Date ? date : new Date(date)
+  if (Number.isNaN(d.getTime())) return null
+  return d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'
+main
+main
+main
+=======
 export const toICSDateTimeUTC = (d) => {
   const date = d instanceof Date ? d : new Date(d)
   return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'
+main
 }
 
