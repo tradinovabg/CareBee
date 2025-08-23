@@ -106,6 +106,16 @@
   "notes": "Notes",
   "save": "Save",
   "delete": "Delete",
+  "vitals": {
+    "title": "Vitals",
+    "auto": {
+      "title": "Auto sending",
+      "enable": "Enable auto sending",
+      "last": "Last sent {{time}}",
+      "never": "Never sent",
+      "sendNow": "Send now"
+    }
+  },
   "nearby": {
     "title": "Nearby",
     "useMyLocation": "Use my location",
