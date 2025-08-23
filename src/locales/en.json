@@ -45,7 +45,15 @@
     "includeICE": "Include ICE",
     "generate": "Generate QR",
     "download": "Download PNG",
-    "print": "Print"
+    "print": "Print",
+    "payload": {
+      "name": "Name",
+      "age": "Age",
+      "allergies": "Allergies",
+      "meds": "Meds",
+      "ice": "ICE",
+      "notes": "Notes"
+    }
   },
   "meds": {
     "title": "Medicine schedule",

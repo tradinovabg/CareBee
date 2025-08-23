@@ -45,7 +45,15 @@
     "includeICE": "Inclure ICE",
     "generate": "Générer QR",
     "download": "Télécharger PNG",
-    "print": "Imprimer"
+    "print": "Imprimer",
+    "payload": {
+      "name": "Nom",
+      "age": "Âge",
+      "allergies": "Allergies",
+      "meds": "Médicaments",
+      "ice": "ICE",
+      "notes": "Notes"
+    }
   },
   "meds": {
     "title": "Prise des médicaments",

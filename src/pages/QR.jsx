@@ -8,7 +8,7 @@ const save = (o) => { try { localStorage.setItem(KEY, JSON.stringify(o)) } catch
 const loadProfile = () => { try { const v=localStorage.getItem('carebee.profile'); return v?JSON.parse(v):{} } catch (e) { void e; return {} } }
 
 export default function QR(){
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const prof = loadProfile()
   const [form, setForm] = useState(() => ({
     allergies:'', conditions:'', meds:'', iceName:'', icePhone:'',
@@ -20,16 +20,17 @@ export default function QR(){
   useEffect(()=>save(form),[form])
 
   const payload = useMemo(()=>{
+    void i18n.language
     const lines = []
     const name = [prof.firstName, prof.lastName].filter(Boolean).join(' ')
-    if (name) lines.push(`Name: ${name}`)
-    if (form.includeAge && prof.age) lines.push(`Age: ${prof.age}`)
-    if (form.includeAllergies && form.allergies) lines.push(`Allergies: ${form.allergies}`)
-    if (form.includeMeds && form.meds) lines.push(`Meds: ${form.meds}`)
-    if (form.includeICE && (form.iceName || form.icePhone)) lines.push(`ICE: ${form.iceName || ''} ${form.icePhone || ''}`.trim())
-    if (form.conditions) lines.push(`Notes: ${form.conditions}`)
+    if (name) lines.push(`${t('qr.payload.name')}: ${name}`)
+    if (form.includeAge && prof.age) lines.push(`${t('qr.payload.age')}: ${prof.age}`)
+    if (form.includeAllergies && form.allergies) lines.push(`${t('qr.payload.allergies')}: ${form.allergies}`)
+    if (form.includeMeds && form.meds) lines.push(`${t('qr.payload.meds')}: ${form.meds}`)
+    if (form.includeICE && (form.iceName || form.icePhone)) lines.push(`${t('qr.payload.ice')}: ${form.iceName || ''} ${form.icePhone || ''}`.trim())
+    if (form.conditions) lines.push(`${t('qr.payload.notes')}: ${form.conditions}`)
     return lines.join('\n').slice(0, 600)
-  }, [form, prof])
+  }, [form, prof, t, i18n.language])
 
   const generate = async () => {
     const url = await QRCode.toDataURL(payload, { width: 512, margin: 1 })
