@@ -35,6 +35,18 @@ npm run build
   If location access is denied, the message is sent without coordinates.
 
 
+## Medication Scheduler
+
+- **Auto-send setup** – configure a contact once and the app can automatically
+  send your schedule when you trigger the SOS action.
+- **Scheduling modes** – add medicines as one-off doses or recurring daily
+  courses with custom start/end dates and times.
+- **Calendar page** – review upcoming doses in day, week, or month views.
+- **Editing entries** – update or remove existing items directly from the
+  schedule.
+- **Google Calendar/.ics exports** – download iCalendar files or import events
+  to Google Calendar with a tap.
+
 ## Nearby
 
 Search for pharmacies or medical specialists near a location. Uses OpenStreetMap Overpass API for places and Nominatim for address geocoding. The 3237 banner links to the official on-call pharmacy service in France. You can also import FINESS CSV files in the browser to search registered facilities. Be mindful of request throttling; results may be cached client-side.
