@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { buildGoogleCalLink, buildICSEvent, fromDateAndTimeLocal, toICSDateTimeUTC } from '../lib/ics'
+import { MEAL_LABEL } from '../locale/mealLabel'
 
 const STORAGE = 'carebee.meds'
 const SLOT_DEFAULTS = { morning: '08:00', noon: '13:00', evening: '20:00' }
@@ -191,9 +192,9 @@ export default function Meds () {
         <div className='field'>
           <label>{t('meds.meal', 'Meal')}
             <select value={meal} onChange={e => setMeal(e.target.value)}>
-              <option value='before'>{t('meds.before', 'Before food')}</option>
-              <option value='with'>{t('meds.with', 'With food')}</option>
-              <option value='after'>{t('meds.after', 'After food')}</option>
+              <option value='before'>{t(MEAL_LABEL.before, 'Before food')}</option>
+              <option value='with'>{t(MEAL_LABEL.with, 'With food')}</option>
+              <option value='after'>{t(MEAL_LABEL.after, 'After food')}</option>
             </select>
           </label>
         </div>
@@ -212,7 +213,7 @@ export default function Meds () {
               <strong>{d.date}</strong>
               {d.entries.length ? (
                 <ul>
-                  {d.entries.map((e, i) => <li key={i}>{e.time} {e.name}{e.meal ? ' • ' + t('meds.meal_' + e.meal) : ''}</li>)}
+                  {d.entries.map((e, i) => <li key={i}>{e.time} {e.name}{e.meal ? ' • ' + t(MEAL_LABEL[e.meal]) : ''}</li>)}
                 </ul>
               ) : <span> — </span>}
             </li>
@@ -229,7 +230,7 @@ export default function Meds () {
           <li key={m.id} className='card'>
             <div className='row' style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
-                <strong>{m.name}</strong> — {m.times.join(', ')}{m.meal ? ` • ${t('meds.meal_' + m.meal)}` : ''}
+                <strong>{m.name}</strong> — {m.times.join(', ')}{m.meal ? ` • ${t(MEAL_LABEL[m.meal])}` : ''}
               </div>
               <div className='row' style={{ display: 'flex', gap: 8 }}>
                 {m.mode === 'once' && <>

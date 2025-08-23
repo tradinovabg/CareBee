@@ -9,6 +9,8 @@ export const icsEscape = (v = '') => String(v)
   .replace(/,/g, '\\,')
   .replace(/;/g, '\\;')
 
+codex/create-localization-for-meal-labels
+=======
 codex/update-googlecallink-dates-formatting
 =======
 codex/validate-hhmm-and-plusminutes-parameters
@@ -29,6 +31,7 @@ codex/validate-hhmm-and-plusminutes-parameters
 codex/refactor-toutcstamp-for-utc-date-creation
 =======
 main
+
 export const buildICSEvent = ({
   uid,
   dtstamp,
@@ -58,6 +61,8 @@ export const buildICSEvent = ({
 }
 codex/validate-hhmm-and-plusminutes-parameters
 
+codex/create-localization-for-meal-labels
+=======
 codex/update-googlecallink-dates-formatting
 =======
 /**
@@ -68,6 +73,7 @@ codex/update-googlecallink-dates-formatting
  */
 =======
 main
+
 export const fromDateAndTimeLocal = (date, time = '09:00') => {
   return new Date(`${date}T${time || '09:00'}:00`)
 }
@@ -169,6 +175,8 @@ export const genUID = (domain = 'carebee') => {
     : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`
   return `${rnd}@${domain}`
 }
+codex/create-localization-for-meal-labels
+=======
 codex/update-googlecallink-dates-formatting
 
 =======
