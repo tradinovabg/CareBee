@@ -11,8 +11,14 @@
     "gettingLocation": "Определяем ваше местоположение…",
     "loading": "Загрузка…"
   },
-  "errors": { "locationDenied": "Доступ к местоположению запрещён." },
-  "nav": { "profile": "Профиль", "meds": "Лекарства", "visits": "Визиты" },
+  "errors": {
+    "locationDenied": "Доступ к местоположению запрещён."
+  },
+  "nav": {
+    "profile": "Профиль",
+    "meds": "Лекарства",
+    "visits": "Визиты"
+  },
   "profile": {
     "title": "Профиль пациента",
     "firstName": "Имя",
@@ -79,5 +85,32 @@
   "time": "Время",
   "notes": "Заметки",
   "save": "Сохранить",
-  "delete": "Удалить"
+  "delete": "Удалить",
+  "nearby": {
+    "title": "Рядом",
+    "useMyLocation": "Определить местоположение",
+    "searchAddress": "Поиск адреса",
+    "addressPlaceholder": "Улица, город…",
+    "radius": "Радиус (м)",
+    "tabPharmacies": "Аптеки",
+    "tabSpecialists": "Специалисты и сервисы",
+    "load": "Загрузить",
+    "loading": "Загрузка…",
+    "nothing": "Ничего рядом не найдено.",
+    "distance": "{{km}} км",
+    "openMaps": "Открыть в Maps",
+    "openOSM": "OSM",
+    "call": "Позвонить",
+    "hours": "Часы",
+    "guardPharmacy": "Дежурная аптека (ночью/праздники):",
+    "call3237": "Позвонить 3237",
+    "website": "Сайт",
+    "geolocDenied": "Доступ к местоположению запрещён — введите адрес.",
+    "geocodingError": "Адрес не найден.",
+    "source": "Источник данных: OpenStreetMap (Overpass).",
+    "importFiness": "Импорт FINESS CSV",
+    "finessHint": "Загрузите официальный CSV для поиска учреждений.",
+    "clear": "Очистить",
+    "category": "Категория"
+  }
 }

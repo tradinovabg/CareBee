@@ -11,8 +11,14 @@
     "gettingLocation": "Récupération de votre position…",
     "loading": "Chargement…"
   },
-  "errors": { "locationDenied": "Accès à la localisation refusé." },
-  "nav": { "profile": "Profil", "meds": "Médicaments", "visits": "Visites" },
+  "errors": {
+    "locationDenied": "Accès à la localisation refusé."
+  },
+  "nav": {
+    "profile": "Profil",
+    "meds": "Médicaments",
+    "visits": "Visites"
+  },
   "profile": {
     "title": "Profil du patient",
     "firstName": "Prénom",
@@ -87,5 +93,32 @@
   "time": "Heure",
   "notes": "Notes",
   "save": "Enregistrer",
-  "delete": "Supprimer"
+  "delete": "Supprimer",
+  "nearby": {
+    "title": "À proximité",
+    "useMyLocation": "Utiliser ma position",
+    "searchAddress": "Rechercher une adresse",
+    "addressPlaceholder": "Rue, ville…",
+    "radius": "Rayon (m)",
+    "tabPharmacies": "Pharmacies",
+    "tabSpecialists": "Spécialistes & services",
+    "load": "Charger",
+    "loading": "Chargement…",
+    "nothing": "Rien trouvé à proximité.",
+    "distance": "{{km}} km",
+    "openMaps": "Ouvrir dans Maps",
+    "openOSM": "OSM",
+    "call": "Appeler",
+    "hours": "Horaires",
+    "guardPharmacy": "Pharmacie de garde (nuits/jours fériés) :",
+    "call3237": "Appeler 3237",
+    "website": "Site web",
+    "geolocDenied": "Position refusée — saisissez une adresse.",
+    "geocodingError": "Adresse introuvable.",
+    "source": "Source : OpenStreetMap (Overpass).",
+    "importFiness": "Importer FINESS CSV",
+    "finessHint": "Chargez le CSV officiel pour chercher les établissements enregistrés.",
+    "clear": "Effacer",
+    "category": "Catégorie"
+  }
 }

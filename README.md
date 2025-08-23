@@ -34,6 +34,11 @@ npm run build
   unavailable, it opens an e-mail draft and copies the message to the clipboard.
   If location access is denied, the message is sent without coordinates.
 
+
+## Nearby
+
+Search for pharmacies or medical specialists near a location. Uses OpenStreetMap Overpass API for places and Nominatim for address geocoding. The 3237 banner links to the official on-call pharmacy service in France. You can also import FINESS CSV files in the browser to search registered facilities. Be mindful of request throttling; results may be cached client-side.
+
 ## Notes on Geolocation and Sharing
 
 The SOS feature relies on browser APIs that work only in secure contexts. When
