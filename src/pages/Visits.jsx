@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { buildICSEvent, genUID, icsEscape } from '../lib/ics'
 
 const STORAGE = 'carebee.visits'
 const load = (k, def) => { try { const v=localStorage.getItem(k); return v?JSON.parse(v):def } catch { return def } }
@@ -9,8 +10,6 @@ const todayISO = () => { const d=new Date(); const y=d.getFullYear(); const m=St
 function toICSDateTime (isoDate, hhmm) {
   return new Date(`${isoDate}T${hhmm || '09:00'}:00`).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'
 }
-
-const esc = v => (v || '').replace(/[\n,;]/g, ' ')
 
 export default function Visits(){
   const { t } = useTranslation()
@@ -35,9 +34,16 @@ export default function Visits(){
   const upcoming = useMemo(()=> [...list].sort((a,b)=> (a.date+a.time).localeCompare(b.date+b.time)), [list])
 
   const downloadICS = (v) => {
-    const uid = `${v.id}@carebee`
+    const uid = genUID()
     const dt = toICSDateTime(v.date, v.time) || ''
-    const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//CareBee//EN\nBEGIN:VEVENT\nUID:${uid}\nDTSTAMP:${dt}\nDTSTART:${dt}\nSUMMARY:${esc(`Visit — ${v.doctor}`) || ''}\nLOCATION:${esc(v.place) || ''}\nDESCRIPTION:${esc(v.notes)}\nEND:VEVENT\nEND:VCALENDAR`
+    const ics = buildICSEvent({
+      uid,
+      dtstamp: dt,
+      dtstart: dt,
+      title: icsEscape(`Visit — ${v.doctor}`),
+      desc: icsEscape(v.notes),
+      loc: icsEscape(v.place)
+    })
     const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' })
     const a = document.createElement('a')
     a.href = URL.createObjectURL(blob)
