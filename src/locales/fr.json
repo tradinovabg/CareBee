@@ -29,7 +29,11 @@
     "saved": "Enregistré"
   },
   "qr": {
+codex/update-localization-files-with-new-keys
+    "title": "Code QR",
+=======
     "title": "QR — {{profile}}",
+main
     "imgAlt": "Code QR",
     "allergies": "Allergies",
     "allergies_placeholder": "pénicilline, arachides…",

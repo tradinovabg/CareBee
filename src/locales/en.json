@@ -29,7 +29,11 @@
     "saved": "Saved"
   },
   "qr": {
+codex/update-localization-files-with-new-keys
+    "title": "QR Code",
+=======
     "title": "QR — {{profile}}",
+main
     "imgAlt": "QR Code",
     "allergies": "Allergies",
     "allergies_placeholder": "penicillin, peanuts…",

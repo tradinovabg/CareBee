@@ -29,7 +29,11 @@
     "saved": "Сохранено"
   },
   "qr": {
+codex/update-localization-files-with-new-keys
+    "title": "QR-код",
+=======
     "title": "QR — {{profile}}",
+main
     "imgAlt": "QR-код",
     "allergies": "Аллергии",
     "allergies_placeholder": "пенициллин, арахис…",
