@@ -106,6 +106,16 @@
   "notes": "Notes",
   "save": "Enregistrer",
   "delete": "Supprimer",
+  "vitals": {
+    "title": "Signes vitaux",
+    "auto": {
+      "title": "Envoi automatique",
+      "enable": "Activer l'envoi automatique",
+      "last": "Dernier envoi {{time}}",
+      "never": "Jamais envoyé",
+      "sendNow": "Envoyer maintenant"
+    }
+  },
   "nearby": {
     "title": "À proximité",
     "useMyLocation": "Utiliser ma position",
