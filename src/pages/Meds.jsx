@@ -1,6 +1,10 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+codex/implement-google-calendar-link-feature
 import { buildGoogleCalLink } from '../lib/ics'
+=======
+import { fromDateAndTimeLocal, toICSDateTimeUTC } from '../lib/ics'
+main
 
 const STORAGE = 'carebee.meds'
 const SLOT_DEFAULTS = { morning: '08:00', noon: '13:00', evening: '20:00' }
@@ -25,10 +29,6 @@ const addDays = (d, n) => {
 }
 
 const esc = v => (v || '').replace(/[\n,;]/g, ' ')
-
-function toICSDateTime (isoDate, hhmm) {
-  return new Date(`${isoDate}T${hhmm || '09:00'}:00`).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'
-}
 
 export default function Meds () {
   const { t } = useTranslation()
@@ -125,8 +125,10 @@ export default function Meds () {
   }, [items, days])
 
   const downloadICS = m => {
-    const dt = toICSDateTime(m.startDate, m.onceTime) || ''
-    const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//CareBee//EN\nBEGIN:VEVENT\nUID:${m.id}\nDTSTAMP:${dt}\nDTSTART:${dt}\nSUMMARY:${esc(m.name) || ''}\nEND:VEVENT\nEND:VCALENDAR`
+    const start = fromDateAndTimeLocal(m.startDate, m.onceTime)
+    const dtStart = toICSDateTimeUTC(start)
+    const dtStamp = toICSDateTimeUTC(new Date())
+    const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//CareBee//EN\nBEGIN:VEVENT\nUID:${m.id}\nDTSTAMP:${dtStamp}\nDTSTART:${dtStart}\nSUMMARY:${esc(m.name) || ''}\nEND:VEVENT\nEND:VCALENDAR`
     const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' })
     const a = document.createElement('a')
     a.href = URL.createObjectURL(blob)

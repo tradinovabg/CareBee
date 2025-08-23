@@ -1,15 +1,16 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+codex/implement-google-calendar-link-feature
 import { buildGoogleCalLink } from '../lib/ics'
+=======
+import { fromDateAndTimeLocal, toICSDateTimeUTC } from '../lib/ics'
+main
 
 const STORAGE = 'carebee.visits'
 const load = (k, def) => { try { const v=localStorage.getItem(k); return v?JSON.parse(v):def } catch { return def } }
 const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)) } catch { /* ignore */ } }
 
 const todayISO = () => { const d=new Date(); const y=d.getFullYear(); const m=String(d.getMonth()+1).padStart(2,'0'); const day=String(d.getDate()).padStart(2,'0'); return `${y}-${m}-${day}` }
-function toICSDateTime (isoDate, hhmm) {
-  return new Date(`${isoDate}T${hhmm || '09:00'}:00`).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'
-}
 
 const esc = v => (v || '').replace(/[\n,;]/g, ' ')
 
@@ -33,12 +34,19 @@ export default function Visits(){
   }
   const remove = (id) => setList(prev=> prev.filter(x=>x.id!==id))
 
-  const upcoming = useMemo(()=> [...list].sort((a,b)=> (a.date+a.time).localeCompare(b.date+b.time)), [list])
+  const upcoming = useMemo(() =>
+    [...list].sort((a, b) =>
+      fromDateAndTimeLocal(a.date, a.time) - fromDateAndTimeLocal(b.date, b.time)
+    ),
+    [list]
+  )
 
   const downloadICS = (v) => {
     const uid = `${v.id}@carebee`
-    const dt = toICSDateTime(v.date, v.time) || ''
-    const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//CareBee//EN\nBEGIN:VEVENT\nUID:${uid}\nDTSTAMP:${dt}\nDTSTART:${dt}\nSUMMARY:${esc(`Visit — ${v.doctor}`) || ''}\nLOCATION:${esc(v.place) || ''}\nDESCRIPTION:${esc(v.notes)}\nEND:VEVENT\nEND:VCALENDAR`
+    const start = fromDateAndTimeLocal(v.date, v.time)
+    const dtStart = toICSDateTimeUTC(start)
+    const dtStamp = toICSDateTimeUTC(new Date())
+    const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//CareBee//EN\nBEGIN:VEVENT\nUID:${uid}\nDTSTAMP:${dtStamp}\nDTSTART:${dtStart}\nSUMMARY:${esc(`Visit — ${v.doctor}`) || ''}\nLOCATION:${esc(v.place) || ''}\nDESCRIPTION:${esc(v.notes)}\nEND:VEVENT\nEND:VCALENDAR`
     const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' })
     const a = document.createElement('a')
     a.href = URL.createObjectURL(blob)
