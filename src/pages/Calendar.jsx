@@ -34,19 +34,20 @@ export default function Calendar () {
     return () => window.removeEventListener('storage', handler)
   }, [])
 
-  const today = new Date().toISOString().slice(0, 10)
+  const todayISO = new Date().toISOString().slice(0, 10)
+  const isToday = iso => iso === todayISO
   const rangeDays = mode === 'day' ? 1 : mode === 'week' ? 7 : 30
 
   const days = useMemo(() => {
-    return Array.from({ length: rangeDays }, (_, i) => addDays(today, i))
-  }, [today, rangeDays])
+    return Array.from({ length: rangeDays }, (_, i) => addDays(todayISO, i))
+  }, [todayISO, rangeDays])
 
   const eventsByDate = useMemo(() => {
     const res = Object.fromEntries(days.map(d => [d, []]))
-    const end = addDays(today, rangeDays - 1)
+    const end = addDays(todayISO, rangeDays - 1)
     if (showVisits) {
       visits.forEach(v => {
-        if (v.date >= today && v.date <= end) {
+        if (v.date >= todayISO && v.date <= end) {
           res[v.date].push({
             time: v.time,
             title: v.doctor,
@@ -60,7 +61,7 @@ export default function Calendar () {
     if (showMeds) {
       meds.forEach(m => {
         if (m.mode === 'once') {
-          if (m.once.date >= today && m.once.date <= end) {
+          if (m.once.date >= todayISO && m.once.date <= end) {
             res[m.once.date].push({
               time: m.once.time,
               title: m.name,
@@ -82,7 +83,7 @@ export default function Calendar () {
     }
     Object.values(res).forEach(list => list.sort((a, b) => (a.time || '').localeCompare(b.time || '')))
     return res
-  }, [days, visits, meds, showVisits, showMeds, today, rangeDays])
+  }, [days, visits, meds, showVisits, showMeds, todayISO, rangeDays])
 
   return (
     <div className='container'>
@@ -103,6 +104,28 @@ export default function Calendar () {
       {days.map(d => {
         const list = eventsByDate[d]
         return (
+codex/rename-today-to-todayiso-and-update-styling
+          <div key={d} className={`day-cell ${isToday(d) ? 'is-today' : ''}`} aria-current={isToday(d) ? 'date' : undefined}>
+            <div className='card'>
+              <strong>
+                {d}
+                {isToday(d) && <span className='today-pill'>{t('calendar.today')}</span>}
+              </strong>
+              {list.length ? (
+                <ul>
+                  {list.map((e, i) => (
+                    <li key={i}>
+                      {e.time ? `${e.time} ` : ''}{e.title} ({e.type === 'visit' ? t('calendar.visit', 'Visit') : t('calendar.med', 'Med')})
+                      {e.location ? ` — ${e.location}` : ''}
+                      {e.notes ? <div style={{ color: '#555' }}>{e.notes}</div> : null}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <div>{t('calendar.empty', 'Nothing scheduled')}</div>
+              )}
+            </div>
+=======
 codex/add-today-key-to-locale-files
           <div key={d} className='card' style={{ marginBottom: 12 }}>
             <strong className={d === today ? 'today-highlight' : ''}>
@@ -133,6 +156,7 @@ main
             ) : (
               <div>{t('calendar.empty', 'Nothing scheduled')}</div>
             )}
+main
           </div>
         )
       })}
