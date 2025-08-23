@@ -45,7 +45,9 @@
     "includeICE": "Inclure ICE",
     "generate": "Générer QR",
     "download": "Télécharger PNG",
-    "print": "Imprimer"
+    "print": "Imprimer",
+    "link": "Voir ce profil sur {{site}}",
+    "restart": "Recommencer"
   },
   "meds": {
     "title": "Prise des médicaments",
@@ -68,7 +70,9 @@
     "status_active": "actif",
     "status_inactive": "inactif",
     "deactivate": "Désactiver",
-    "activate": "Activer"
+    "activate": "Activer",
+    "nextDose": "Prochaine prise à {{start}}",
+    "site": "Plus d'infos sur {{site}}"
   },
   "visits": {
     "title": "Visites médicales",
