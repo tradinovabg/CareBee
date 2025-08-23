@@ -47,7 +47,15 @@
     "includeICE": "Указать ICE",
     "generate": "Сгенерировать QR",
     "download": "Скачать PNG",
-    "print": "Печать"
+    "print": "Печать",
+    "payload": {
+      "name": "Имя",
+      "age": "Возраст",
+      "allergies": "Аллергии",
+      "meds": "Препараты",
+      "ice": "ICE",
+      "notes": "Заметки"
+    }
   },
   "meds": {
     "title": "График приёма лекарств",
