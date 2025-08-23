@@ -163,5 +163,8 @@
     "finessHint": "Chargez le CSV officiel pour chercher les établissements enregistrés.",
     "clear": "Effacer",
     "category": "Catégorie"
+  },
+  "daily": {
+    "confirmSend": "Envoyer le résumé quotidien maintenant ?"
   }
 }
