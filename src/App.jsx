@@ -1,11 +1,9 @@
 import { Routes, Route, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { useEffect } from 'react'
 import LanguageSwitcher from './components/LanguageSwitcher.jsx'
 import Home from './pages/Home.jsx'
 import Sos from './pages/Sos.jsx'
 import Profile from './pages/Profile.jsx'
-import { sendSummary } from './lib/dailySummary.js'
 import Meds from './pages/Meds.jsx'
 import Visits from './pages/Visits.jsx'
 import Calendar from './pages/Calendar.jsx'
@@ -18,22 +16,6 @@ export default function App () {
   const { t } = useTranslation()
   const year = new Date().getFullYear()
 
-  useEffect(() => {
-    try {
-      const p = JSON.parse(localStorage.getItem('carebee.profile') || '{}')
-      if (p.autosendEnabled) {
-        const now = new Date()
-        const hhmm = now.toTimeString().slice(0, 5)
-        const today = now.toISOString().slice(0, 10)
-        const last = localStorage.getItem('carebee.lastDailySent')
-        if (hhmm >= (p.autosendTime || '00:00') && last !== today) {
-          if (confirm('Send daily summary now?')) sendSummary()
-        }
-      }
-    } catch {
-      /* ignore */
-    }
-  }, [])
 
   return (
     <>
