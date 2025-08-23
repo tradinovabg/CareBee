@@ -6,14 +6,8 @@ const load = (k, def) => { try { const v=localStorage.getItem(k); return v?JSON.
 const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)) } catch { /* ignore */ } }
 
 const todayISO = () => { const d=new Date(); const y=d.getFullYear(); const m=String(d.getMonth()+1).padStart(2,'0'); const day=String(d.getDate()).padStart(2,'0'); return `${y}-${m}-${day}` }
-function toICSDateTime(isoDate, hhmm){
-  const [h,m] = (hhmm||'09:00').split(':')
-  const dt = new Date(`${isoDate}T${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:00`)
-  const y=dt.getFullYear(), mo=String(dt.getMonth()+1).padStart(2,'0')
-  const d=String(dt.getDate()).padStart(2,'0')
-  const H=String(dt.getHours()).padStart(2,'0'), M=String(dt.getMinutes()).padStart(2,'0'), S=String(dt.getSeconds()).padStart(2,'0')
-  return `${y}${mo}${d}T${H}${M}${S}`
-}
+const toUTCString = (date) => date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'
+const parseLocal = (isoDate, hhmm='00:00') => new Date(`${isoDate}T${hhmm}:00`)
 
 export default function Visits(){
   const { t } = useTranslation()
@@ -37,10 +31,24 @@ export default function Visits(){
 
   const upcoming = useMemo(()=> [...list].sort((a,b)=> (a.date+a.time).localeCompare(b.date+b.time)), [list])
 
-  const downloadICS = (v) => {
+  const buildGoogleLink = v => {
+    const start = parseLocal(v.date, v.time)
+    const end = new Date(start.getTime() + 3600000)
+    const dtstart = toUTCString(start)
+    const dtend = toUTCString(end)
+    const title = `Visit — ${v.doctor}`
+    const details = (v.notes || '').replace(/\n/g, ' ')
+    const location = (v.place || '').replace(/\n/g, ' ')
+    return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${dtstart}/${dtend}&details=${encodeURIComponent(details)}&location=${encodeURIComponent(location)}`
+  }
+
+  const downloadICS = v => {
     const uid = `${v.id}@carebee`
-    const dtstart = toICSDateTime(v.date, v.time)
-    const now = toICSDateTime(todayISO(), new Date().toTimeString().slice(0,5))
+    const start = parseLocal(v.date, v.time)
+    const end = new Date(start.getTime() + 3600000)
+    const dtstart = toUTCString(start)
+    const dtend = toUTCString(end)
+    const now = toUTCString(new Date())
     const ics =
 `BEGIN:VCALENDAR
 VERSION:2.0
@@ -49,12 +57,13 @@ BEGIN:VEVENT
 UID:${uid}
 DTSTAMP:${now}
 DTSTART:${dtstart}
+DTEND:${dtend}
 SUMMARY:Visit — ${v.doctor}
 LOCATION:${(v.place||'').replace(/\n/g,' ')}
 DESCRIPTION:${(v.notes||'').replace(/\n/g,' ')}
 END:VEVENT
 END:VCALENDAR`
-    const blob = new Blob([ics], {type:'text/calendar;charset=utf-8'})
+    const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' })
     const a = document.createElement('a')
     a.href = URL.createObjectURL(blob)
     a.download = `visit-${v.date}-${v.time}.ics`
@@ -132,8 +141,9 @@ END:VCALENDAR`
                 {v.notes? <div style={{color:'#555'}}>{v.notes}</div> : null}
               </div>
               <div style={{display:'flex', gap:8}}>
-                <button onClick={()=>downloadICS(v)}>{t('visits.addToCalendar','Add to calendar')}</button>
-                <button onClick={()=>remove(v.id)}>{t('delete','Delete')}</button>
+                <a className="btn" href={buildGoogleLink(v)} target="_blank" rel="noopener noreferrer">{t('visits.gcal','Add to Google')}</a>
+                <button className="btn" onClick={() => downloadICS(v)}>{t('visits.ics','Download .ics')}</button>
+                <button onClick={() => remove(v.id)}>{t('delete','Delete')}</button>
               </div>
             </div>
           </li>

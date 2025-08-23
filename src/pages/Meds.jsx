@@ -22,6 +22,9 @@ const addDays = (d, n) => {
   return x.toISOString().slice(0, 10)
 }
 
+const toUTCString = date => date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'
+const parseLocal = (isoDate, hhmm = '00:00') => new Date(`${isoDate}T${hhmm}:00`)
+
 export default function Meds () {
   const { t } = useTranslation()
   const [items, setItems] = useState(() => load(STORAGE, []))
@@ -90,10 +93,52 @@ export default function Meds () {
     return list
   }, [items, days])
 
+  const buildGoogleLink = m => {
+    if (m.mode === 'once') {
+      const start = parseLocal(m.once.date, m.once.time)
+      const dt = toUTCString(start)
+      return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(m.name)}&dates=${dt}/${dt}&details=&location=`
+    } else {
+      const dtStart = parseLocal(m.daily.start, m.daily.times[0] || '00:00')
+      const start = toUTCString(dtStart)
+      let url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(m.name)}&dates=${start}/${start}&details=&location=`
+      if (m.daily.end) url += `&recur=${encodeURIComponent(`RRULE:FREQ=DAILY;UNTIL=${m.daily.end.replace(/-/g, '')}T000000Z`)}`
+      return url
+    }
+  }
+
   const downloadICS = m => {
-    const dt = `${m.once.date.replace(/-/g, '')}T${m.once.time.replace(':', '')}00`
-    const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nUID:${m.id}\nDTSTAMP:${dt}\nDTSTART:${dt}\nSUMMARY:${m.name}\nEND:VEVENT\nEND:VCALENDAR`
-    const blob = new Blob([ics], { type: 'text/calendar' })
+    const now = toUTCString(new Date())
+    const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//CareBee//EN']
+    if (m.mode === 'once') {
+      const start = parseLocal(m.once.date, m.once.time)
+      const dt = toUTCString(start)
+      lines.push(
+        'BEGIN:VEVENT',
+        `UID:${m.id}`,
+        `DTSTAMP:${now}`,
+        `DTSTART:${dt}`,
+        `DTEND:${dt}`,
+        `SUMMARY:${m.name}`,
+        'END:VEVENT'
+      )
+    } else {
+      m.daily.times.forEach((t, idx) => {
+        const start = parseLocal(m.daily.start, t)
+        const dt = toUTCString(start)
+        lines.push(
+          'BEGIN:VEVENT',
+          `UID:${m.id}-${idx}`,
+          `DTSTAMP:${now}`,
+          `DTSTART:${dt}`,
+          `DTEND:${dt}`
+        )
+        if (m.daily.end) lines.push(`RRULE:FREQ=DAILY;UNTIL=${m.daily.end.replace(/-/g, '')}T000000Z`)
+        lines.push(`SUMMARY:${m.name}`, 'END:VEVENT')
+      })
+    }
+    lines.push('END:VCALENDAR')
+    const blob = new Blob([lines.join('\n')], { type: 'text/calendar' })
     const a = document.createElement('a')
     a.href = URL.createObjectURL(blob)
     a.download = `${m.name}.ics`
@@ -193,7 +238,8 @@ export default function Meds () {
                   : `${m.daily.start}${m.daily.end ? '–' + m.daily.end : ''} ${m.daily.times.join(', ')}`}
               </div>
               <div className='row' style={{ display: 'flex', gap: 8 }}>
-                {m.mode === 'once' && <button className='btn btn-outline' onClick={() => downloadICS(m)}>ICS</button>}
+                <a className='btn btn-outline' href={buildGoogleLink(m)} target='_blank' rel='noopener noreferrer'>Google</a>
+                <button className='btn btn-outline' onClick={() => downloadICS(m)}>ICS</button>
                 <button className='btn btn-danger' onClick={() => remove(m.id)}>{t('delete', 'Delete')}</button>
               </div>
             </div>
