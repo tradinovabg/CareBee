@@ -5,8 +5,8 @@ import { useTranslation } from 'react-i18next'
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend)
 
 const KEY='carebee.vitals'
-const load=()=>{try{const v=localStorage.getItem(KEY);return v?JSON.parse(v):[]}catch(e){void e;return[]}}
-const save=(arr)=>{try{localStorage.setItem(KEY,JSON.stringify(arr))}catch(e){/* ignore */ void e;}}
+const load=()=>{try{const v=localStorage.getItem(KEY);return v?JSON.parse(v):[]}catch{return[]}}
+const save=(arr)=>{try{localStorage.setItem(KEY,JSON.stringify(arr))}catch(e){console.error(e)}}
 const nowISO = ()=> new Date().toISOString()
 
 export default function Vitals(){
@@ -54,7 +54,7 @@ export default function Vitals(){
       const reader=new FileReader()
       reader.onload=()=>{ try{
         const arr=JSON.parse(reader.result); if(!Array.isArray(arr)) throw new Error();
-        setList(arr); }catch(e){ void e; alert('Invalid file') } }
+        setList(arr); }catch{ alert('Invalid file') } }
       reader.readAsText(file)
     }
 
