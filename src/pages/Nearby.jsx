@@ -99,7 +99,7 @@ export default function Nearby(){
         {err && <p role="alert">{err}</p>}
       </div>
 
-      {/* Баннер 3237 */}
+      {/* Banner 3237 */}
       {tab==='pharm' && (
         <div className="card">
           <div className="row" style={{justifyContent:'space-between'}}>
@@ -112,7 +112,7 @@ export default function Nearby(){
         </div>
       )}
 
-      {/* Результаты */}
+      {/* Results */}
       <ul>
         {(!loading && items.length===0 && !err) && <li>{t('nearby.nothing')}</li>}
         {items.map(it=>(
@@ -136,7 +136,7 @@ export default function Nearby(){
 
       <p style={{opacity:.7}}>{t('nearby.source')}</p>
 
-      {/* FINESS CSV (опционально) */}
+      {/* FINESS CSV (optional) */}
       {tab==='spec' && (
         <div className="card">
           <div className="row" style={{justifyContent:'space-between'}}>
@@ -151,7 +151,7 @@ export default function Nearby(){
                 Papa.parse(file, {
                   header:true, skipEmptyLines:true,
                   complete: res => {
-                    // Ожидаемые поля: latitude, longitude, rs_comp_lib (название), categetab (категория) — адаптировать к CSV
+                    // Expected fields: latitude, longitude, rs_comp_lib (name), categetab (category) — adapt to CSV
                     const origin = center || null
                     const out = res.data.map(r=>{
                       const lat = parseFloat(r.latitude || r.Latitude || r.lat); const lon = parseFloat(r.longitude || r.Longitude || r.lon)
