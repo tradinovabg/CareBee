@@ -5,7 +5,7 @@ export const haversineKm = (a, b) => {
   return 2*R*Math.asin(Math.sqrt(s1))
 }
 
-// Overpass с фолбэками
+// Overpass with fallbacks
 const OVERPASS = [
   "https://overpass-api.de/api/interpreter",
   "https://overpass.kumi.systems/api/interpreter"
@@ -43,7 +43,7 @@ export async function fetchNearbyPharmacies(lat, lon, radiusKm = 1){
   return overpassAround(lat, lon, radiusKm, ['["amenity"="pharmacy"]'])
 }
 
-// Nominatim — геокодинг адреса → {lat, lon}
+// Nominatim — geocode address → {lat, lon}
 export async function geocodeAddress(q, lang="en"){
   const u = new URL("https://nominatim.openstreetmap.org/search")
   u.searchParams.set("format","json")
