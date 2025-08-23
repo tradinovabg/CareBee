@@ -29,11 +29,7 @@
     "saved": "Saved"
   },
   "qr": {
-codex/update-localization-files-with-new-keys
-    "title": "QR Code",
-=======
     "title": "QR — {{profile}}",
-main
     "imgAlt": "QR Code",
     "allergies": "Allergies",
     "allergies_placeholder": "penicillin, peanuts…",
@@ -117,11 +113,13 @@ main
     "day": "Day",
     "week": "Week",
     "month": "Month",
+    "today": "Today",
     "showVisits": "Visits & Events",
     "showMeds": "Meds schedule",
     "visit": "Visit",
     "med": "Med",
-    "empty": "Nothing scheduled"
+    "empty": "Nothing scheduled",
+    "addToGoogle": "Add to Google Calendar"
   },
   "date": "Date",
   "time": "Time",

@@ -1,5 +1,18 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+codex/escape-special-characters-in-ics-event-strings
+import { icsEscape, buildICSEvent } from '../lib/ics'
+=======
+codex/extend-ics.js-for-ics-events
+import { buildICSEvent, genUID, icsEscape } from '../lib/ics'
+=======
+codex/implement-google-calendar-link-feature
+import { buildGoogleCalLink } from '../lib/ics'
+=======
+import { fromDateAndTimeLocal, toICSDateTimeUTC } from '../lib/ics'
+main
+main
+main
 
 const STORAGE = 'carebee.meds'
 const SLOT_DEFAULTS = { morning: '08:00', noon: '13:00', evening: '20:00' }
@@ -23,11 +36,17 @@ const addDays = (d, n) => {
   return x.toISOString().slice(0, 10)
 }
 
-const esc = v => (v || '').replace(/[\n,;]/g, ' ')
+codex/escape-special-characters-in-ics-event-strings
 
+=======
+codex/extend-ics.js-for-ics-events
+main
 function toICSDateTime (isoDate, hhmm) {
   return new Date(`${isoDate}T${hhmm || '09:00'}:00`).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'
 }
+=======
+const esc = v => (v || '').replace(/[\n,;]/g, ' ')
+main
 
 export default function Meds () {
   const { t } = useTranslation()
@@ -124,8 +143,27 @@ export default function Meds () {
   }, [items, days])
 
   const downloadICS = m => {
+ codex/extend-ics.js-for-ics-events
     const dt = toICSDateTime(m.startDate, m.onceTime) || ''
-    const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//CareBee//EN\nBEGIN:VEVENT\nUID:${m.id}\nDTSTAMP:${dt}\nDTSTART:${dt}\nSUMMARY:${esc(m.name) || ''}\nEND:VEVENT\nEND:VCALENDAR`
+    const ics = buildICSEvent({
+codex/escape-special-characters-in-ics-event-strings
+      uid: m.id,
+      start: dt,
+      title: icsEscape(m.name)
+    })
+=======
+      uid: genUID(),
+      dtstamp: dt,
+      dtstart: dt,
+      title: icsEscape(m.name)
+    })
+=======
+    const start = fromDateAndTimeLocal(m.startDate, m.onceTime)
+    const dtStart = toICSDateTimeUTC(start)
+    const dtStamp = toICSDateTimeUTC(new Date())
+    const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//CareBee//EN\nBEGIN:VEVENT\nUID:${m.id}\nDTSTAMP:${dtStamp}\nDTSTART:${dtStart}\nSUMMARY:${esc(m.name) || ''}\nEND:VEVENT\nEND:VCALENDAR`
+main
+main
     const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' })
     const a = document.createElement('a')
     a.href = URL.createObjectURL(blob)
@@ -240,7 +278,10 @@ export default function Meds () {
                     : `${m.startDate}${m.endDate ? '–' + m.endDate : ''} ${Object.values(m.slots || {}).filter(Boolean).join(', ')} ${m.mealTiming}`}
                 </div>
                 <div className='row' style={{ display: 'flex', gap: 8 }}>
-                  {m.mode === 'once' && <button className='btn btn-outline' onClick={() => downloadICS(m)}>{t('meds.addToCalendar', 'Add to calendar')}</button>}
+                  {m.mode === 'once' && <>
+                    <button className='btn btn-outline' onClick={() => downloadICS(m)}>{t('meds.addToCalendar', 'Add to calendar')}</button>
+                    <button className='btn btn-outline' onClick={() => window.open(buildGoogleCalLink({ title: m.name, date: m.startDate, time: m.onceTime }))}>{t('calendar.addToGoogle', 'Add to Google')}</button>
+                  </>}
                   <button className='btn btn-outline' onClick={() => edit(m)}>{t('edit', 'Edit')}</button>
                   <button className='btn btn-danger' onClick={() => remove(m.id)}>{t('delete', 'Delete')}</button>
                 </div>
