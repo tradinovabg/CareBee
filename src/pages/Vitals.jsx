@@ -2,6 +2,7 @@ import { useMemo, useState, useEffect } from 'react'
 import { Line } from 'react-chartjs-2'
 import { CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend, Chart as ChartJS } from 'chart.js'
 import { useTranslation } from 'react-i18next'
+import { maybeSendDailySummary } from '../lib/dailySummary.js'
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend)
 
 const KEY='carebee.vitals'
@@ -17,6 +18,7 @@ export default function Vitals(){
   const [temp,setTemp]=useState(''); const [glu,setGlu]=useState(''); const [ts,setTs]=useState(()=>nowISO().slice(0,16))
 
   useEffect(()=>save(list),[list])
+  useEffect(()=>{ maybeSendDailySummary() },[])
 
   const add=()=>{
     const time = ts ? new Date(ts) : new Date()
