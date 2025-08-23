@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import QrCard from '../components/QrCard'
+import { sendSummary, shouldPromptDaily } from '../lib/dailySummary'
 
 const KEY = 'carebee.profile'
 const load = () => { try { const v = localStorage.getItem(KEY); return v ? JSON.parse(v) : {} } catch { return {} } }
@@ -12,6 +13,13 @@ export default function Profile() {
   const [msg, setMsg] = useState('')
 
   useEffect(()=>{ save(p) }, [p])
+
+  useEffect(() => {
+    if (shouldPromptDaily()) {
+      const ok = window.confirm(t('profile.sendSummaryPrompt', 'Send daily summary?'))
+      if (ok) sendSummary(p)
+    }
+  }, [p, t])
 
   const onChange = (e) => {
     const { name, value } = e.target
@@ -45,6 +53,9 @@ export default function Profile() {
         </label>
 
         <button type="submit">{t('save','Save')}</button>
+        <button type="button" onClick={() => sendSummary(p)} style={{marginLeft:8}}>
+          {t('profile.sendSummary', 'Send summary')}
+        </button>
         {msg && <small aria-live="polite" style={{marginTop:6, display:'block'}}>{msg}</small>}
       </form>
       <QrCard />

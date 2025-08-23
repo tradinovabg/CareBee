@@ -25,7 +25,9 @@
     "lastName": "Last name",
     "age": "Age",
     "phone": "Phone",
-    "saved": "Saved"
+    "saved": "Saved",
+    "sendSummary": "Send summary",
+    "sendSummaryPrompt": "Send daily summary?"
   },
   "qr": {
     "allergies": "Allergies",
