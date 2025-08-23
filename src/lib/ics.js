@@ -1,13 +1,10 @@
-codex/escape-special-characters-in-ics-event-strings
-export function icsEscape(str = '') {
-  return String(str)
-    .replace(/\\/g, '\\\\')
-    .replace(/,/g, '\\,')
-    .replace(/;/g, '\\;')
-    .replace(/\n/g, '\\n')
-}
+export const icsEscape = (v = '') => String(v)
+  .replace(/\\/g, '\\\\')
+  .replace(/\r?\n/g, '\\n')
+  .replace(/,/g, '\\,')
+  .replace(/;/g, '\\;')
 
-export function buildICSEvent({ uid, start, title, details = '', location = '' }) {
+export const buildICSEvent = ({ uid, start, title, details = '', location = '' }) => {
   const lines = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
@@ -22,13 +19,7 @@ export function buildICSEvent({ uid, start, title, details = '', location = '' }
   if (details) lines.push(`DESCRIPTION:${details}`)
   lines.push('END:VEVENT', 'END:VCALENDAR')
   return lines.join('\n')
-=======
-codex/extend-ics.js-for-ics-events
-export const icsEscape = v => (v || '')
-  .replace(/\\/g, '\\\\')
-  .replace(/\r?\n/g, '\\n')
-  .replace(/,/g, '\\,')
-  .replace(/;/g, '\\;')
+}
 
 export const genUID = (domain = 'carebee') => {
   const rnd = typeof crypto !== 'undefined' && crypto.randomUUID
@@ -37,25 +28,6 @@ export const genUID = (domain = 'carebee') => {
   return `${rnd}@${domain}`
 }
 
-export const buildICSEvent = ({ uid, dtstamp, dtstart, title, desc, loc, method = 'PUBLISH' }) => {
-  const lines = [
-    'BEGIN:VCALENDAR',
-    'PRODID:-//CareBee//EN',
-    'VERSION:2.0',
-    `METHOD:${method}`,
-    'BEGIN:VEVENT',
-    `UID:${uid}`,
-    `DTSTAMP:${dtstamp}`,
-    `DTSTART:${dtstart}`,
-    title ? `SUMMARY:${title}` : null,
-    desc ? `DESCRIPTION:${desc}` : null,
-    loc ? `LOCATION:${loc}` : null,
-    'END:VEVENT',
-    'END:VCALENDAR'
-  ].filter(Boolean)
-  return lines.join('\r\n') + '\r\n'
-=======
-codex/implement-google-calendar-link-feature
 export function toICSDateTime (isoDate, hhmm) {
   return new Date(`${isoDate}T${hhmm || '09:00'}:00`).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'
 }
@@ -81,10 +53,12 @@ export function buildGoogleCalLink ({
   if (description) params.set('details', description)
   if (location) params.set('location', location)
   return `https://calendar.google.com/calendar/render?${params.toString()}`
-=======
+}
+
 export const detectTZ = () => {
   try {
-    return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
+    return tz || 'UTC'
   } catch {
     return 'UTC'
   }
@@ -94,6 +68,7 @@ export const fromDateAndTimeLocal = (date, time = '09:00') => {
   return new Date(`${date}T${time || '09:00'}:00`)
 }
 
+codex/validate-date-in-toicsdatetimeutc
 export const toICSDateTimeUTC = (date) => {
   const d = date instanceof Date ? date : new Date(date)
   if (Number.isNaN(d.getTime())) return null
@@ -101,4 +76,10 @@ export const toICSDateTimeUTC = (date) => {
 main
 main
 main
+=======
+export const toICSDateTimeUTC = (d) => {
+  const date = d instanceof Date ? d : new Date(d)
+  return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'
+main
 }
+
