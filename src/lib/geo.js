@@ -12,15 +12,20 @@ const OVERPASS = [
 ]
 
 async function overpassFetch(body){
-  let lastErr
   for (const url of OVERPASS){
+    const controller = new AbortController()
+    const timer = setTimeout(()=>controller.abort(), 25000)
     try{
-      const r = await fetch(url, { method:"POST", headers:{ "Content-Type":"text/plain" }, body })
-      if (!r.ok) throw new Error(`HTTP ${r.status}`)
+      const r = await fetch(url, { method:"POST", headers:{ "Content-Type":"text/plain" }, body, signal: controller.signal })
+      if (!r.ok) throw new Error('overpass_failed')
       return await r.json()
-    }catch(e){ lastErr = e }
+    }catch{
+      // try next endpoint on failure/timeout
+    }finally{
+      clearTimeout(timer)
+    }
   }
-  throw lastErr
+  throw new Error('overpass_failed')
 }
 
 export async function overpassAround(lat, lon, radiusKm, qlBlocks){

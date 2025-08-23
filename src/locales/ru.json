@@ -119,6 +119,7 @@
     "website": "Сайт",
     "geolocDenied": "Доступ к местоположению запрещён — введите адрес.",
     "geocodingError": "Адрес не найден.",
+    "overpassError": "Не удаётся связаться с Overpass. Попробуйте позже.",
     "source": "Источник данных: OpenStreetMap (Overpass).",
     "importFiness": "Импорт FINESS CSV",
     "finessHint": "Загрузите официальный CSV для поиска учреждений.",

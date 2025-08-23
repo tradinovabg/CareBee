@@ -51,7 +51,11 @@ export default function Nearby(){
       }).sort((a,b)=>(a.distKm ?? 1e9) - (b.distKm ?? 1e9))
       setItems(enriched)
     }catch(e){
-      setErr(e.message==='not_found' ? t('nearby.geocodingError') : e.message)
+      let msg
+      if (e.message==='not_found') msg = t('nearby.geocodingError')
+      else if (e.message==='overpass_failed') msg = t('nearby.overpassError')
+      else msg = e.message
+      setErr(msg)
       setItems([])
     }finally{
       setLoading(false)

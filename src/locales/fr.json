@@ -127,6 +127,7 @@
     "website": "Site web",
     "geolocDenied": "Position refusée — saisissez une adresse.",
     "geocodingError": "Adresse introuvable.",
+    "overpassError": "Impossible de joindre Overpass. Veuillez réessayer plus tard.",
     "source": "Source : OpenStreetMap (Overpass).",
     "importFiness": "Importer FINESS CSV",
     "finessHint": "Chargez le CSV officiel pour chercher les établissements enregistrés.",

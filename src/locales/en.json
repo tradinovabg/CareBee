@@ -127,6 +127,7 @@
     "website": "Website",
     "geolocDenied": "Location denied — enter an address.",
     "geocodingError": "Address not found.",
+    "overpassError": "Unable to reach Overpass. Please try again later.",
     "source": "Data source: OpenStreetMap (Overpass).",
     "importFiness": "Import FINESS CSV",
     "finessHint": "Load official CSV to search registered facilities.",
