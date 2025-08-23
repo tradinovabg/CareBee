@@ -9,6 +9,7 @@ import Visits from './pages/Visits.jsx'
 import QR from './pages/QR.jsx'
 import Vitals from './pages/Vitals.jsx'
 import Docs from './pages/Docs.jsx'
+import Nearby from './pages/Nearby.jsx'
 export default function App() {
   const { t } = useTranslation()
   const year = new Date().getFullYear()
@@ -23,7 +24,7 @@ export default function App() {
             <Link to="/visits">{t('nav.visits', 'Visits')}</Link>
             <Link to="/qr">QR</Link>
             <Link to="/vitals">Vitals</Link>
-            <Link to="/docs">Docs</Link>
+            <Link to="/nearby">Nearby</Link>
             <LanguageSwitcher />
           </nav>
         </div>
@@ -38,7 +39,7 @@ export default function App() {
             <Route path="/visits" element={<Visits />} />
             <Route path="/qr" element={<QR />} />
             <Route path="/vitals" element={<Vitals />} />
-            <Route path="/docs" element={<Docs />} />
+            <Route path="/nearby" element={<Nearby />} />
           </Routes>
         </div>
       </main>

@@ -11,8 +11,14 @@
     "gettingLocation": "Getting your location…",
     "loading": "Loading…"
   },
-  "errors": { "locationDenied": "Location access was denied." },
-  "nav": { "profile": "Profile", "meds": "Meds", "visits": "Visits" },
+  "errors": {
+    "locationDenied": "Location access was denied."
+  },
+  "nav": {
+    "profile": "Profile",
+    "meds": "Meds",
+    "visits": "Visits"
+  },
   "profile": {
     "title": "Patient profile",
     "firstName": "First name",
@@ -87,5 +93,32 @@
   "time": "Time",
   "notes": "Notes",
   "save": "Save",
-  "delete": "Delete"
+  "delete": "Delete",
+  "nearby": {
+    "title": "Nearby",
+    "useMyLocation": "Use my location",
+    "searchAddress": "Search address",
+    "addressPlaceholder": "Street, city…",
+    "radius": "Radius (m)",
+    "tabPharmacies": "Pharmacies",
+    "tabSpecialists": "Specialists & services",
+    "load": "Load",
+    "loading": "Loading…",
+    "nothing": "Nothing found nearby.",
+    "distance": "{{km}} km",
+    "openMaps": "Open in Maps",
+    "openOSM": "OSM",
+    "call": "Call",
+    "hours": "Hours",
+    "guardPharmacy": "Pharmacie de garde (nights/holidays):",
+    "call3237": "Call 3237",
+    "website": "Website",
+    "geolocDenied": "Location denied — enter an address.",
+    "geocodingError": "Address not found.",
+    "source": "Data source: OpenStreetMap (Overpass).",
+    "importFiness": "Import FINESS CSV",
+    "finessHint": "Load official CSV to search registered facilities.",
+    "clear": "Clear",
+    "category": "Category"
+  }
 }

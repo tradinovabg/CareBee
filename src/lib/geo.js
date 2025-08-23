@@ -1,0 +1,50 @@
+export const haversineKm = (a, b) => {
+  const R=6371, toRad = d=>d*Math.PI/180
+  const dLat=toRad(b.lat-a.lat), dLon=toRad(b.lon-a.lon)
+  const s1=Math.sin(dLat/2)**2 + Math.cos(toRad(a.lat))*Math.cos(toRad(b.lat))*Math.sin(dLon/2)**2
+  return 2*R*Math.asin(Math.sqrt(s1))
+}
+
+// Overpass с фолбэками
+const OVERPASS = [
+  "https://overpass-api.de/api/interpreter",
+  "https://overpass.kumi.systems/api/interpreter"
+]
+
+async function overpassFetch(body){
+  let lastErr
+  for (const url of OVERPASS){
+    try{
+      const r = await fetch(url, { method:"POST", headers:{ "Content-Type":"text/plain" }, body })
+      if (!r.ok) throw new Error(`HTTP ${r.status}`)
+      return await r.json()
+    }catch(e){ lastErr = e }
+  }
+  throw lastErr
+}
+
+export async function overpassAround(lat, lon, radius, qlBlocks){
+  const around = (k,v)=>`nwr(around:${radius},${lat},${lon})["${k}"="${v}"];`
+  const any = qlBlocks.join("\n")
+  const body = `[out:json][timeout:25];(${any});out center tags;`
+  const data = await overpassFetch(body)
+  return (data.elements||[]).map(el=>{
+    const latc = el.center?.lat ?? el.lat, lonc = el.center?.lon ?? el.lon
+    return { id: `${el.type}/${el.id}`, lat: latc, lon: lonc, tags: el.tags||{} }
+  })
+}
+
+// Nominatim — геокодинг адреса → {lat, lon}
+export async function geocodeAddress(q, lang="en"){
+  const u = new URL("https://nominatim.openstreetmap.org/search")
+  u.searchParams.set("format","json")
+  u.searchParams.set("q", q)
+  u.searchParams.set("limit","1")
+  u.searchParams.set("addressdetails","1")
+  u.searchParams.set("accept-language", lang)
+  const r = await fetch(u.toString(), { headers:{ "Accept":"application/json" } })
+  if (!r.ok) throw new Error(`HTTP ${r.status}`)
+  const arr = await r.json()
+  if (!arr.length) throw new Error("not_found")
+  return { lat: parseFloat(arr[0].lat), lon: parseFloat(arr[0].lon) }
+}
