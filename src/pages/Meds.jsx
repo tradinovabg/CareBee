@@ -5,10 +5,6 @@ import { buildGoogleCalLink, buildICSEvent, fromDateAndTimeLocal, toICSDateTimeU
 const STORAGE = 'carebee.meds'
 const SLOT_DEFAULTS = { morning: '08:00', noon: '13:00', evening: '20:00' }
 
-codex/add-ics-utility-functions-and-buttons
-const load = (k, def) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : def } catch { return def } }
-const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)) } catch { } }
-=======
 const load = (k, def) => {
   try {
     const v = localStorage.getItem(k)
@@ -32,11 +28,6 @@ const addDays = (d, n) => {
   x.setDate(x.getDate() + n)
   return x.toISOString().slice(0, 10)
 }
-
-codex/escape-special-characters-in-ics-event-strings
-main
-
-const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x.toISOString().slice(0, 10) }
 
 export default function Meds () {
   const { t } = useTranslation()

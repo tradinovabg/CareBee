@@ -109,12 +109,15 @@ export default function Calendar () {
       {days.map(d => {
         const list = eventsByDate[d]
         return (
-codex/rename-today-to-todayiso-and-update-styling
-          <div key={d} className={`day-cell ${isToday(d) ? 'is-today' : ''}`} aria-current={isToday(d) ? 'date' : undefined}>
+          <div
+            key={d}
+            className={`day-cell ${isToday(d) ? 'is-today' : ''}`}
+            aria-current={isToday(d) ? 'date' : undefined}
+          >
             <div className='card'>
               <strong>
                 {d}
-                {isToday(d) && <span className='today-pill'>{t('calendar.today')}</span>}
+                {isToday(d) && <span className='today-pill'>{t('calendar.today', 'Today')}</span>}
               </strong>
               {list.length ? (
                 <ul>
@@ -130,38 +133,6 @@ codex/rename-today-to-todayiso-and-update-styling
                 <div>{t('calendar.empty', 'Nothing scheduled')}</div>
               )}
             </div>
-=======
-codex/add-today-key-to-locale-files
-          <div key={d} className='card' style={{ marginBottom: 12 }}>
-            <strong className={d === today ? 'today-highlight' : ''}>
-              {d === today ? t('calendar.today', 'Today') : d}
-=======
-          <div
-            key={d}
-            className={`card day-cell${d === today ? ' is-today' : ''}`}
-            style={{ marginBottom: 12 }}
-          >
-            <strong>
-              {d}
-              {d === today ? (
-                <span className='today-pill'>{t('today', 'Today')}</span>
-              ) : null}
-main
-            </strong>
-            {list.length ? (
-              <ul>
-                {list.map((e, i) => (
-                  <li key={i}>
-                    {e.time ? `${e.time} ` : ''}{e.title} ({e.type === 'visit' ? t('calendar.visit', 'Visit') : t('calendar.med', 'Med')})
-                    {e.location ? ` — ${e.location}` : ''}
-                    {e.notes ? <div style={{ color: '#555' }}>{e.notes}</div> : null}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <div>{t('calendar.empty', 'Nothing scheduled')}</div>
-            )}
-main
           </div>
         )
       })}
