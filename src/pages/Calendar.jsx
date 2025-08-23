@@ -103,6 +103,11 @@ export default function Calendar () {
       {days.map(d => {
         const list = eventsByDate[d]
         return (
+codex/add-today-key-to-locale-files
+          <div key={d} className='card' style={{ marginBottom: 12 }}>
+            <strong className={d === today ? 'today-highlight' : ''}>
+              {d === today ? t('calendar.today', 'Today') : d}
+=======
           <div
             key={d}
             className={`card day-cell${d === today ? ' is-today' : ''}`}
@@ -113,6 +118,7 @@ export default function Calendar () {
               {d === today ? (
                 <span className='today-pill'>{t('today', 'Today')}</span>
               ) : null}
+main
             </strong>
             {list.length ? (
               <ul>
