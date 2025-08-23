@@ -50,6 +50,7 @@ input, textarea { padding: 0.5rem; font-size: 1rem; border: 1px solid var(--blac
 }
 
 .day-cell.is-today {
+codex/clean-up-css-styles-in-index.css
   outline: 2px solid var(--brand-blue);
   outline-offset: 2px;
   background: #eef7ff;
@@ -65,4 +66,17 @@ input, textarea { padding: 0.5rem; font-size: 1rem; border: 1px solid var(--blac
   color: #fff;
   font-size: .8rem;
   line-height: 1;
+=======
+  outline: 2px solid var(--yellow);
+  border-radius: 8px;
+}
+
+.today-pill {
+  background: var(--yellow);
+  color: var(--black);
+  padding: 0 4px;
+  border-radius: 4px;
+  margin-left: 8px;
+  font-size: 0.75rem;
+main
 }
