@@ -105,7 +105,7 @@ export default function Calendar () {
         return (
           <div key={d} className='card' style={{ marginBottom: 12 }}>
             <strong className={d === today ? 'today-highlight' : ''}>
-              {d === today ? t('today', 'Today') : d}
+              {d === today ? t('calendar.today', 'Today') : d}
             </strong>
             {list.length ? (
               <ul>
