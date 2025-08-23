@@ -23,6 +23,14 @@ const addDays = (d, n) => {
   return x.toISOString().slice(0, 10)
 }
 
+const formatUTC = dt => dt.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z')
+const toUTC = (isoDate, hhmm, addMinutes = 0) => {
+  const [h, m] = (hhmm || '08:00').split(':').map(Number)
+  const dt = new Date(`${isoDate}T${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:00`)
+  dt.setMinutes(dt.getMinutes() + addMinutes)
+  return formatUTC(dt)
+}
+
 export default function Meds () {
   const { t } = useTranslation()
   const [items, setItems] = useState(() => load(STORAGE, []))
@@ -116,14 +124,14 @@ export default function Meds () {
   }, [items, days])
 
   const downloadICS = m => {
-    const dt = `${m.startDate.replace(/-/g, '')}T${m.onceTime.replace(':', '')}00`
-    const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nUID:${m.id}\nDTSTAMP:${dt}\nDTSTART:${dt}\nSUMMARY:${m.name}\nEND:VEVENT\nEND:VCALENDAR`
-    const blob = new Blob([ics], { type: 'text/calendar' })
-    const a = document.createElement('a')
-    a.href = URL.createObjectURL(blob)
-    a.download = `${m.name}.ics`
-    a.click()
-    URL.revokeObjectURL(a.href)
+    const startUTC = toUTC(m.startDate, m.onceTime)
+    const endUTC = toUTC(m.startDate, m.onceTime, 60)
+    const summary = m.name || 'Medicine'
+    const url = new URL('https://calendar.google.com/calendar/render')
+    url.searchParams.set('action', 'TEMPLATE')
+    url.searchParams.set('dates', `${startUTC}/${endUTC}`)
+    url.searchParams.set('text', summary)
+    window.open(url.toString(), '_blank')
   }
 
   const toggleSlot = s => e => {
@@ -231,11 +239,11 @@ export default function Meds () {
                   ? `${m.startDate} ${m.onceTime} ${m.mealTiming}`
                   : `${m.startDate}${m.endDate ? '–' + m.endDate : ''} ${Object.values(m.slots || {}).filter(Boolean).join(', ')} ${m.mealTiming}`}
               </div>
-              <div className='row' style={{ display: 'flex', gap: 8 }}>
-                {m.mode === 'once' && <button className='btn btn-outline' onClick={() => downloadICS(m)}>ICS</button>}
-                <button className='btn btn-outline' onClick={() => edit(m)}>{t('edit', 'Edit')}</button>
-                <button className='btn btn-danger' onClick={() => remove(m.id)}>{t('delete', 'Delete')}</button>
-              </div>
+                <div className='row' style={{ display: 'flex', gap: 8 }}>
+                  {m.mode === 'once' && <button className='btn btn-outline' onClick={() => downloadICS(m)}>{t('visits.addToCalendar', 'Add to calendar')}</button>}
+                  <button className='btn btn-outline' onClick={() => edit(m)}>{t('edit', 'Edit')}</button>
+                  <button className='btn btn-danger' onClick={() => remove(m.id)}>{t('delete', 'Delete')}</button>
+                </div>
             </div>
           </li>
         ))}
