@@ -26,7 +26,11 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
+codex/add-lint-step-to-deploy-workflow
+      - run: npm run lint
+=======
       - run: npm test
+main
       - run: npm run build
         if: ${{ success() }}
       - run: cp dist/index.html dist/404.html
