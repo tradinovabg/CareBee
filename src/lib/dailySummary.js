@@ -1,5 +1,6 @@
 const PROFILE_KEY = 'carebee.profile'
 const LAST_KEY = 'carebee.lastDailySent'
+const AUTO_KEY = 'carebee.autosend'
 
 const load = (k, def) => {
   try {
@@ -11,6 +12,27 @@ const load = (k, def) => {
 }
 
 const loadProfile = () => load(PROFILE_KEY, {})
+
+export function getAutoSendSettings () {
+  return load(AUTO_KEY, { enabled: false, time: '08:00' })
+}
+
+export function setAutoSendSettings (settings) {
+  try {
+    localStorage.setItem(AUTO_KEY, JSON.stringify(settings))
+  } catch {
+    /* ignore */
+  }
+}
+
+export function getLastSummaryAt () {
+  try {
+    const v = localStorage.getItem(LAST_KEY)
+    return v ? new Date(`${v}T00:00:00`) : null
+  } catch {
+    return null
+  }
+}
 
 export function buildDailySummary () {
   const today = new Date().toISOString().slice(0, 10)
@@ -50,6 +72,11 @@ export function sendSummary () {
   const subj = encodeURIComponent('CareBee Daily Summary')
   const url = `mailto:${to}?subject=${subj}&body=${body}`
   window.open(url)
+  try { localStorage.setItem(LAST_KEY, new Date().toISOString().slice(0, 10)) } catch { /* ignore */ }
+}
+
+export function sendDailySummaryNow () {
+  sendSummary()
   try { localStorage.setItem(LAST_KEY, new Date().toISOString().slice(0, 10)) } catch { /* ignore */ }
 }
 
