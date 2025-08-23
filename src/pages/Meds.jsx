@@ -23,6 +23,8 @@ const addDays = (d, n) => {
   return x.toISOString().slice(0, 10)
 }
 
+const esc = v => (v || '').replace(/[\n,;]/g, ' ')
+
 export default function Meds () {
   const { t } = useTranslation()
   const [items, setItems] = useState(() => load(STORAGE, []))
@@ -117,7 +119,7 @@ export default function Meds () {
 
   const downloadICS = m => {
     const dt = `${m.startDate.replace(/-/g, '')}T${m.onceTime.replace(':', '')}00`
-    const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nUID:${m.id}\nDTSTAMP:${dt}\nDTSTART:${dt}\nSUMMARY:${m.name}\nEND:VEVENT\nEND:VCALENDAR`
+    const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nUID:${m.id}\nDTSTAMP:${dt}\nDTSTART:${dt}\nSUMMARY:${esc(m.name)}\nEND:VEVENT\nEND:VCALENDAR`
     const blob = new Blob([ics], { type: 'text/calendar' })
     const a = document.createElement('a')
     a.href = URL.createObjectURL(blob)

@@ -15,6 +15,8 @@ function toICSDateTime(isoDate, hhmm){
   return `${y}${mo}${d}T${H}${M}${S}`
 }
 
+const esc = v => (v || '').replace(/[\n,;]/g, ' ')
+
 export default function Visits(){
   const { t } = useTranslation()
   const [list, setList] = useState(()=> load(STORAGE, []))
@@ -49,9 +51,9 @@ BEGIN:VEVENT
 UID:${uid}
 DTSTAMP:${now}
 DTSTART:${dtstart}
-SUMMARY:Visit — ${v.doctor}
-LOCATION:${(v.place||'').replace(/\n/g,' ')}
-DESCRIPTION:${(v.notes||'').replace(/\n/g,' ')}
+SUMMARY:${esc(`Visit — ${v.doctor}`)}
+LOCATION:${esc(v.place)}
+DESCRIPTION:${esc(v.notes)}
 END:VEVENT
 END:VCALENDAR`
     const blob = new Blob([ics], {type:'text/calendar;charset=utf-8'})
