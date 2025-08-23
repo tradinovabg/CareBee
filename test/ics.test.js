@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { icsEscape, buildICSEvent } from '../src/lib/ics.js'
+import { icsEscape, buildICSEvent, toICSDateTimeUTC } from '../src/lib/ics.js'
 
 test('icsEscape escapes special characters', () => {
   const input = 'comma,semi;slash\\line\nnext'
@@ -25,4 +25,8 @@ test('buildICSEvent builds CRLF ICS with escaped fields', () => {
   assert.ok(ics.includes('LOCATION:loc\\,ation\\;\\\\three\\n'))
   assert.ok(ics.includes('\r\n'))
   assert.ok(ics.endsWith('\r\n'))
+})
+
+test('toICSDateTimeUTC returns null for invalid date', () => {
+  assert.equal(toICSDateTimeUTC('not-a-date'), null)
 })

@@ -5,8 +5,36 @@ import { buildGoogleCalLink, buildICSEvent, fromDateAndTimeLocal, toICSDateTimeU
 const STORAGE = 'carebee.meds'
 const SLOT_DEFAULTS = { morning: '08:00', noon: '13:00', evening: '20:00' }
 
+codex/add-ics-utility-functions-and-buttons
 const load = (k, def) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : def } catch { return def } }
 const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)) } catch { } }
+=======
+const load = (k, def) => {
+  try {
+    const v = localStorage.getItem(k)
+    return v ? JSON.parse(v) : def
+  } catch {
+    return def
+  }
+}
+
+const save = (k, v) => {
+  try { localStorage.setItem(k, JSON.stringify(v)) } catch { /* ignore */ }
+}
+
+const parseISODate = iso => {
+  const [y, m, d] = iso.split('-').map(Number)
+  return new Date(y, m - 1, d)
+}
+
+const addDays = (d, n) => {
+  const x = parseISODate(d)
+  x.setDate(x.getDate() + n)
+  return x.toISOString().slice(0, 10)
+}
+
+codex/escape-special-characters-in-ics-event-strings
+main
 
 const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x.toISOString().slice(0, 10) }
 
@@ -75,7 +103,7 @@ export default function Meds () {
 
   const renewals = useMemo(() => {
     const now = today()
-    return items.filter(i => i.mode === 'daily' && i.endDate && (new Date(i.endDate) - new Date(now)) / 86400000 <= 3)
+    return items.filter(i => i.mode === 'daily' && i.endDate && (parseISODate(i.endDate) - parseISODate(now)) / 86400000 <= 3)
   }, [items])
 
   const schedule = useMemo(() => {
