@@ -1,5 +1,3 @@
-import { t } from 'i18next'
-
 const PROFILE_KEY = 'carebee.profile'
 const LAST_KEY = 'carebee.lastDailySent'
 const AUTO_KEY = 'carebee.autosend'
@@ -13,12 +11,9 @@ const load = (k, def) => {
   }
 }
 
-const loadProfile = () => {
-  const p = load(PROFILE_KEY, {})
-  const { autosendEnabled: _ae, autosendTime: _at, ...rest } = p || {}
-  return rest
-}
+const loadProfile = () => load(PROFILE_KEY, {})
 
+codex/add-daily-summary-helpers-in-dailysummary.js
 export function getAutoSendSettings () {
   return load(AUTO_KEY, { enabled: false, time: '08:00' })
 }
@@ -37,20 +32,19 @@ export function getLastSummaryAt () {
     return v ? new Date(`${v}T00:00:00`) : null
   } catch {
     return null
-  }
-}
-
+=======
 export function shouldAutoSend () {
   try {
-    const { enabled, time } = getAutoSendSettings()
-    if (!enabled) return false
+    const p = loadProfile()
+    if (!p.autosendEnabled) return false
     const now = new Date()
     const hhmm = now.toTimeString().slice(0, 5)
     const today = now.toISOString().slice(0, 10)
     const last = localStorage.getItem(LAST_KEY)
-    return hhmm >= (time || '00:00') && last !== today
+    return hhmm >= (p.autosendTime || '00:00') && last !== today
   } catch {
     return false
+main
   }
 }
 
@@ -95,11 +89,28 @@ export function sendSummary () {
   try { localStorage.setItem(LAST_KEY, new Date().toISOString()) } catch { /* ignore */ }
 }
 
-export function sendDailySummaryNow () {
+const AUTO_KEY = 'carebee.autoDailySummary'
+
+export const getAutoSendSettings = () => load(AUTO_KEY, { enabled: false, time: '09:00' })
+
+export const setAutoSendSettings = (s) => {
+  try { localStorage.setItem(AUTO_KEY, JSON.stringify(s)) } catch { /* ignore */ }
+}
+
+export const getLastSummaryAt = () => load(LAST_KEY, null)
+
+export const sendDailySummaryNow = () => {
   sendSummary()
   return getLastSummaryAt()
 }
 
+codex/add-daily-summary-helpers-in-dailysummary.js
+export function sendDailySummaryNow () {
+  sendSummary()
+  try { localStorage.setItem(LAST_KEY, new Date().toISOString().slice(0, 10)) } catch { /* ignore */ }
+=======
 export function maybeSendDailySummary () {
-  if (shouldAutoSend() && confirm(t('daily.confirmSend', 'Send daily summary now?'))) sendSummary()
+  if (shouldAutoSend() && confirm('Send daily summary now?')) sendSummary()
+main
 }
+

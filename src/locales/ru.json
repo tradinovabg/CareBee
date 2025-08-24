@@ -29,7 +29,11 @@
     "saved": "Сохранено"
   },
   "qr": {
+codex/update-localization-files-with-new-keys
+    "title": "QR-код",
+=======
     "title": "QR — {{profile}}",
+main
     "imgAlt": "QR-код",
     "allergies": "Аллергии",
     "allergies_placeholder": "пенициллин, арахис…",
@@ -105,14 +109,12 @@
     "day": "День",
     "week": "Неделя",
     "month": "Месяц",
-    "today": "Сегодня",
     "showVisits": "Визиты и события",
     "showMeds": "График приёма",
-      "visit": "Визит",
-      "med": "Препарат",
-      "empty": "Ничего не запланировано",
-      "addToGoogle": "Добавить в Google Календарь"
-    },
+    "visit": "Визит",
+    "med": "Препарат",
+    "empty": "Ничего не запланировано"
+  },
   "date": "Дата",
   "time": "Время",
   "notes": "Заметки",
@@ -155,8 +157,5 @@
     "finessHint": "Загрузите официальный CSV для поиска учреждений.",
     "clear": "Очистить",
     "category": "Категория"
-  },
-  "daily": {
-    "confirmSend": "Отправить ежедневный отчёт сейчас?"
   }
 }
