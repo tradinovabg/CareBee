@@ -1,21 +1,25 @@
-/** @type {import('eslint').Linter.Config} */
-module.exports = {
-  root: true,
+// eslint.config.js (flat config)
+import js from '@eslint/js';
+import globals from 'globals';
 
-  env: { browser: true, es2021: true },
+export default [
+  js.configs.recommended,
 
-  extends: ['eslint:recommended'],
+  // (опционально) игнорируем сборку
+  { ignores: ['dist/**'] },
 
-  parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
-
-  overrides: [
-    {
-      files: ['test/**', '**/*.test.js'],
-      env: { node: true },                 // включает Node-глобалы в тестах
-      globals: { process: 'readonly' },    // на всякий случай явно разрешаем process
-      // при желании можно полностью вырубить правило:
-      // rules: { 'no-undef': 'off' },
+  // ТЕСТЫ: включаем Node-глобалы (process и пр.)
+  {
+    files: ['test/**/*.{js,jsx}', '**/*.test.{js,jsx}'],
+    languageOptions: {
+      globals: {
+        ...globals.node,       // дает process, __dirname и т.п.
+        ...globals.es2021,
+      },
     },
-  ],
-};
-
+    // страховка: даже если глобалы не подтянутся — не валим сборку
+    rules: {
+      'no-undef': 'off',
+    },
+  },
+];
