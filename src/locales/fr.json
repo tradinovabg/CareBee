@@ -15,10 +15,14 @@
     "locationDenied": "Accès à la localisation refusé."
   },
   "nav": {
+    "home": "CareBee",
     "profile": "Profil",
     "meds": "Médicaments",
     "visits": "Visites",
-    "calendar": "Calendrier"
+    "calendar": "Calendrier",
+    "qr": "QR",
+    "vitals": "Signes vitaux",
+    "nearby": "À proximité"
   },
   "profile": {
     "title": "Profil du patient",

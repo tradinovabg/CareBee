@@ -15,10 +15,14 @@
     "locationDenied": "Location access was denied."
   },
   "nav": {
+    "home": "CareBee",
     "profile": "Profile",
     "meds": "Meds",
     "visits": "Visits",
-    "calendar": "Calendar"
+    "calendar": "Calendar",
+    "qr": "QR",
+    "vitals": "Vitals",
+    "nearby": "Nearby"
   },
   "profile": {
     "title": "Patient profile",

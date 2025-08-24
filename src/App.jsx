@@ -21,15 +21,15 @@ export default function App () {
     <>
       <header>
         <div className="container header-bar">
-          <Link to="/" className="brand">CareBee</Link>
+          <Link to="/" className="brand">{t('nav.home', 'CareBee')}</Link>
           <nav className="main-nav" style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
             <Link to="/profile">{t('nav.profile', 'Profile')}</Link>
             <Link to="/meds">{t('nav.meds', 'Meds')}</Link>
             <Link to="/visits">{t('nav.visits', 'Visits')}</Link>
             <Link to="/calendar">{t('nav.calendar', 'Calendar')}</Link>
-            <Link to="/qr">QR</Link>
-            <Link to="/vitals">Vitals</Link>
-            <Link to="/nearby">Nearby</Link>
+            <Link to="/qr">{t('nav.qr', 'QR')}</Link>
+            <Link to="/vitals">{t('nav.vitals', 'Vitals')}</Link>
+            <Link to="/nearby">{t('nav.nearby', 'Nearby')}</Link>
             <LanguageSwitcher />
           </nav>
         </div>

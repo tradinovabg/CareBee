@@ -15,10 +15,14 @@
     "locationDenied": "Доступ к местоположению запрещён."
   },
   "nav": {
+    "home": "CareBee",
     "profile": "Профиль",
     "meds": "Лекарства",
     "visits": "Визиты",
-    "calendar": "Календарь"
+    "calendar": "Календарь",
+    "qr": "QR",
+    "vitals": "Жизненные показатели",
+    "nearby": "Рядом"
   },
   "profile": {
     "title": "Профиль пациента",
