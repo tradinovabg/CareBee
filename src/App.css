@@ -4,3 +4,7 @@
   padding: 2rem;
   text-align: center;
 }
+
+.main-nav .active {
+  text-decoration: underline;
+}

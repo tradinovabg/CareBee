@@ -1,4 +1,5 @@
-import { Routes, Route, Link } from 'react-router-dom'
+import { Routes, Route, Link, NavLink } from 'react-router-dom'
+import './App.css'
 import { useTranslation } from 'react-i18next'
 import LanguageSwitcher from './components/LanguageSwitcher.jsx'
 import Home from './pages/Home.jsx'
@@ -23,13 +24,21 @@ export default function App () {
         <div className="container header-bar">
           <Link to="/" className="brand">CareBee</Link>
           <nav className="main-nav" style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-            <Link to="/profile">{t('nav.profile', 'Profile')}</Link>
-            <Link to="/meds">{t('nav.meds', 'Meds')}</Link>
-            <Link to="/visits">{t('nav.visits', 'Visits')}</Link>
-            <Link to="/calendar">{t('nav.calendar', 'Calendar')}</Link>
-            <Link to="/qr">QR</Link>
-            <Link to="/vitals">Vitals</Link>
-            <Link to="/nearby">Nearby</Link>
+            <NavLink to="/profile" className={({ isActive }) => (isActive ? 'active' : undefined)}>
+              {t('nav.profile', 'Profile')}
+            </NavLink>
+            <NavLink to="/meds" className={({ isActive }) => (isActive ? 'active' : undefined)}>
+              {t('nav.meds', 'Meds')}
+            </NavLink>
+            <NavLink to="/visits" className={({ isActive }) => (isActive ? 'active' : undefined)}>
+              {t('nav.visits', 'Visits')}
+            </NavLink>
+            <NavLink to="/calendar" className={({ isActive }) => (isActive ? 'active' : undefined)}>
+              {t('nav.calendar', 'Calendar')}
+            </NavLink>
+            <NavLink to="/qr" className={({ isActive }) => (isActive ? 'active' : undefined)}>QR</NavLink>
+            <NavLink to="/vitals" className={({ isActive }) => (isActive ? 'active' : undefined)}>Vitals</NavLink>
+            <NavLink to="/nearby" className={({ isActive }) => (isActive ? 'active' : undefined)}>Nearby</NavLink>
             <LanguageSwitcher />
           </nav>
         </div>
