@@ -111,7 +111,6 @@ export default function Calendar () {
         return (
           <div
             key={d}
-codex/refactor-meds.jsx-and-verify-medication-rendering
             className={`day-cell ${isToday(d) ? 'is-today' : ''}`}
             aria-current={isToday(d) ? 'date' : undefined}
           >
@@ -134,28 +133,6 @@ codex/refactor-meds.jsx-and-verify-medication-rendering
                 <div>{t('calendar.empty', 'Nothing scheduled')}</div>
               )}
             </div>
-=======
-            className={`card day-cell${isToday(d) ? ' is-today' : ''}`}
-            aria-current={isToday(d) ? 'date' : undefined}
-          >
-            <strong>
-              {d}
-              {isToday(d) && <span className='today-pill'>{t('calendar.today', 'Today')}</span>}
-            </strong>
-            {list.length ? (
-              <ul>
-                {list.map((e, i) => (
-                  <li key={i}>
-                    {e.time ? `${e.time} ` : ''}{e.title} ({e.type === 'visit' ? t('calendar.visit', 'Visit') : t('calendar.med', 'Med')})
-                    {e.location ? ` — ${e.location}` : ''}
-                    {e.notes ? <div style={{ color: '#555' }}>{e.notes}</div> : null}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <div>{t('calendar.empty', 'Nothing scheduled')}</div>
-            )}
-main
           </div>
         )
       })}
