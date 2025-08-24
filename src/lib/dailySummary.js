@@ -13,7 +13,11 @@ const load = (k, def) => {
   }
 }
 
-const loadProfile = () => load(PROFILE_KEY, {})
+const loadProfile = () => {
+  const p = load(PROFILE_KEY, {})
+  const { autosendEnabled: _ae, autosendTime: _at, ...rest } = p || {}
+  return rest
+}
 
 export function getAutoSendSettings () {
   return load(AUTO_KEY, { enabled: false, time: '08:00' })
@@ -38,13 +42,13 @@ export function getLastSummaryAt () {
 
 export function shouldAutoSend () {
   try {
-    const p = loadProfile()
-    if (!p.autosendEnabled) return false
+    const { enabled, time } = getAutoSendSettings()
+    if (!enabled) return false
     const now = new Date()
     const hhmm = now.toTimeString().slice(0, 5)
     const today = now.toISOString().slice(0, 10)
     const last = localStorage.getItem(LAST_KEY)
-    return hhmm >= (p.autosendTime || '00:00') && last !== today
+    return hhmm >= (time || '00:00') && last !== today
   } catch {
     return false
   }
