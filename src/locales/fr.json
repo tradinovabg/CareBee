@@ -29,7 +29,11 @@
     "saved": "Enregistré"
   },
   "qr": {
+codex/update-localization-files-with-new-keys
+    "title": "Code QR",
+=======
     "title": "QR — {{profile}}",
+main
     "imgAlt": "Code QR",
     "allergies": "Allergies",
     "allergies_placeholder": "pénicilline, arachides…",
@@ -113,14 +117,12 @@
     "day": "Jour",
     "week": "Semaine",
     "month": "Mois",
-    "today": "Aujourd’hui",
     "showVisits": "Visites & événements",
     "showMeds": "Planning médicaments",
-      "visit": "Visite",
-      "med": "Médicament",
-      "empty": "Rien de prévu",
-      "addToGoogle": "Ajouter à Google Agenda"
-    },
+    "visit": "Visite",
+    "med": "Médicament",
+    "empty": "Rien de prévu"
+  },
   "date": "Date",
   "time": "Heure",
   "notes": "Notes",
@@ -163,8 +165,5 @@
     "finessHint": "Chargez le CSV officiel pour chercher les établissements enregistrés.",
     "clear": "Effacer",
     "category": "Catégorie"
-  },
-  "daily": {
-    "confirmSend": "Envoyer le résumé quotidien maintenant ?"
   }
 }

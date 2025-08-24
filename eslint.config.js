@@ -1,24 +1,29 @@
-// flat-config
 import js from '@eslint/js'
 import globals from 'globals'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
+import { defineConfig, globalIgnores } from 'eslint/config'
 
-export default [
-  js.configs.recommended,
-
-  // ваш основной конфиг (если есть)…
-
-  // тесты запускаются в node:
+export default defineConfig([
+  globalIgnores(['dist']),
   {
-    files: ['test/**/*', '**/*.test.js'],
+    files: ['**/*.{js,jsx}'],
+    extends: [
+      js.configs.recommended,
+      reactHooks.configs['recommended-latest'],
+      reactRefresh.configs.vite,
+    ],
     languageOptions: {
-      globals: { ...globals.node },   // process и др. в тестах
+      ecmaVersion: 2020,
+      globals: globals.browser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        ecmaFeatures: { jsx: true },
+        sourceType: 'module',
+      },
+    },
+    rules: {
+      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
     },
   },
-  // браузерные глобалы для клиентского кода:
-  {
-    files: ['src/**/*.{js,jsx}'],
-    languageOptions: {
-      globals: { ...globals.browser },
-    },
-  },
-]
+])
