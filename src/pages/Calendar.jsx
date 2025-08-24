@@ -49,7 +49,7 @@ export default function Calendar() {
   const [showVisits, setShowVisits] = useState(true);
   const [showMeds, setShowMeds] = useState(true);
 
-  // исходные данные (хранятся на страницах Visits/Meds)
+  // исходные данные
   const [visits, setVisits] = useState(() => load('carebee.visits', []));
   const [meds, setMeds] = useState(() => load('carebee.meds', []));
 
@@ -79,7 +79,7 @@ export default function Calendar() {
 
     if (showVisits) {
       visits.forEach((v) => {
-        // ожидаем структуру: { id, doctor, date, time, place, notes }
+        // ожидаем: { doctor, date, time, place, notes }
         if (v?.date && v.date >= today && v.date <= end && res[v.date]) {
           res[v.date].push({
             time: v.time || '',
@@ -94,7 +94,6 @@ export default function Calendar() {
 
     if (showMeds) {
       meds.forEach((m) => {
-        // ожидаем структуру:
         // once:  { mode:'once',  name, once:{date, time} }
         // daily: { mode:'daily', name, daily:{ start?, end?, times:['08:00','20:00'] } }
         if (m?.mode === 'once') {
