@@ -1,3 +1,4 @@
+/* eslint-env node */
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { icsEscape, buildICSEvent, toICSDateTimeUTC, toUTCStamp } from '../src/lib/ics.js'
