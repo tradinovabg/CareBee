@@ -11,6 +11,7 @@ import QR from './pages/QR.jsx'
 import Vitals from './pages/Vitals.jsx'
 import Docs from './pages/Docs.jsx'
 import Nearby from './pages/Nearby.jsx'
+import './App.css'
 
 export default function App () {
   const { t } = useTranslation()
@@ -22,7 +23,7 @@ export default function App () {
       <header>
         <div className="container header-bar">
           <Link to="/" className="brand">CareBee</Link>
-          <nav className="main-nav" style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+          <nav className="main-nav">
             <Link to="/profile">{t('nav.profile', 'Profile')}</Link>
             <Link to="/meds">{t('nav.meds', 'Meds')}</Link>
             <Link to="/visits">{t('nav.visits', 'Visits')}</Link>
