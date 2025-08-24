@@ -1,29 +1,33 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
-import { defineConfig, globalIgnores } from 'eslint/config'
+// eslint.config.js (flat config)
+import js from '@eslint/js';
+import globals from 'globals';
 
-export default defineConfig([
-  globalIgnores(['dist']),
+export default [
+  // Базовые рекомендации ESLint
+  js.configs.recommended,
+
+  // Глобалы для браузера и Node в основном коде
   {
-    files: ['**/*.{js,jsx}'],
-    extends: [
-      js.configs.recommended,
-      reactHooks.configs['recommended-latest'],
-      reactRefresh.configs.vite,
-    ],
     languageOptions: {
-      ecmaVersion: 2020,
-      globals: globals.browser,
-      parserOptions: {
-        ecmaVersion: 'latest',
-        ecmaFeatures: { jsx: true },
-        sourceType: 'module',
+      globals: {
+        ...globals.browser,
+        ...globals.node,
       },
     },
-    rules: {
-      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+  },
+
+  // Оверрайд для тестов: разрешаем process и node-глобалы
+  {
+    files: ['test/**', '**/*.test.js'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        process: 'readonly',
+      },
     },
   },
-])
+
+  // Если у вас есть дополнительные правила/плагины —
+  // оставьте их ниже этим объектом.
+  // { ...ваш остальной конфиг... }
+];
