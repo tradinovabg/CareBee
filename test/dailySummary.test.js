@@ -16,7 +16,7 @@ test('maybeSendDailySummary uses translated confirmation', async () => {
     setItem: (k, v) => store.set(k, v),
     removeItem: k => store.delete(k)
   }
-  store.set('carebee.profile', JSON.stringify({ autosendEnabled: true, autosendTime: '00:00' }))
+  store.set('carebee.autosend', JSON.stringify({ enabled: true, time: '00:00' }))
 
   globalThis.window = { open: () => {} }
   let message
