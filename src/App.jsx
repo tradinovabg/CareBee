@@ -11,6 +11,7 @@ import QR from './pages/QR.jsx'
 import Vitals from './pages/Vitals.jsx'
 import Docs from './pages/Docs.jsx'
 import Nearby from './pages/Nearby.jsx'
+import NotFound from './pages/NotFound.jsx'
 
 export default function App () {
   const { t } = useTranslation()
@@ -46,6 +47,7 @@ export default function App () {
             <Route path="/qr" element={<QR />} />
             <Route path="/vitals" element={<Vitals />} />
             <Route path="/nearby" element={<Nearby />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
       </main>
