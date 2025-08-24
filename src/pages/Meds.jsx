@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import { buildGoogleCalLink, buildICSEvent, fromDateAndTimeLocal, toICSDateTimeUTC } from '../lib/ics'
 codex/add-normalization-to-times-array
 import { normalizeTimes } from '../lib/normalizeTimes'
-=======
 import { MEAL_LABEL } from '../locale/mealLabel'
 main
 
