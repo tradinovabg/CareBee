@@ -6,7 +6,6 @@ const STORAGE = 'carebee.visits'
 const load = (k, def) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : def } catch { return def } }
 codex/refactor-meds.jsx-and-verify-medication-rendering
 const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)) } catch { /* ignore */ } }
-=======
 const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)) } catch { /* empty */ } }
 main
 
