@@ -12,10 +12,10 @@ import Vitals from './pages/Vitals.jsx'
 import Docs from './pages/Docs.jsx'
 import Nearby from './pages/Nearby.jsx'
 
+const year = new Date().getFullYear()
+
 export default function App () {
   const { t } = useTranslation()
-  const year = new Date().getFullYear()
-
 
   return (
     <>
