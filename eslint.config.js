@@ -1,22 +1,21 @@
-// eslint.config.js (flat config)
+// eslint.config.js (ESLint v9, flat config)
 import js from '@eslint/js';
 import globals from 'globals';
 
 export default [
-  // Базовые рекомендации ESLint
+  // База от ESLint
   js.configs.recommended,
 
-  // Глобалы для браузера и Node в основном коде
+  // Общие настройки для .js/.jsx
   {
+    files: ['**/*.js', '**/*.jsx'],
     languageOptions: {
-      globals: {
-        ...globals.browser,
-        ...globals.node,
-      },
+      ecmaVersion: 'latest',
+      sourceType: 'module',
     },
   },
 
-  // Оверрайд для тестов: разрешаем process и node-глобалы
+  // Тесты: разрешаем node-глобалы, в т.ч. process
   {
     files: ['test/**', '**/*.test.js'],
     languageOptions: {
@@ -26,8 +25,5 @@ export default [
       },
     },
   },
-
-  // Если у вас есть дополнительные правила/плагины —
-  // оставьте их ниже этим объектом.
-  // { ...ваш остальной конфиг... }
 ];
+
