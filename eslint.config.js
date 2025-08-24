@@ -1,29 +1,45 @@
-// eslint.config.js (ESLint v9, flat config)
+// eslint.config.js — ESLint 9 flat config
 import js from '@eslint/js';
 import globals from 'globals';
+import react from 'eslint-plugin-react';
 
 export default [
   // База от ESLint
   js.configs.recommended,
 
-  // Общие настройки для .js/.jsx
+  // Фронтенд: src/** — включаем JSX и браузерные глобалы
   {
-    files: ['**/*.js', '**/*.jsx'],
+    files: ['src/**/*.{js,jsx}'],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
-    },
-  },
-
-  // Тесты: разрешаем node-глобалы, в т.ч. process
-  {
-    files: ['test/**', '**/*.test.js'],
-    languageOptions: {
+      parserOptions: {
+        ecmaFeatures: { jsx: true },
+      },
       globals: {
-        ...globals.node,
-        process: 'readonly',
+        ...globals.browser, // window, document и т.п.
       },
     },
+    plugins: { react },
+    settings: { react: { version: 'detect' } },
+    rules: {
+      // для React 17+
+      'react/react-in-jsx-scope': 'off',
+      'react/jsx-uses-react': 'off',
+    },
+  },
+
+  // Тесты: включаем Node-глобалы (process и т.п.)
+  {
+    files: ['test/**/*', '**/*.test.js'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: {
+        ...globals.node,
+      },
+    },
+    // если вдруг останется жалоба на переобъявление process — можно временно выключить
+    // rules: { 'no-redeclare': 'off' },
   },
 ];
-
