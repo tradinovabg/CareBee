@@ -1,45 +1,38 @@
-// eslint.config.js — ESLint 9 flat config
+// eslint.config.js
 import js from '@eslint/js';
-import globals from 'globals';
 import react from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
+import globals from 'globals';
 
 export default [
-  // База от ESLint
+  // База от @eslint/js
   js.configs.recommended,
 
-  // Фронтенд: src/** — включаем JSX и браузерные глобалы
+  // Конфиг для обычного кода (браузер + JSX)
   {
-    files: ['src/**/*.{js,jsx}'],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
-      parserOptions: {
-        ecmaFeatures: { jsx: true },
-      },
+      parserOptions: { ecmaFeatures: { jsx: true } },
       globals: {
         ...globals.browser, // window, document и т.п.
       },
     },
-    plugins: { react },
-    settings: { react: { version: 'detect' } },
+    plugins: { react, 'react-hooks': reactHooks },
     rules: {
-      // для React 17+
-      'react/react-in-jsx-scope': 'off',
-      'react/jsx-uses-react': 'off',
+      'react/react-in-jsx-scope': 'off', // React 17+
+      'react/prop-types': 'off',
     },
+    settings: { react: { version: 'detect' } },
   },
 
-  // Тесты: включаем Node-глобалы (process и т.п.)
+  // Переопределения для тестов (Node-глобалы, включая process)
   {
-    files: ['test/**/*', '**/*.test.js'],
+    files: ['**/*.test.{js,jsx}', 'test/**/*.{js,jsx}'],
     languageOptions: {
-      ecmaVersion: 'latest',
-      sourceType: 'module',
       globals: {
-        ...globals.node,
+        ...globals.node, // добавит process, __dirname и т.п.
       },
     },
-    // если вдруг останется жалоба на переобъявление process — можно временно выключить
-    // rules: { 'no-redeclare': 'off' },
   },
 ];
