@@ -4,5 +4,5 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/CareBee/',           // имя репозитория на GitHub Pages
+  base: '/CareBee/',        // имя репозитория для GitHub Pages
 })
