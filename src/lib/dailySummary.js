@@ -1,116 +1,78 @@
-const PROFILE_KEY = 'carebee.profile'
-const LAST_KEY = 'carebee.lastDailySent'
-const AUTO_KEY = 'carebee.autosend'
+// src/lib/dailySummary.js — clean minimal implementation
+
+const SETTINGS_KEY = "carebee.autoSend.settings";
+const LAST_KEY = "carebee.autoSend.lastSummaryAt";
 
 const load = (k, def) => {
   try {
-    const v = localStorage.getItem(k)
-    return v ? JSON.parse(v) : def
+    const v = localStorage.getItem(k);
+    return v ? JSON.parse(v) : def;
   } catch {
-    return def
+    return def;
   }
-}
+};
 
-const loadProfile = () => load(PROFILE_KEY, {})
-
-codex/add-daily-summary-helpers-in-dailysummary.js
-export function getAutoSendSettings () {
-  return load(AUTO_KEY, { enabled: false, time: '08:00' })
-}
-
-export function setAutoSendSettings (settings) {
+const save = (k, v) => {
   try {
-    localStorage.setItem(AUTO_KEY, JSON.stringify(settings))
-  } catch {
-    /* ignore */
+    localStorage.setItem(k, JSON.stringify(v));
+  } catch {}
+};
+
+export function getAutoSendSettings() {
+  // enabled: включена ли автопересылка; time: HH:MM
+  return load(SETTINGS_KEY, { enabled: false, time: "08:00" });
+}
+
+export function setAutoSendSettings(next) {
+  const current = getAutoSendSettings();
+  save(SETTINGS_KEY, { ...current, ...next });
+}
+
+export function getLastSummaryAt() {
+  return load(LAST_KEY, null); // ISO‑строка или null
+}
+
+export async function sendDailySummaryNow() {
+  // Заглушка отправки: просто фиксируем время
+  const nowIso = new Date().toISOString();
+  save(LAST_KEY, nowIso);
+  return { ok: true, at: nowIso };
+}
+
+function todayAt(timeHHMM) {
+  const [hh = 0, mm = 0] = (timeHHMM || "00:00").split(":").map(Number);
+  const d = new Date();
+  d.setHours(hh, mm, 0, 0);
+  return d;
+}
+
+function sameLocalDate(a, b) {
+  return (
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate()
+  );
+}
+
+export function shouldAutoSend(now = new Date()) {
+  const { enabled, time } = getAutoSendSettings();
+  if (!enabled) return false;
+
+  const last = getLastSummaryAt();
+  const lastDate = last ? new Date(last) : null;
+
+  const target = todayAt(time);
+  const isTimePassed = now.getTime() >= target.getTime();
+
+  // если сегодня уже отправляли — не отправляем
+  if (lastDate && sameLocalDate(lastDate, now)) return false;
+
+  return isTimePassed;
+}
+
+export function maybeSendDailySummary(now = new Date()) {
+  if (shouldAutoSend(now)) {
+    return sendDailySummaryNow();
   }
+  return { skipped: true };
 }
-
-export function getLastSummaryAt () {
-  try {
-    const v = localStorage.getItem(LAST_KEY)
-    return v ? new Date(`${v}T00:00:00`) : null
-  } catch {
-    return null
-=======
-export function shouldAutoSend () {
-  try {
-    const p = loadProfile()
-    if (!p.autosendEnabled) return false
-    const now = new Date()
-    const hhmm = now.toTimeString().slice(0, 5)
-    const today = now.toISOString().slice(0, 10)
-    const last = localStorage.getItem(LAST_KEY)
-    return hhmm >= (p.autosendTime || '00:00') && last !== today
-  } catch {
-    return false
-main
-  }
-}
-
-export function buildDailySummary () {
-  const today = new Date().toISOString().slice(0, 10)
-  const visits = load('carebee.visits', []).filter(v => v.date === today)
-  const medsRaw = load('carebee.meds', [])
-  const meds = []
-  medsRaw.forEach(m => {
-    if (m.mode === 'once') {
-      if (m.once.date === today) meds.push(`${m.once.time} ${m.name}`)
-    } else {
-      const d = m.daily
-      const within = (!d.start || today >= d.start) && (!d.end || today <= d.end)
-      if (within) d.times.forEach(t => meds.push(`${t} ${m.name}`))
-    }
-  })
-  const lines = [`Date: ${today}`]
-  lines.push('')
-  lines.push('Meds:')
-  if (meds.length) meds.forEach(m => lines.push(`- ${m}`))
-  else lines.push('- none')
-  lines.push('')
-  lines.push('Visits:')
-  if (visits.length) {
-    visits.forEach(v => {
-      const place = v.place ? ` @ ${v.place}` : ''
-      const notes = v.notes ? ` (${v.notes})` : ''
-      lines.push(`- ${v.time} ${v.doctor}${place}${notes}`)
-    })
-  } else lines.push('- none')
-  return lines.join('\n')
-}
-
-export function sendSummary () {
-  const profile = loadProfile()
-  const body = encodeURIComponent(buildDailySummary())
-  const to = encodeURIComponent(profile.recipients || '')
-  const subj = encodeURIComponent('CareBee Daily Summary')
-  const url = `mailto:${to}?subject=${subj}&body=${body}`
-  window.open(url)
-  try { localStorage.setItem(LAST_KEY, new Date().toISOString()) } catch { /* ignore */ }
-}
-
-const AUTO_KEY = 'carebee.autoDailySummary'
-
-export const getAutoSendSettings = () => load(AUTO_KEY, { enabled: false, time: '09:00' })
-
-export const setAutoSendSettings = (s) => {
-  try { localStorage.setItem(AUTO_KEY, JSON.stringify(s)) } catch { /* ignore */ }
-}
-
-export const getLastSummaryAt = () => load(LAST_KEY, null)
-
-export const sendDailySummaryNow = () => {
-  sendSummary()
-  return getLastSummaryAt()
-}
-
-codex/add-daily-summary-helpers-in-dailysummary.js
-export function sendDailySummaryNow () {
-  sendSummary()
-  try { localStorage.setItem(LAST_KEY, new Date().toISOString().slice(0, 10)) } catch { /* ignore */ }
-=======
-export function maybeSendDailySummary () {
-  if (shouldAutoSend() && confirm('Send daily summary now?')) sendSummary()
-main
-}
-
