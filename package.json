@@ -8,6 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
+    "postbuild": "cp dist/index.html dist/404.html"
+}
   },
   "dependencies": {
     "chart.js": "^4.4.0",
