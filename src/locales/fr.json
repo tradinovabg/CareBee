@@ -1,43 +1,35 @@
 {
   "app": { "title": "CareBee" },
-  "nav": {
-    "profile": "Profil",
-    "meds": "Médicaments",
-    "visits": "Visites",
-    "calendar": "Calendrier",
-    "vitals": "Signes vitaux",
-    "nearby": "À proximité"
-  },
+  "nav": { "profile": "Profil", "meds": "Médicaments", "visits": "Visites", "calendar": "Calendrier", "vitals": "Signes vitaux", "nearby": "À proximité" },
   "today": "Aujourd'hui",
+  "actions": { "add": "Ajouter", "save": "Enregistrer", "delete": "Supprimer", "cancel": "Annuler", "clear":"Effacer" },
+  "fields": { "name":"Nom", "dose":"Dose", "mode":"Mode", "date":"Date", "time":"Heure", "start":"Début", "end":"Fin", "times":"Heures", "doctor":"Médecin", "place":"Lieu", "notes":"Notes", "value":"Valeur", "type":"Type", "address":"Adresse", "phone":"Téléphone" },
   "calendar": {
-    "title": "Calendrier",
-    "day": "Jour",
-    "week": "Semaine",
-    "month": "Mois",
-    "showVisits": "Visites & Événements",
-    "showMeds": "Prise des médicaments",
-    "visit": "Visite",
-    "med": "Médicament",
-    "empty": "Rien de prévu"
+    "title": "Calendrier", "day": "Jour", "week": "Semaine", "month": "Mois",
+    "showVisits": "Visites & Événements", "showMeds": "Prise des médicaments",
+    "visit": "Visite", "med": "Médicament", "empty": "Rien de prévu",
+    "quick": "Ajout rapide", "addVisit":"Ajouter une visite", "addMed":"Ajouter un médicament"
   },
-  "meds": {
-    "title": "Médicaments",
-    "empty": "Aucun médicament ajouté",
-    "dose": "Dose",
-    "times": "Heures",
-    "mode_once": "Une fois",
-    "mode_daily": "Quotidien"
+  "meds": { "title": "Médicaments", "empty": "Aucun médicament", "mode_once": "Une fois", "mode_daily": "Quotidien", "hint_times": "Séparées par des virgules (ex. 08:00, 20:00)", "add":"Ajouter un médicament" },
+  "visits": { "title": "Visites & Événements", "empty": "Aucune visite", "add":"Ajouter une visite" },
+  "vitals": { "title": "Signes vitaux", "empty": "Aucune mesure", "add":"Ajouter une mesure", "hr":"Fréquence cardiaque (bpm)", "temp":"Température (°C)", "sys":"Systolique (mmHg)", "dia":"Diastolique (mmHg)" },
+  "profile": {
+    "title": "Profil",
+    "fullName": "Nom complet",
+    "birthDate": "Date de naissance",
+    "bloodType": "Groupe sanguin",
+    "allergies": "Allergies (séparées par virgules)",
+    "conditions": "Affections / notes",
+    "emgName": "Contact d'urgence — nom",
+    "emgPhone": "Contact d'urgence — téléphone",
+    "saved": "Profil enregistré"
   },
-  "visits": {
-    "title": "Visites & Événements",
-    "empty": "Aucune visite",
-    "doctor": "Médecin",
-    "place": "Lieu",
-    "date": "Date",
-    "time": "Heure",
-    "notes": "Notes"
-  },
-  "profile": { "title": "Profil" },
-  "vitals": { "title": "Signes vitaux", "empty": "Aucune donnée" },
-  "nearby": { "title": "À proximité", "empty": "Pas de données" }
+  "nearby": {
+    "title": "À proximité",
+    "empty": "Aucun lieu enregistré",
+    "addPlace": "Ajouter un lieu",
+    "category": "Catégorie",
+    "categories": { "doctor":"Médecin", "clinic":"Clinique", "pharmacy":"Pharmacie", "other":"Autre" },
+    "openInMaps": "Ouvrir dans Maps"
+  }
 }
