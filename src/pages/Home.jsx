@@ -1,14 +1,13 @@
-import { Link } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
+import React from "react";
+import { useTranslation } from "react-i18next";
+
 export default function Home() {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   return (
-    <div className="home">
-      <div className="hero-card">
-        <h1>{t('title')}</h1>
-        <p>{t('tagline')}</p>
-        <Link to="/sos"><button className="sos-button">{t('goToSOS')}</button></Link>
-      </div>
+    <div className="container">
+      <h1>{t("title", "CareBee")}</h1>
+      <p>{t("tagline", "Your personal care assistant")}</p>
+      <button className="btn">{t("goToSOS", "goToSOS")}</button>
     </div>
-  )
+  );
 }
