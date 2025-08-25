@@ -4,10 +4,18 @@ import en from "./locales/en.json";
 import ru from "./locales/ru.json";
 import fr from "./locales/fr.json";
 
+const saved = localStorage.getItem("lng") || "en";
+
 i18n.use(initReactI18next).init({
-  resources: { en: { translation: en }, ru: { translation: ru }, fr: { translation: fr } },
+  lng: saved,
   fallbackLng: "en",
   supportedLngs: ["en", "ru", "fr"],
-  interpolation: { escapeValue: false }
+  resources: {
+    en: { translation: en },
+    ru: { translation: ru },
+    fr: { translation: fr },
+  },
+  interpolation: { escapeValue: false },
 });
+
 export default i18n;
