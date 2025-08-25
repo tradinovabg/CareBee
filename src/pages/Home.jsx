@@ -1,3 +1,8 @@
+import { useTranslation } from "react-i18next";
+export default function Profile() {
+  const { t } = useTranslation();
+  return <h1>{t("nav.profile","Profile")}</h1>;
+}
 import React from "react";
 import { useTranslation } from "react-i18next";
 
