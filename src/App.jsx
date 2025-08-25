@@ -14,10 +14,7 @@ function LangSwitcher() {
   return (
     <select
       value={i18n.language}
-      onChange={(e) => {
-        i18n.changeLanguage(e.target.value);
-        localStorage.setItem("lng", e.target.value);
-      }}
+      onChange={(e) => { i18n.changeLanguage(e.target.value); localStorage.setItem("lng", e.target.value); }}
       className="border rounded px-2 py-1"
     >
       <option value="en">EN</option>
@@ -31,12 +28,12 @@ function Header() {
   const { t } = useTranslation();
   return (
     <nav className="header-bar container">
-      <Link to="/profile">{t("nav.profile", "Profile")}</Link>
-      <Link to="/meds">{t("nav.meds", "Meds")}</Link>
-      <Link to="/visits">{t("nav.visits", "Visits")}</Link>
-      <Link to="/calendar">{t("nav.calendar", "Calendar")}</Link>
-      <Link to="/vitals">{t("nav.vitals", "Vitals")}</Link>
-      <Link to="/nearby">{t("nav.nearby", "Nearby")}</Link>
+      <Link to="/profile">{t("nav.profile","Profile")}</Link>
+      <Link to="/meds">{t("nav.meds","Meds")}</Link>
+      <Link to="/visits">{t("nav.visits","Visits")}</Link>
+      <Link to="/calendar">{t("nav.calendar","Calendar")}</Link>
+      <Link to="/vitals">{t("nav.vitals","Vitals")}</Link>
+      <Link to="/nearby">{t("nav.nearby","Nearby")}</Link>
       <LangSwitcher />
     </nav>
   );
@@ -58,9 +55,7 @@ export default function App() {
           <Route path="*" element={<Navigate to="/calendar" replace />} />
         </Routes>
       </main>
-      <footer className="container" style={{ marginTop: 24, color: "#666" }}>
-        © 2025 CareBee
-      </footer>
+      <footer className="container" style={{ marginTop:24, color:"#666" }}>© 2025 CareBee</footer>
     </>
   );
 }

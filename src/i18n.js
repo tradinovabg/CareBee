@@ -9,13 +9,8 @@ const saved = localStorage.getItem("lng") || "en";
 i18n.use(initReactI18next).init({
   lng: saved,
   fallbackLng: "en",
-  supportedLngs: ["en", "ru", "fr"],
-  resources: {
-    en: { translation: en },
-    ru: { translation: ru },
-    fr: { translation: fr },
-  },
+  supportedLngs: ["en","ru","fr"],
+  resources: { en:{translation:en}, ru:{translation:ru}, fr:{translation:fr} },
   interpolation: { escapeValue: false },
 });
-
 export default i18n;
