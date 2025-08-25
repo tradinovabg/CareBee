@@ -11,36 +11,37 @@ import Nearby from "./pages/Nearby.jsx";
 
 export default function App() {
   const { t, i18n } = useTranslation();
-
   const changeLang = (e) => {
     const lng = e.target.value;
     i18n.changeLanguage(lng);
     localStorage.setItem("i18nextLng", lng);
   };
-
   const lng = i18n.resolvedLanguage || i18n.language || "en";
 
   return (
     <>
       <header className="header-bar">
-        <Link to="/calendar" className="font-semibold text-xl">
-          {t("app.title", "CareBee")}
-        </Link>
+        <div className="inner">
+          <Link to="/calendar" className="font-semibold text-xl text-slate-900">
+            {t("app.title", "CareBee")}
+          </Link>
 
-        <nav className="flex gap-4 flex-wrap">
-          <Link to="/profile">{t("nav.profile","Profile")}</Link>
-          <Link to="/meds">{t("nav.meds","Meds")}</Link>
-          <Link to="/visits">{t("nav.visits","Visits")}</Link>
-          <Link to="/calendar">{t("nav.calendar","Calendar")}</Link>
-          <Link to="/vitals">{t("nav.vitals","Vitals")}</Link>
-          <Link to="/nearby">{t("nav.nearby","Nearby")}</Link>
-        </nav>
+          <nav className="flex gap-4 flex-wrap">
+            <Link to="/profile">{t("nav.profile","Profile")}</Link>
+            <Link to="/meds">{t("nav.meds","Meds")}</Link>
+            <Link to="/visits">{t("nav.visits","Visits")}</Link>
+            <Link to="/calendar">{t("nav.calendar","Calendar")}</Link>
+            <Link to="/vitals">{t("nav.vitals","Vitals")}</Link>
+            <Link to="/nearby">{t("nav.nearby","Nearby")}</Link>
+          </nav>
 
-        <select value={lng} onChange={changeLang} className="ml-auto border rounded px-2 py-1">
-          <option value="en">EN</option>
-          <option value="ru">RU</option>
-          <option value="fr">FR</option>
-        </select>
+          <select value={lng} onChange={changeLang}
+                  className="ml-auto select w-auto">
+            <option value="en">EN</option>
+            <option value="ru">RU</option>
+            <option value="fr">FR</option>
+          </select>
+        </div>
       </header>
 
       <main className="container">
