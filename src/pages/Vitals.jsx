@@ -1,3 +1,8 @@
+import { useTranslation } from "react-i18next";
+export default function Profile() {
+  const { t } = useTranslation();
+  return <h1>{t("nav.profile","Profile")}</h1>;
+}
 import { useMemo, useState, useEffect } from 'react'
 import { Line } from 'react-chartjs-2'
 import { CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend, Chart as ChartJS } from 'chart.js'
