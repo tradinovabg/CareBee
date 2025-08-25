@@ -1,34 +1,108 @@
-import React, { useMemo } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-const load = (k, def) => {
-  try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : def } catch { return def }
-};
+const load = (k, def) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : def; } catch { return def; } };
+const save = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+const todayStr = () => new Date().toISOString().slice(0, 10);
 
 export default function Meds() {
   const { t } = useTranslation();
-  const meds = useMemo(() => load("carebee.meds", []), []);
+  const [items, setItems] = useState(() => load("carebee.meds", []));
+  const [mode, setMode] = useState("daily");
+  const [form, setForm] = useState({
+    name: "", dose: "",
+    once: { date: todayStr(), time: "" },
+    daily: { times: ["08:00", "20:00"], start: "", end: "" }
+  });
+
+  const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const onOnce   = (e) => setForm({ ...form, once: { ...form.once, [e.target.name]: e.target.value }});
+  const onDaily  = (e) => setForm({
+    ...form,
+    daily: {
+      ...form.daily,
+      [e.target.name]:
+        e.target.name === "times"
+          ? e.target.value.split(",").map(s=>s.trim()).filter(Boolean)
+          : e.target.value
+    }
+  });
+
+  const add = (e) => {
+    e.preventDefault();
+    const rec = { name: form.name, dose: form.dose, mode };
+    if (mode === "once") rec.once = { ...form.once };
+    else rec.daily = { ...form.daily };
+    const next = [...items, rec];
+    setItems(next); save("carebee.meds", next);
+    setForm({ name:"", dose:"", once:{ date: todayStr(), time:"" }, daily:{ times:["08:00","20:00"], start:"", end:"" } });
+  };
+
+  const delAt = (i) => {
+    const next = items.filter((_, idx) => idx !== i);
+    setItems(next); save("carebee.meds", next);
+  };
 
   return (
     <div className="container">
       <h1>{t("meds.title","Medications")}</h1>
-      {!meds.length ? (
-        <p className="text-gray-500">{t("meds.empty","No medications added yet")}</p>
+
+      <div className="card mb-4">
+        <form onSubmit={add} className="grid gap-3 md:grid-cols-2">
+          <input className="input" name="name" required placeholder={t("fields.name")} value={form.name} onChange={onChange} />
+          <input className="input" name="dose" placeholder={t("fields.dose")} value={form.dose} onChange={onChange} />
+
+          <div className="md:col-span-2 flex gap-2">
+            <select className="select" value={mode} onChange={(e)=>setMode(e.target.value)}>
+              <option value="daily">{t("meds.mode_daily","Daily")}</option>
+              <option value="once">{t("meds.mode_once","Once")}</option>
+            </select>
+          </div>
+
+          {mode === "once" ? (
+            <>
+              <input className="input" type="date" name="date" value={form.once.date} onChange={onOnce} />
+              <input className="input" type="time" name="time" value={form.once.time} onChange={onOnce} />
+            </>
+          ) : (
+            <>
+              <div className="md:col-span-2">
+                <input className="input" name="times"
+                       placeholder={t("fields.times")}
+                       value={(form.daily.times||[]).join(", ")}
+                       onChange={onDaily} />
+                <div className="muted text-sm mt-1">{t("meds.hint_times")}</div>
+              </div>
+              <input className="input" type="date" name="start" value={form.daily.start||""} onChange={onDaily} />
+              <input className="input" type="date" name="end"   value={form.daily.end||""} onChange={onDaily} />
+            </>
+          )}
+
+          <div className="md:col-span-2">
+            <button className="btn btn-primary" type="submit">{t("meds.add","Add medication")}</button>
+          </div>
+        </form>
+      </div>
+
+      {!items.length ? (
+        <div className="card muted">{t("meds.empty","No medications added yet")}</div>
       ) : (
-        <ul className="list-disc pl-6">
-          {meds.map((m, i) => (
-            <li key={i} className="mb-2">
-              <strong>{m.name}</strong>{" "}
-              {m.mode === "once" ? (
-                <span>— {t("meds.mode_once","Once")}: {m.once?.date} {m.once?.time}</span>
-              ) : (
-                <span>
-                  — {t("meds.mode_daily","Daily")}:
-                  {" "}{(m.daily?.times || []).join(", ")}
-                  {m.daily?.start ? ` · ${m.daily.start}` : ""}{m.daily?.end ? `–${m.daily.end}` : ""}
-                </span>
-              )}
-              {m.dose ? <> · {t("meds.dose","Dose")}: {m.dose}</> : null}
+        <ul className="grid gap-2">
+          {items.map((m, i) => (
+            <li key={i} className="card flex items-center justify-between">
+              <div>
+                <div className="font-medium">
+                  {m.name}{m.dose ? ` — ${m.dose}` : ""}
+                </div>
+                <div className="muted text-sm">
+                  {m.mode === "once"
+                    ? `${t("meds.mode_once")}: ${m.once?.date || ""} ${m.once?.time || ""}`
+                    : `${t("meds.mode_daily")}: ${(m.daily?.times||[]).join(", ")} ${
+                        [m.daily?.start, m.daily?.end].some(Boolean)
+                          ? `(${m.daily?.start||"…"} — ${m.daily?.end||"…"})` : ""}`}
+                </div>
+              </div>
+              <button className="btn btn-danger" onClick={()=>delAt(i)}>{t("actions.delete","Delete")}</button>
             </li>
           ))}
         </ul>
