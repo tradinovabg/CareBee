@@ -4,5 +4,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "postbuild": "node -e \"require('fs').copyFileSync('dist/index.html','dist/404.html')\""
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.0.1",
+    "vite": "^7.1.3"
   }
 }
