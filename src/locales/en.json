@@ -1,4 +1,13 @@
 {
+  "app": { "title": "CareBee" },
+  "nav": {
+    "profile": "Profile",
+    "meds": "Meds",
+    "visits": "Visits",
+    "calendar": "Calendar",
+    "vitals": "Vitals",
+    "nearby": "Nearby"
+  },
   "today": "Today",
   "calendar": {
     "title": "Calendar",
@@ -10,5 +19,25 @@
     "visit": "Visit",
     "med": "Med",
     "empty": "Nothing scheduled"
-  }
+  },
+  "meds": {
+    "title": "Medications",
+    "empty": "No medications added yet",
+    "dose": "Dose",
+    "times": "Times",
+    "mode_once": "Once",
+    "mode_daily": "Daily"
+  },
+  "visits": {
+    "title": "Visits & Events",
+    "empty": "No visits yet",
+    "doctor": "Doctor",
+    "place": "Place",
+    "date": "Date",
+    "time": "Time",
+    "notes": "Notes"
+  },
+  "profile": { "title": "Profile" },
+  "vitals": { "title": "Vitals", "empty": "No vitals recorded yet" },
+  "nearby": { "title": "Nearby", "empty": "No nearby data" }
 }

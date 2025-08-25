@@ -2,12 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Базовые удобные классы под текущую разметку */
-.container { @apply max-w-5xl mx-auto p-4; }
-.header-bar { @apply flex items-center gap-3 py-4; }
-.card { @apply rounded-2xl border border-gray-200 bg-white p-4 shadow-sm; }
-.btn { @apply inline-flex items-center gap-2 rounded-xl bg-blue-600 text-white px-4 py-2 hover:bg-blue-700 active:bg-blue-800; }
-.btn-primary { @apply bg-blue-600 text-white; }
-.today-highlight { @apply text-blue-600 font-semibold; }
-nav a { @apply text-blue-600 hover:underline mr-3; }
-body { @apply bg-gray-50 text-gray-800; }
+/* Удобный контейнер и шапка */
+.container { @apply max-w-4xl mx-auto p-4; }
+.header-bar { @apply container flex flex-wrap items-center gap-4 border-b pb-3 mb-4; }
+.header-bar a { @apply text-sky-700 hover:underline; }

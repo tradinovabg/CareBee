@@ -1,14 +1,43 @@
 {
-  "today": "Aujourdhui",
+  "app": { "title": "CareBee" },
+  "nav": {
+    "profile": "Profil",
+    "meds": "Médicaments",
+    "visits": "Visites",
+    "calendar": "Calendrier",
+    "vitals": "Signes vitaux",
+    "nearby": "À proximité"
+  },
+  "today": "Aujourd'hui",
   "calendar": {
     "title": "Calendrier",
     "day": "Jour",
     "week": "Semaine",
     "month": "Mois",
     "showVisits": "Visites & Événements",
-    "showMeds": "Prises de médicaments",
+    "showMeds": "Prise des médicaments",
     "visit": "Visite",
     "med": "Médicament",
     "empty": "Rien de prévu"
-  }
+  },
+  "meds": {
+    "title": "Médicaments",
+    "empty": "Aucun médicament ajouté",
+    "dose": "Dose",
+    "times": "Heures",
+    "mode_once": "Une fois",
+    "mode_daily": "Quotidien"
+  },
+  "visits": {
+    "title": "Visites & Événements",
+    "empty": "Aucune visite",
+    "doctor": "Médecin",
+    "place": "Lieu",
+    "date": "Date",
+    "time": "Heure",
+    "notes": "Notes"
+  },
+  "profile": { "title": "Profil" },
+  "vitals": { "title": "Signes vitaux", "empty": "Aucune donnée" },
+  "nearby": { "title": "À proximité", "empty": "Pas de données" }
 }
