@@ -3,6 +3,11 @@ export default function Profile() {
   const { t } = useTranslation();
   return <h1>{t("nav.profile","Profile")}</h1>;
 }
+import { useTranslation } from "react-i18next";
+export default function Profile() {
+  const { t } = useTranslation();
+  return <h1>{t("nav.profile","Profile")}</h1>;
+}
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import QrCard from '../components/QrCard'
