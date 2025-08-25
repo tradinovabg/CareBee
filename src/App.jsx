@@ -3,7 +3,7 @@ import { Link, Routes, Route, Navigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import i18n from "./i18n.js";
 
-import Home from "./pages/Home.jsx";
+// страницы (имена точно как в файловой системе)
 import Profile from "./pages/Profile.jsx";
 import Meds from "./pages/Meds.jsx";
 import Visits from "./pages/Visits.jsx";
@@ -20,6 +20,7 @@ function LangSwitcher() {
         localStorage.setItem("lng", e.target.value);
       }}
       className="border rounded px-2 py-1"
+      aria-label="Language"
     >
       <option value="en">EN</option>
       <option value="ru">RU</option>
@@ -49,15 +50,16 @@ export default function App() {
       <Header />
       <main className="container">
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/home" element={<Home />} />
+          {/* корень сразу ведёт на calendar */}
+          <Route path="/" element={<Navigate to="/calendar" replace />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/meds" element={<Meds />} />
           <Route path="/visits" element={<Visits />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/vitals" element={<Vitals />} />
           <Route path="/nearby" element={<Nearby />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
+          {/* неизвестные маршруты → на calendar */}
+          <Route path="*" element={<Navigate to="/calendar" replace />} />
         </Routes>
       </main>
       <footer className="container" style={{ marginTop: 24, color: "#666" }}>
