@@ -2,7 +2,7 @@ name: Deploy Vite to GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
   workflow_dispatch:
 
 permissions:
@@ -29,11 +29,13 @@ jobs:
 
       - name: Install deps
         run: npm ci
+        # если нет package-lock.json, замени на: run: npm install
 
       - name: Build
         run: npm run build
 
-      # Если добавил пост-скрипт для 404, он сработает здесь автоматически
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
