@@ -2,54 +2,57 @@
 @tailwind components;
 @tailwind utilities;
 
-/* База */
+/* ---------- БАЗА ---------- */
 @layer base {
-  body { @apply bg-slate-50 text-slate-800; }
-  a { @apply transition-colors; }
-
-  .container { @apply max-w-3xl mx-auto p-4; }
-  h1 { @apply text-2xl font-semibold mb-3 text-slate-900; }
-
-  /* Авто-стилизация форм внутри страниц без правки разметки */
-  .container form input[type="text"],
-  .container form input[type="date"],
-  .container form input[type="time"],
-  .container form input[type="tel"],
-  .container form input[type="number"],
-  .container form input:not([type]),
-  .container form select,
-  .container form textarea {
-    @apply w-full rounded-lg border border-slate-300 px-3 py-2 bg-white
-           focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500;
-  }
-  .container form button[type="submit"] {
-    @apply inline-flex items-center justify-center rounded-lg px-3 py-2
-           border border-transparent bg-sky-600 text-white
-           hover:bg-sky-700 transition-colors;
-  }
+  html, body { @apply h-full; }
+  body { @apply min-h-full bg-slate-50 text-slate-800 antialiased; }
+  a { @apply text-sky-700 hover:text-sky-800; }
 }
 
-/* Компоненты */
+/* ---------- КОМПОНЕНТЫ ---------- */
 @layer components {
-  .card         { @apply bg-white border border-slate-200 rounded-2xl shadow-sm p-4; }
-  .btn          { @apply inline-flex items-center gap-2 rounded-lg px-3 py-2
-                          border border-slate-300 bg-white text-slate-700 hover:bg-slate-50; }
-  .btn-primary  { @apply border-transparent bg-sky-600 text-white hover:bg-sky-700; }
-  .btn-danger   { @apply border-transparent bg-rose-600 text-white hover:bg-rose-700; }
-  .input        { @apply w-full rounded-lg border border-slate-300 px-3 py-2
-                          focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-white; }
-  .select       { @apply input; }
-  .textarea     { @apply input min-h-[96px]; }
+  /* Контейнер контента */
+  .container { @apply mx-auto max-w-5xl px-4 py-6; }
 
   /* Шапка */
-  .header-bar   { @apply sticky top-0 z-30 border-b border-slate-200 bg-white/80 backdrop-blur; }
-  .header-bar .inner { @apply container flex items-center gap-4 py-3; }
-  .header-bar nav a  { @apply text-slate-700 hover:text-sky-700; }
-  .today-highlight   { @apply bg-yellow-100 px-2 py-0.5 rounded-md; }
+  .header-bar {
+    @apply sticky top-0 z-40 bg-white/80 backdrop-blur
+           border-b border-slate-200;
+    @apply flex items-center gap-4 px-4 py-3;
+  }
+  .header-bar nav a { @apply text-slate-700 hover:text-sky-700; }
+  .header-bar nav a.active { @apply text-sky-700 font-semibold; }
+
+  /* Карточки / секции */
+  .card { @apply rounded-2xl border border-slate-200 bg-white p-4 shadow-sm; }
+  .card-title { @apply text-lg font-semibold mb-3; }
+
+  /* Кнопки */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2
+           rounded-xl px-3 py-2 text-sm font-medium
+           shadow-sm transition-colors duration-150
+           border border-slate-300 bg-white text-slate-700 hover:bg-slate-50;
+  }
+  .btn-primary { @apply border-transparent bg-sky-600 text-white hover:bg-sky-700; }
+  .btn-danger  { @apply border-transparent bg-rose-600 text-white hover:bg-rose-700; }
+  .btn-ghost   { @apply border-transparent bg-transparent hover:bg-slate-100; }
+  .btn-sm      { @apply px-2 py-1 text-xs rounded-lg; }
+
+  /* Поля ввода */
+  .label  { @apply text-xs font-medium text-slate-600; }
+  .input  { @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm
+                   shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500; }
+  .select { @apply input pr-8; }
+  .textarea { @apply input min-h-[44px] resize-y; }
+
+  /* Формы */
+  .form-grid { @apply grid gap-3 md:grid-cols-3; }
+  .field     { @apply grid gap-1; }
+
+  /* Вспомогательное */
+  .today-highlight { @apply text-sky-700 font-semibold; }
 }
 
-/* Удобные утилиты для форм */
-@layer utilities {
-  .form-grid  { @apply grid gap-2 md:grid-cols-3; }
-  .muted      { @apply text-slate-500; }
-}
+/* Небольшой отступ между карточками списков */
+ul.space-y > li + li { margin-top: .5rem; }
