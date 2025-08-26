@@ -14,25 +14,29 @@
   /* Контейнер контента */
   .container { @apply mx-auto max-w-5xl px-4 py-6; }
 
-  /* Шапка */
+  /* Шапка + пастельные темы */
   .header-bar {
-    @apply sticky top-0 z-40 bg-white/80 backdrop-blur
-           border-b border-slate-200;
+    @apply sticky top-0 z-40 backdrop-blur border-b;
     @apply flex items-center gap-4 px-4 py-3;
   }
+  .hb-honey  { @apply bg-amber-50  border-amber-200; }
+  .hb-sky    { @apply bg-sky-50    border-sky-200; }
+  .hb-orange { @apply bg-orange-50 border-orange-200; }
+
+  .header-bar nav { @apply flex gap-3 flex-wrap; }
   .header-bar nav a { @apply text-slate-700 hover:text-sky-700; }
   .header-bar nav a.active { @apply text-sky-700 font-semibold; }
 
   /* Карточки / секции */
-  .card { @apply rounded-2xl border border-slate-200 bg-white p-4 shadow-sm; }
+  .card { @apply rounded-2xl border border-slate-200 bg-white p-5 shadow-sm; }
   .card-title { @apply text-lg font-semibold mb-3; }
 
   /* Кнопки */
   .btn {
     @apply inline-flex items-center justify-center gap-2
            rounded-xl px-3 py-2 text-sm font-medium
-           shadow-sm transition-colors duration-150
-           border border-slate-300 bg-white text-slate-700 hover:bg-slate-50;
+           shadow-sm border border-slate-300 bg-white text-slate-700
+           hover:bg-slate-50 transition-colors;
   }
   .btn-primary { @apply border-transparent bg-sky-600 text-white hover:bg-sky-700; }
   .btn-danger  { @apply border-transparent bg-rose-600 text-white hover:bg-rose-700; }
@@ -54,5 +58,5 @@
   .today-highlight { @apply text-sky-700 font-semibold; }
 }
 
-/* Небольшой отступ между карточками списков */
+/* Для списков */
 ul.space-y > li + li { margin-top: .5rem; }

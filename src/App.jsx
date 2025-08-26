@@ -1,7 +1,8 @@
 import React from "react";
-import { Routes, Route, Link, Navigate } from "react-router-dom";
+import { Routes, Route, NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
+import Home from "./pages/Home.jsx";
 import Profile from "./pages/Profile.jsx";
 import Meds from "./pages/Meds.jsx";
 import Visits from "./pages/Visits.jsx";
@@ -11,49 +12,49 @@ import Nearby from "./pages/Nearby.jsx";
 
 export default function App() {
   const { t, i18n } = useTranslation();
-  const changeLang = (e) => {
-    const lng = e.target.value;
-    i18n.changeLanguage(lng);
-    localStorage.setItem("i18nextLng", lng);
-  };
-  const lng = i18n.resolvedLanguage || i18n.language || "en";
+  const changeLang = (e) => i18n.changeLanguage(e.target.value);
 
   return (
     <>
-      <header className="header-bar">
-        <div className="inner">
-          <Link to="/calendar" className="font-semibold text-xl text-slate-900">
-            {t("app.title", "CareBee")}
-          </Link>
+      <header className="header-bar hb-honey">
+        <div className="flex items-center gap-3 flex-1">
+          <NavLink to="/" className="font-semibold text-slate-800">
+            {t("app.title","CareBee")}
+          </NavLink>
 
-          <nav className="flex gap-4 flex-wrap">
-            <Link to="/profile">{t("nav.profile","Profile")}</Link>
-            <Link to="/meds">{t("nav.meds","Meds")}</Link>
-            <Link to="/visits">{t("nav.visits","Visits")}</Link>
-            <Link to="/calendar">{t("nav.calendar","Calendar")}</Link>
-            <Link to="/vitals">{t("nav.vitals","Vitals")}</Link>
-            <Link to="/nearby">{t("nav.nearby","Nearby")}</Link>
-          </nav>
-
-          <select value={lng} onChange={changeLang}
-                  className="ml-auto select w-auto">
-            <option value="en">EN</option>
-            <option value="ru">RU</option>
-            <option value="fr">FR</option>
-          </select>
         </div>
+
+        <nav className="flex-1">
+          <NavLink to="/" end>{t("nav.profile","Home")}</NavLink>
+          <NavLink to="/profile">{t("nav.profile","Profile")}</NavLink>
+          <NavLink to="/meds">{t("nav.meds","Meds")}</NavLink>
+          <NavLink to="/visits">{t("nav.visits","Visits")}</NavLink>
+          <NavLink to="/calendar">{t("nav.calendar","Calendar")}</NavLink>
+          <NavLink to="/vitals">{t("nav.vitals","Vitals")}</NavLink>
+          <NavLink to="/nearby">{t("nav.nearby","Nearby")}</NavLink>
+        </nav>
+
+        <select
+          value={i18n.language}
+          onChange={changeLang}
+          className="input w-24"
+          aria-label="Language"
+        >
+          <option value="en">EN</option>
+          <option value="ru">RU</option>
+          <option value="fr">FR</option>
+        </select>
       </header>
 
-      <main className="container">
+      <main>
         <Routes>
-          <Route path="/" element={<Navigate to="/calendar" replace />} />
+          <Route path="/" element={<Home />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/meds" element={<Meds />} />
           <Route path="/visits" element={<Visits />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/vitals" element={<Vitals />} />
           <Route path="/nearby" element={<Nearby />} />
-          <Route path="*" element={<Navigate to="/calendar" replace />} />
         </Routes>
       </main>
     </>
