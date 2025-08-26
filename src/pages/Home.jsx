@@ -10,7 +10,7 @@ export default function Home() {
       <section className="card border-amber-200 bg-gradient-to-br from-amber-50 to-amber-100">
         <div className="flex flex-col md:flex-row items-center gap-6">
           <img
-            src="/carebee-logo.png"
+            src={import.meta.env.BASE_URL + "carebee-logo.png"}
             alt="CareBee"
             className="w-40 md:w-56 drop-shadow"
             loading="eager"
