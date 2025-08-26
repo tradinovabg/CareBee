@@ -1,4 +1,4 @@
-// pages/src/pages/Home.jsx
+// src/pages/Home.jsx
 import { Link } from "react-router-dom";
 
 export default function Home() {
@@ -28,24 +28,32 @@ export default function Home() {
 
       {/* БОЛЬШАЯ SOS-КНОПКА ПРЯМО НА HOME */}
       <div className="my-8 grid place-items-center">
-       <Link
-  to="/sos"
-  style={{ width: "18rem", height: "18rem" }}
-  className="grid place-items-center rounded-full bg-red-600 text-white text-5xl font-extrabold"
->
-  SOS
-</Link>
+        <Link
+          to="/sos"
+          aria-label="Open SOS"
+          style={{ width: "18rem", height: "18rem" }}   // размеры фиксированы, всегда БОЛЬШАЯ
+          className="
+            grid place-items-center
+            rounded-full bg-red-600 text-white text-5xl font-extrabold
+            shadow-[0_20px_50px_-12px_rgba(220,38,38,0.6)]
+            ring-4 ring-red-300/50 hover:bg-red-700 active:scale-95
+            focus:outline-none focus:ring-8 focus:ring-red-400/60
+            select-none
+          "
+        >
+          SOS
+        </Link>
         <p className="mt-3 text-xs text-neutral-500">
           Нажмите, чтобы открыть страницу рассылки оповещений.
         </p>
       </div>
 
-      {/* Карточки переходов (можно оставить свои) */}
+      {/* Карточки переходов */}
       <section className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <Card title="Calendar" to="/calendar" text="Быстро добавляйте события." />
         <Card title="Visits" to="/visits" text="Планируйте приёмы." />
         <Card title="Meds" to="/meds" text="Список лекарств и время." />
-        <Card title="Vitals" to="/vitals" text="Ключевые показатели здоровья." />
+        <Card title="Vitals" to="/vitals" text="Показатели здоровья." />
         <Card title="Nearby" to="/nearby" text="Поиск помощи рядом (OSM)." />
         <Card title="Profile" to="/profile" text="Данные пациента и экстр. инфо." />
       </section>
