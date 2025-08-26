@@ -4,77 +4,61 @@ import { Link } from "react-router-dom";
 
 export default function Home() {
   const { t } = useTranslation();
-  const logo = import.meta.env.BASE_URL + "carebee-logo.png"; // лежит в public/
+  const logo = import.meta.env.BASE_URL + "carebee-logo.png";
 
   return (
-    <div className="container">
-      {/* Hero */}
-      <section className="card border-amber-200 bg-gradient-to-br from-amber-50 to-amber-100">
-        <div className="flex flex-col md:flex-row items-center gap-6">
-          <img
-            src={logo}
-            alt="CareBee"
-            className="w-40 md:w-56 drop-shadow"
-            loading="eager"
-          />
-          <div className="flex-1">
-            <h1 className="text-3xl md:text-4xl font-bold text-slate-800">
-              {t("app.title", "CareBee")}
-            </h1>
-            <p className="mt-2 text-slate-700">
-              {t("home.tagline",
-                "Your friendly health companion for families who care")}
-            </p>
-
-            <div className="mt-4 flex flex-wrap gap-2">
-              {/* Крупная красная кнопка SOS */}
-              <Link
-                to="/sos"
-                className="btn btn-danger text-base md:text-lg px-5 py-3 rounded-2xl"
-                title={t("sos.title", "Emergency SOS")}
-              >
-                🆘 {t("sos.sos", "SOS")}
-              </Link>
-
-              {/* Быстрые ссылки */}
-              <Link to="/calendar" className="btn btn-primary">{t("nav.calendar","Calendar")}</Link>
-              <Link to="/visits" className="btn">{t("nav.visits","Visits")}</Link>
-              <Link to="/meds" className="btn">{t("nav.meds","Meds")}</Link>
-              <Link to="/vitals" className="btn">{t("nav.vitals","Vitals")}</Link>
-              <Link to="/profile" className="btn">{t("nav.profile","Profile")}</Link>
-              <Link to="/nearby" className="btn">{t("nav.nearby","Nearby")}</Link>
-            </div>
-
-            {/* Краткое объяснение */}
-            <p className="mt-4 text-slate-700 leading-relaxed">
-              {t("home.pitch",
-                "CareBee помогает семье контролировать состояние близкого человека, быстро искать помощь рядом, вести календарь мероприятий и визитов, а также график приёма лекарств. Это помощник для семей, которые заботятся о пожилых или заболевших родственниках.")}
-            </p>
-          </div>
-        </div>
+    <div className="container space-y-6">
+      {/* HERO: только лого и слоган */}
+      <section className="rounded-3xl border border-amber-200 bg-amber-50 px-6 py-10 md:px-10 md:py-14 text-center">
+        <img src={logo} alt="CareBee" className="mx-auto w-40 md:w-56 drop-shadow" />
+        <h1 className="mt-4 text-2xl md:text-4xl font-bold text-slate-800">
+          {t("home.slogan","CareBee — the caring bee, always by your side.")}
+        </h1>
       </section>
 
-      {/* Подсказки */}
-      <div className="grid md:grid-cols-3 gap-4 mt-6">
-        <div className="card">
+      {/* Пояснение */}
+      <section className="card">
+        <div className="card-title">{t("app.title","CareBee")}</div>
+        <p className="text-slate-700 leading-relaxed">
+          {t("home.pitch",
+            "CareBee helps a family monitor a loved one's condition, quickly look for urgent help nearby, keep a calendar of events and visits, and manage the medication schedule. A helper for families who take care of elderly or ill relatives.")}
+        </p>
+      </section>
+
+      {/* Огромная кнопка SOS — отдельно от остальных */}
+      <div className="text-center">
+        <Link to="/sos" className="btn-sos">🆘 SOS</Link>
+      </div>
+
+      {/* Сетка «крупных» кнопок-навигации */}
+      <section className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <Link to="/calendar" className="card hover:shadow-md transition">
           <div className="card-title">{t("nav.calendar","Calendar")}</div>
           <p className="text-sm text-slate-600">
             {t("calendar.empty","Nothing scheduled")} — {t("calendar.quick","Quick add")} прямо из календаря.
           </p>
-        </div>
-        <div className="card">
+        </Link>
+        <Link to="/visits" className="card hover:shadow-md transition">
+          <div className="card-title">{t("nav.visits","Visits")}</div>
+          <p className="text-sm text-slate-600">{t("visits.hint","Plan and keep track of appointments.")}</p>
+        </Link>
+        <Link to="/meds" className="card hover:shadow-md transition">
           <div className="card-title">{t("nav.meds","Meds")}</div>
-          <p className="text-sm text-slate-600">
-            {t("meds.hint_times","Comma-separated (e.g. 08:00, 20:00)")}
-          </p>
-        </div>
-        <div className="card">
+          <p className="text-sm text-slate-600">{t("meds.hint_times","Comma-separated (e.g. 08:00, 20:00)")}</p>
+        </Link>
+        <Link to="/vitals" className="card hover:shadow-md transition">
+          <div className="card-title">{t("nav.vitals","Vitals")}</div>
+          <p className="text-sm text-slate-600">{t("vitals.hint","Record key health indicators.")}</p>
+        </Link>
+        <Link to="/nearby" className="card hover:shadow-md transition">
           <div className="card-title">{t("nav.nearby","Nearby")}</div>
-          <p className="text-sm text-slate-600">
-            {t("nearby.info","Data: OpenStreetMap/Overpass. Please search responsibly.")}
-          </p>
-        </div>
-      </div>
+          <p className="text-sm text-slate-600">{t("nearby.info","Data: OpenStreetMap/Overpass. Please search responsibly.")}</p>
+        </Link>
+        <Link to="/profile" className="card hover:shadow-md transition">
+          <div className="card-title">{t("nav.profile","Profile")}</div>
+          <p className="text-sm text-slate-600">{t("profile.hint","Basic patient data and emergency info.")}</p>
+        </Link>
+      </section>
     </div>
   );
 }
