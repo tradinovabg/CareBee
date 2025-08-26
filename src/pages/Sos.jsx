@@ -76,6 +76,29 @@ export default function Sos() {
             🆘 {t("sos.sos","SOS")}
           </a>
         </div>
+function SosButton({ onPress }) {
+  return (
+    <button
+      type="button"
+      onClick={onPress}
+      className="
+        fixed bottom-6 left-1/2 -translate-x-1/2   /* всегда видна и поверх */
+        z-50
+        w-56 h-56 sm:w-64 sm:h-64 md:w-72 md:h-72   /* крупнее на больших экранах */
+        rounded-full
+        bg-red-600 text-white text-4xl sm:text-5xl font-extrabold
+        shadow-[0_20px_50px_-12px_rgba(220,38,38,0.6)]
+        ring-4 ring-red-300/50
+        hover:bg-red-700 active:scale-95
+        focus:outline-none focus:ring-8 focus:ring-red-400/60
+        select-none
+      "
+      aria-label="SOS — срочно нужна помощь"
+    >
+      SOS
+    </button>
+  );
+}
 
         {/* Шаблон сообщения */}
         <div className="mt-4 grid md:grid-cols-3 gap-4">
