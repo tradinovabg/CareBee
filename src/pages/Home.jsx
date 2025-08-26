@@ -28,22 +28,13 @@ export default function Home() {
 
       {/* БОЛЬШАЯ SOS-КНОПКА ПРЯМО НА HOME */}
       <div className="my-8 grid place-items-center">
-        <Link
-          to="/sos"
-          aria-label="Open SOS"
-          // Инлайн-размеры — кнопка будет БОЛЬШОЙ даже без Tailwind
-          style={{ width: "18rem", height: "18rem" }}
-          className="
-            grid place-items-center
-            rounded-full bg-red-600 text-white text-5xl font-extrabold
-            shadow-[0_20px_50px_-12px_rgba(220,38,38,0.6)]
-            ring-4 ring-red-300/50 hover:bg-red-700 active:scale-95
-            focus:outline-none focus:ring-8 focus:ring-red-400/60
-            select-none
-          "
-        >
-          SOS
-        </Link>
+       <Link
+  to="/sos"
+  style={{ width: "18rem", height: "18rem" }}
+  className="grid place-items-center rounded-full bg-red-600 text-white text-5xl font-extrabold"
+>
+  SOS
+</Link>
         <p className="mt-3 text-xs text-neutral-500">
           Нажмите, чтобы открыть страницу рассылки оповещений.
         </p>
