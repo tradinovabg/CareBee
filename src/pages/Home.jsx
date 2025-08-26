@@ -1,4 +1,5 @@
 // src/pages/Home.jsx
+<div style={{display:'none'}}>HOME_DBG</div>
 import { Link } from "react-router-dom";
 
 export default function Home() {
