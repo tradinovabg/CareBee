@@ -9,6 +9,9 @@ import Visits from "./pages/Visits.jsx";
 import Calendar from "./pages/Calendar.jsx";
 import Vitals from "./pages/Vitals.jsx";
 import Nearby from "./pages/Nearby.jsx";
+import Contacts from "./pages/Contacts";
+
+<Route path="/contacts" element={<Contacts />} />
 
 export default function App() {
   const { t, i18n } = useTranslation();
