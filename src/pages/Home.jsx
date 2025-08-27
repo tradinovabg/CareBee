@@ -1,10 +1,13 @@
-// src/pages/Home.jsx
-<div style={{display:'none'}}>HOME_DBG</div>
 import { Link } from "react-router-dom";
 
 export default function Home() {
   return (
     <main className="mx-auto max-w-5xl p-4 sm:p-6">
+      {/* Диагностическая плашка — если её видишь, значит грузится ЭТОТ Home.jsx */}
+      <div style={{background:"#f59e0b",color:"#111827",fontSize:12,padding:"4px 8px",marginBottom:8}}>
+        Home v2 loaded — src/pages/Home.jsx
+      </div>
+
       {/* HERO */}
       <section className="rounded-3xl border bg-amber-50 p-6 sm:p-10 text-center shadow-sm">
         <img
@@ -32,7 +35,8 @@ export default function Home() {
         <Link
           to="/sos"
           aria-label="Open SOS"
-          style={{ width: "18rem", height: "18rem" }}   // размеры фиксированы, всегда БОЛЬШАЯ
+          // ФИКСИРОВАННЫЕ inline-размеры — всегда БОЛЬШАЯ, даже без Tailwind
+          style={{ width: "18rem", height: "18rem" }}
           className="
             grid place-items-center
             rounded-full bg-red-600 text-white text-5xl font-extrabold
@@ -48,28 +52,6 @@ export default function Home() {
           Нажмите, чтобы открыть страницу рассылки оповещений.
         </p>
       </div>
-
-      {/* Карточки переходов */}
-      <section className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        <Card title="Calendar" to="/calendar" text="Быстро добавляйте события." />
-        <Card title="Visits" to="/visits" text="Планируйте приёмы." />
-        <Card title="Meds" to="/meds" text="Список лекарств и время." />
-        <Card title="Vitals" to="/vitals" text="Показатели здоровья." />
-        <Card title="Nearby" to="/nearby" text="Поиск помощи рядом (OSM)." />
-        <Card title="Profile" to="/profile" text="Данные пациента и экстр. инфо." />
-      </section>
     </main>
-  );
-}
-
-function Card({ title, text, to }) {
-  return (
-    <Link
-      to={to}
-      className="rounded-2xl border bg-white p-5 shadow-sm hover:shadow-md transition"
-    >
-      <div className="font-semibold mb-1">{title}</div>
-      <div className="text-sm text-neutral-600">{text}</div>
-    </Link>
   );
 }
