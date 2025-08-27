@@ -55,19 +55,14 @@ function sameLocalDate(a, b) {
 }
 
 export function shouldAutoSend(now = new Date()) {
-  const { enabled, time } = getAutoSendSettings();
-  if (!enabled) return false;
+  const settings = getAutoSendSettings();
+  if (!settings.enabled) return false;
 
   const last = getLastSummaryAt();
-  const lastDate = last ? new Date(last) : null;
+  if (last && sameLocalDate(new Date(last), now)) return false;
 
-  const target = todayAt(time);
-  const isTimePassed = now.getTime() >= target.getTime();
-
-  // если сегодня уже отправляли — не отправляем
-  if (lastDate && sameLocalDate(lastDate, now)) return false;
-
-  return isTimePassed;
+  const target = todayAt(settings.time);
+  return now.getTime() >= target.getTime();
 }
 
 export function maybeSendDailySummary(now = new Date()) {
