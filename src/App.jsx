@@ -1,4 +1,3 @@
-// src/App.jsx
 import { BrowserRouter, Routes, Route, NavLink, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import Sos from "./pages/Sos";
@@ -34,23 +33,33 @@ function Nav() {
 }
 
 export default function App() {
+  console.log("[CareBee] App.jsx mounted");
   return (
-    <BrowserRouter basename={BASENAME}>
-      <Nav />
-      <Routes>
-        {/* ГЛАВНАЯ */}
-        <Route path="/" element={<Home />} />
-        {/* Остальные страницы */}
-        <Route path="/sos" element={<Sos />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/meds" element={<Meds />} />
-        <Route path="/visits" element={<Visits />} />
-        <Route path="/calendar" element={<Calendar />} />
-        <Route path="/vitals" element={<Vitals />} />
-        <Route path="/nearby" element={<Nearby />} />
-        {/* 404 → на главную */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </BrowserRouter>
+    <>
+      {/* Диагностическая плашка — если её видишь, значит грузится ЭТОТ App.jsx */}
+      <div style={{background:"#16a34a",color:"#fff",fontSize:12,padding:"4px 8px"}}>
+        App v2 loaded — router from src/App.jsx
+      </div>
+
+      <BrowserRouter basename={BASENAME}>
+        <Nav />
+        <Routes>
+          {/* ГЛАВНАЯ */}
+          <Route path="/" element={<Home />} />
+
+          {/* Остальные страницы */}
+          <Route path="/sos" element={<Sos />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/meds" element={<Meds />} />
+          <Route path="/visits" element={<Visits />} />
+          <Route path="/calendar" element={<Calendar />} />
+          <Route path="/vitals" element={<Vitals />} />
+          <Route path="/nearby" element={<Nearby />} />
+
+          {/* 404 → на главную */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
