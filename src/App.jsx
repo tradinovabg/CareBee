@@ -1,3 +1,6 @@
+<div style={{background:"#16a34a",color:"#fff",fontSize:12,padding:"4px 8px"}}>
+  App DIAG — этот App.jsx реально отрисован
+</div>
 import { BrowserRouter, Routes, Route, NavLink, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import Sos from "./pages/Sos";
