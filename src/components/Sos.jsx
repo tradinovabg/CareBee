@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import "./Sos.css";
 
 export default function Sos() {
   const [active, setActive] = useState(false);
@@ -32,11 +33,16 @@ export default function Sos() {
   }, [active]);
 
   return (
+codex/remove-aria-label-from-button-in-sos.jsx
     <main style={{ minHeight: "70vh", display: "grid", placeItems: "center", padding: 16 }}>
+
+    <main className="sos-container">
+main
       <button
         ref={buttonRef}
         onClick={open}
         type="button"
+codex/remove-aria-label-from-button-in-sos.jsx
         style={{
           width: "18rem",
           height: "18rem",
@@ -49,6 +55,10 @@ export default function Sos() {
           border: "8px solid rgba(248,113,113,.5)",
           cursor: "pointer",
         }}
+=======
+        aria-label="SOS"
+        className="sos-button"
+main
       >
         SOS
       </button>
@@ -58,6 +68,7 @@ export default function Sos() {
           role="alertdialog"
           aria-modal="true"
           aria-labelledby="sos-title"
+ codex/remove-aria-label-from-button-in-sos.jsx
           style={{
             position: "fixed",
             inset: 0,
@@ -80,12 +91,22 @@ export default function Sos() {
               SOS activated
             </h2>
             <p style={{ marginBottom: 24 }}>
+
+          className="sos-overlay"
+        >
+          <div className="sos-dialog">
+            <h2 id="sos-title" className="sos-title">
+              SOS activated
+            </h2>
+            <p className="sos-message">
+main
               Emergency services have been notified.
             </p>
             <button
               ref={closeButtonRef}
               onClick={close}
               type="button"
+ codex/remove-aria-label-from-button-in-sos.jsx
               style={{
                 padding: "8px 16px",
                 background: "#dc2626",
@@ -94,6 +115,9 @@ export default function Sos() {
                 borderRadius: 4,
                 cursor: "pointer",
               }}
+=======
+              className="sos-close-button"
+ main
             >
               Close
             </button>

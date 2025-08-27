@@ -17,3 +17,38 @@
   border: 8px solid rgba(248, 113, 113, 0.5);
   cursor: pointer;
 }
+
+.sos-overlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.sos-dialog {
+  background: #fff;
+  padding: 24px;
+  border-radius: 8px;
+  text-align: center;
+  max-width: 320px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.sos-title {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+.sos-message {
+  margin-bottom: 24px;
+}
+
+.sos-close-button {
+  padding: 8px 16px;
+  background: #dc2626;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
