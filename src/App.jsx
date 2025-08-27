@@ -1,4 +1,7 @@
 // src/App.jsx
+ codex/replace-link-with-navlink-in-header-nav-b5rbde
+import { HashRouter as Router, Routes, Route, NavLink, Navigate } from "react-router-dom";
+=======
 codex/create-notfound-page-and-route
 import { HashRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Home from "./pages/Home";
@@ -7,6 +10,7 @@ import NotFound from "./pages/NotFound";
 =======
 import { HashRouter as Router, Routes, Route, Link, Navigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+ main
 import Home from "./pages/Home";
 import Sos from "./pages/Sos";
 import "./App.css";
@@ -29,6 +33,10 @@ codex/wrap-navigation-links-in-ul-and-style
 =======
 codex/add-internationalization-to-app-component
         <nav style={{display:"flex",gap:12,fontSize:14}}>
+codex/replace-link-with-navlink-in-header-nav-b5rbde
+          <NavLink to="/" className={({ isActive }) => isActive ? "active" : undefined}>Home</NavLink>
+          <NavLink to="/sos" className={({ isActive }) => isActive ? "active" : undefined}>SOS</NavLink>
+=======
           <Link to="/">{t('nav.home', 'Home')}</Link>
           <Link to="/sos">{t('nav.sos', 'SOS')}</Link>
 =======
@@ -36,6 +44,7 @@ codex/add-internationalization-to-app-component
           <Link to="/">Home</Link>
           <Link to="/sos">SOS</Link>
 main
+
         </nav>
       </header>
 
