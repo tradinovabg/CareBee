@@ -64,9 +64,11 @@ export default function AppMini() {
   return (
     <BrowserRouter basename={BASENAME}>
       <header style={{position:"sticky",top:0,zIndex:10,background:"#fff8e1",borderBottom:"1px solid #f0d48a", padding:"8px 12px"}}>
-        <nav style={{display:"flex",gap:12,fontSize:14}}>
-          <Link to="/">Home</Link>
-          <Link to="/sos">SOS</Link>
+        <nav aria-label="Main">
+          <ul style={{display:"flex",gap:12,fontSize:14,listStyle:"none",margin:0,padding:0}}>
+            <li><Link to="/">Home</Link></li>
+            <li><Link to="/sos">SOS</Link></li>
+          </ul>
         </nav>
       </header>
       <Routes>

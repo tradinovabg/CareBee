@@ -1,6 +1,6 @@
 {
   "app": { "title": "CareBee" },
-  "nav": { "profile": "Profile", "meds": "Meds", "visits": "Visits", "calendar": "Calendar", "vitals": "Vitals", "nearby": "Nearby" },
+  "nav": { "home": "Home", "sos": "SOS", "profile": "Profile", "meds": "Meds", "visits": "Visits", "calendar": "Calendar", "vitals": "Vitals", "nearby": "Nearby" },
   "today": "Today",
   "actions": { "add": "Add", "save": "Save", "delete": "Delete", "cancel": "Cancel", "clear":"Clear" },
   "fields": { "name":"Name", "dose":"Dose", "mode":"Mode", "date":"Date", "time":"Time", "start":"Start", "end":"End", "times":"Times", "doctor":"Doctor", "place":"Place", "notes":"Notes", "value":"Value", "type":"Type", "address":"Address", "phone":"Phone" },

@@ -5,7 +5,14 @@
   text-align: center;
 }
 
+codex/replace-link-with-navlink-in-header-nav-b5rbde
 nav a.active {
   font-weight: bold;
   text-decoration: underline;
+=======
+.main-nav {
+  display: flex;
+  gap: 12px;
+  font-size: 14px;
+main
 }
