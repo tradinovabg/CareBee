@@ -1,5 +1,9 @@
+codex/add-tests-for-sos-component-onc6ne
+import { test, expect } from 'vitest';
+=======
 import { test } from 'vitest';
 import { strict as assert } from 'node:assert';
+main
 
 function createLocalStorage() {
   const store = {};
@@ -33,9 +37,9 @@ test('shouldAutoSend uses auto-send settings rather than profile', async () => {
   now.setHours(9, 0, 0, 0);
 
   // With default settings (enabled=false) it should not send
-  assert.equal(shouldAutoSend(now), false);
+  expect(shouldAutoSend(now)).toBe(false);
 
   // Enabling via settings should allow auto-send irrespective of profile
   setAutoSendSettings({ enabled: true, time: '08:00' });
-  assert.equal(shouldAutoSend(now), true);
+  expect(shouldAutoSend(now)).toBe(true);
 });
