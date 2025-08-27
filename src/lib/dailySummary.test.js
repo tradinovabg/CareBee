@@ -1,4 +1,9 @@
+codex/add-tests-for-sos-component-onc6ne
 import { test, expect } from 'vitest';
+=======
+import { test } from 'vitest';
+import { strict as assert } from 'node:assert';
+main
 
 function createLocalStorage() {
   const store = {};
