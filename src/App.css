@@ -4,3 +4,9 @@
   padding: 2rem;
   text-align: center;
 }
+
+.main-nav {
+  display: flex;
+  gap: 12px;
+  font-size: 14px;
+}
