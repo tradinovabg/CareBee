@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "postbuild": "node -e \"require('fs').copyFileSync('dist/index.html','dist/404.html')\"",
-    "test": "node --test"
+    "test": "vitest run"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.56.0",
@@ -21,10 +21,14 @@
     "react-router-dom": "^6.26.1"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.8.0",
+    "@testing-library/react": "^16.3.0",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.20",
+    "jsdom": "^26.1.0",
     "postcss": "^8.4.41",
     "tailwindcss": "^3.4.9",
-    "vite": "^5.4.3"
+    "vite": "^5.4.3",
+    "vitest": "^3.2.4"
   }
 }
