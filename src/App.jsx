@@ -13,6 +13,13 @@ export default function App() {
         position:"sticky",top:0,zIndex:10,background:"#fff8e1",
         borderBottom:"1px solid #f0d48a", padding:"8px 12px"
       }}>
+codex/wrap-navigation-links-in-ul-and-style
+        <nav aria-label="Main">
+          <ul style={{display:"flex",gap:12,fontSize:14,listStyle:"none",margin:0,padding:0}}>
+            <li><Link to="/">Home</Link></li>
+            <li><Link to="/sos">SOS</Link></li>
+          </ul>
+=======
 codex/add-internationalization-to-app-component
         <nav style={{display:"flex",gap:12,fontSize:14}}>
           <Link to="/">{t('nav.home', 'Home')}</Link>
