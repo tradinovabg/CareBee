@@ -6,7 +6,6 @@ export default function Sos() {
       <button
         onClick={click}
         type="button"
-        aria-label="SOS"
         style={{
           width:"18rem", height:"18rem", borderRadius:"9999px",
           background:"#dc2626", color:"#fff", fontWeight:800, fontSize:"56px",
