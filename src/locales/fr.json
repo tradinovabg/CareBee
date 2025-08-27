@@ -1,6 +1,6 @@
 {
   "app": { "title": "CareBee" },
-  "nav": { "profile": "Profil", "meds": "Médicaments", "visits": "Visites", "calendar": "Calendrier", "vitals": "Signes vitaux", "nearby": "À proximité" },
+  "nav": { "home": "Accueil", "sos": "SOS", "profile": "Profil", "meds": "Médicaments", "visits": "Visites", "calendar": "Calendrier", "vitals": "Signes vitaux", "nearby": "À proximité" },
   "today": "Aujourd'hui",
   "actions": { "add": "Ajouter", "save": "Enregistrer", "delete": "Supprimer", "cancel": "Annuler", "clear":"Effacer" },
   "fields": { "name":"Nom", "dose":"Dose", "mode":"Mode", "date":"Date", "time":"Heure", "start":"Début", "end":"Fin", "times":"Heures", "doctor":"Médecin", "place":"Lieu", "notes":"Notes", "value":"Valeur", "type":"Type", "address":"Adresse", "phone":"Téléphone" },
