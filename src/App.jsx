@@ -1,7 +1,8 @@
 // src/App.jsx
-import { HashRouter as Router, Routes, Route, Link, Navigate } from "react-router-dom";
+import { HashRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Home from "./pages/Home";
 import Sos from "./pages/Sos";
+import NotFound from "./pages/NotFound";
 
 export default function App() {
   return (
@@ -19,7 +20,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/sos" element={<Sos />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );
