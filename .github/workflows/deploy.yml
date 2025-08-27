@@ -33,6 +33,11 @@ jobs:
         working-directory: pages
         run: npm ci
 
+      - run: npm run lint
+        working-directory: pages
+      - run: npm test
+        working-directory: pages
+
       - name: Build
         working-directory: pages
         env:
