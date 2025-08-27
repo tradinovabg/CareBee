@@ -1,5 +1,5 @@
-import test from 'node:test';
-import assert from 'node:assert/strict';
+import { test } from 'vitest';
+import { strict as assert } from 'node:assert';
 
 function createLocalStorage() {
   const store = {};
