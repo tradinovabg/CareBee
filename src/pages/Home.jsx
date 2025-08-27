@@ -35,6 +35,25 @@ export default function Home() {
         <Link
           to="/sos"
           aria-label="Open SOS"
+          import { Link } from "react-router-dom";
+
+// ...
+<div style={{display:"grid", placeItems:"center", margin:"24px 0 8px"}}>
+  <Link
+    to="/sos"
+    aria-label="Open SOS"
+    style={{
+      width:"18rem", height:"18rem", borderRadius:"9999px",
+      background:"#dc2626", color:"#fff", fontWeight:800, fontSize:"56px",
+      display:"grid", placeItems:"center", textDecoration:"none",
+      boxShadow:"0 20px 50px -12px rgba(220,38,38,.6)",
+      border:"8px solid rgba(248,113,113,.5)"
+    }}
+  >
+    SOS
+  </Link>
+</div>
+
           // ФИКСИРОВАННЫЕ inline-размеры — всегда БОЛЬШАЯ, даже без Tailwind
           style={{ width: "18rem", height: "18rem" }}
           className="
