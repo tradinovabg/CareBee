@@ -1,9 +1,16 @@
 // src/App.jsx
+codex/create-notfound-page-and-route
+import { HashRouter as Router, Routes, Route, Link } from "react-router-dom";
+import Home from "./pages/Home";
+import Sos from "./pages/Sos";
+import NotFound from "./pages/NotFound";
+=======
 import { HashRouter as Router, Routes, Route, Link, Navigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Home from "./pages/Home";
 import Sos from "./pages/Sos";
 import "./App.css";
+main
 
 export default function App() {
   const { t } = useTranslation();
@@ -35,7 +42,7 @@ main
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/sos" element={<Sos />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );
