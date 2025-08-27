@@ -2,6 +2,7 @@
 import { HashRouter as Router, Routes, Route, Link, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import Sos from "./pages/Sos";
+import "./App.css";
 
 export default function App() {
   return (
@@ -10,7 +11,7 @@ export default function App() {
         position:"sticky",top:0,zIndex:10,background:"#fff8e1",
         borderBottom:"1px solid #f0d48a", padding:"8px 12px"
       }}>
-        <nav style={{display:"flex",gap:12,fontSize:14}}>
+        <nav className="main-nav">
           <Link to="/">Home</Link>
           <Link to="/sos">SOS</Link>
         </nav>
