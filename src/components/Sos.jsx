@@ -17,31 +17,24 @@ export default function Sos() {
     }
   }, [active]);
 
-  useEffect(() => {
-    if (!active) return;
-    const onKeyDown = (e) => {
-      if (e.key === "Escape") {
-        e.preventDefault();
-        close();
-      } else if (e.key === "Tab") {
-        e.preventDefault();
-        closeButtonRef.current?.focus();
-      }
-    };
-    document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
-  }, [active]);
-
   return (
+codex/add-tests-for-sos-component
+    <main className="sos-container">
+    
 codex/remove-aria-label-from-button-in-sos.jsx
     <main style={{ minHeight: "70vh", display: "grid", placeItems: "center", padding: 16 }}>
 
     <main className="sos-container">
 main
+
       <button
         ref={buttonRef}
         onClick={open}
         type="button"
+codex/add-tests-for-sos-component
+        aria-label="SOS"
+        className="sos-button"
+
 codex/remove-aria-label-from-button-in-sos.jsx
         style={{
           width: "18rem",
@@ -55,15 +48,27 @@ codex/remove-aria-label-from-button-in-sos.jsx
           border: "8px solid rgba(248,113,113,.5)",
           cursor: "pointer",
         }}
-=======
+
         aria-label="SOS"
         className="sos-button"
 main
+
       >
         SOS
       </button>
 
       {active && (
+codex/add-tests-for-sos-component
+        <div role="alert" className="sos-notification" data-testid="notification">
+          <p>Emergency services have been notified.</p>
+          <button
+            ref={closeButtonRef}
+            onClick={close}
+            type="button"
+          >
+            Close
+          </button>
+
         <div
           role="alertdialog"
           aria-modal="true"
@@ -115,13 +120,13 @@ main
                 borderRadius: 4,
                 cursor: "pointer",
               }}
-=======
               className="sos-close-button"
  main
             >
               Close
             </button>
           </div>
+main
         </div>
       )}
     </main>
