@@ -1,5 +1,5 @@
-codex/remove-alert-and-implement-accessible-notification
 import { useEffect, useRef, useState } from "react";
+import "./Sos.css";
 
 export default function Sos() {
   const [active, setActive] = useState(false);
@@ -33,18 +33,13 @@ export default function Sos() {
   }, [active]);
 
   return (
-    <main style={{minHeight:"70vh", display:"grid", placeItems:"center", padding:16}}>
+    <main className="sos-container">
       <button
         ref={buttonRef}
         onClick={open}
         type="button"
         aria-label="SOS"
-        style={{
-          width:"18rem", height:"18rem", borderRadius:"9999px",
-          background:"#dc2626", color:"#fff", fontWeight:800, fontSize:"56px",
-          boxShadow:"0 20px 50px -12px rgba(220,38,38,.6)",
-          border:"8px solid rgba(248,113,113,.5)", cursor:"pointer"
-        }}
+        className="sos-button"
       >
         SOS
       </button>
@@ -54,49 +49,27 @@ export default function Sos() {
           role="alertdialog"
           aria-modal="true"
           aria-labelledby="sos-title"
-          style={{
-            position:"fixed", inset:0, display:"grid", placeItems:"center",
-            background:"rgba(0,0,0,0.5)",
-          }}
+          className="sos-overlay"
         >
-          <div
-            style={{
-              background:"#fff", padding:24, borderRadius:8, textAlign:"center",
-              maxWidth:320, boxShadow:"0 10px 25px rgba(0,0,0,0.2)"
-            }}
-          >
-            <h2 id="sos-title" style={{fontSize:24, marginBottom:16}}>SOS activated</h2>
-            <p style={{marginBottom:24}}>Emergency services have been notified.</p>
+          <div className="sos-dialog">
+            <h2 id="sos-title" className="sos-title">
+              SOS activated
+            </h2>
+            <p className="sos-message">
+              Emergency services have been notified.
+            </p>
             <button
               ref={closeButtonRef}
               onClick={close}
               type="button"
-              style={{
-                padding:"8px 16px", background:"#dc2626", color:"#fff",
-                border:"none", borderRadius:4, cursor:"pointer"
-              }}
+              className="sos-close-button"
             >
               Close
             </button>
           </div>
         </div>
-      )}========
-// src/components/Sos.jsx
-import "./Sos.css";
-
-export default function Sos() {
-  const click = () => alert("SOS test — кнопка работает ✅");
-  return (
-    <main className="sos-container">
-      <button
-        onClick={click}
-        type="button"
-        aria-label="SOS"
-        className="sos-button"
-      >
-        SOS
-      </button>
-main
+      )}
     </main>
   );
 }
+
