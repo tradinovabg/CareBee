@@ -1,5 +1,5 @@
 // src/App.jsx
-import { HashRouter as Router, Routes, Route, Link, Navigate } from "react-router-dom";
+import { HashRouter as Router, Routes, Route, NavLink, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import Sos from "./pages/Sos";
 
@@ -11,8 +11,8 @@ export default function App() {
         borderBottom:"1px solid #f0d48a", padding:"8px 12px"
       }}>
         <nav style={{display:"flex",gap:12,fontSize:14}}>
-          <Link to="/">Home</Link>
-          <Link to="/sos">SOS</Link>
+          <NavLink to="/" className={({ isActive }) => isActive ? "active" : undefined}>Home</NavLink>
+          <NavLink to="/sos" className={({ isActive }) => isActive ? "active" : undefined}>SOS</NavLink>
         </nav>
       </header>
 
