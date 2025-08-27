@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { maybeSendDailySummary } from "../lib/dailySummary.js";
 
 const load = (k, def) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : def; } catch { return def; } };
 const save = (k, v) => localStorage.setItem(k, JSON.stringify(v));
@@ -18,6 +19,7 @@ export default function Vitals() {
     const next = [...items, { ...form }];
     next.sort((a,b)=> (a.date+a.time).localeCompare(b.date+b.time));
     setItems(next); save("carebee.vitals", next);
+    maybeSendDailySummary();
     setForm({ type: form.type, value:"", date: todayStr(), time: timeStr(), notes:"" });
   };
 
