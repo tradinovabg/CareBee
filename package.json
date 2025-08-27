@@ -10,8 +10,10 @@
     "postbuild": "node -e \"require('fs').copyFileSync('dist/index.html','dist/404.html')\""
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.56.0",
     "i18next": "^23.11.5",
     "leaflet": "^1.9.4",
+    "qrcode.react": "^4.2.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-i18next": "^14.1.2",
