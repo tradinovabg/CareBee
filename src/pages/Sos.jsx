@@ -1,4 +1,5 @@
 // src/pages/Sos.jsx
+codex/remove-aria-label-from-sos-button
 export default function Sos() {
   const click = () => alert("SOS test — кнопка работает ✅");
   return (
@@ -18,3 +19,11 @@ export default function Sos() {
     </main>
   );
 }
+
+codex/remove-alert-and-implement-accessible-notification
+import Sos from "../components/Sos";
+
+export default Sos;
+
+export { default } from "../components/Sos";
+main

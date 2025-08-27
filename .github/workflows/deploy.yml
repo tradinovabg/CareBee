@@ -1,8 +1,7 @@
-name: Deploy CareBee (Vite) to GitHub Pages
+name: Deploy static content to Pages
 
 on:
   push:
-    branches: [ main ]
   workflow_dispatch:
 
 permissions:
@@ -26,6 +25,12 @@ jobs:
         with:
           node-version: 20
           cache: npm
+codex/fix-deploy.yml-workflow-configuration
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
           cache-dependency-path: package-lock.json
 
       # если у тебя нет package-lock.json — можно заменить на `npm install`
@@ -40,6 +45,7 @@ jobs:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
           VITE_SUPABASE_EDGE_URL: ${{ secrets.VITE_SUPABASE_EDGE_URL }}
+main
         run: npm run build
 
       - name: Configure Pages
