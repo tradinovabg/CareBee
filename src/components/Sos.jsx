@@ -18,6 +18,9 @@ export default function Sos() {
   }, [active]);
 
   return (
+codex/remove-alert-from-click-handler
+    <main className="sos-container">
+
 codex/add-tests-for-sos-component
     <main className="sos-container">
     
@@ -26,7 +29,6 @@ codex/remove-aria-label-from-button-in-sos.jsx
 
     <main className="sos-container">
 main
-
       <button
         ref={buttonRef}
         onClick={open}
@@ -34,6 +36,7 @@ main
 codex/add-tests-for-sos-component
         aria-label="SOS"
         className="sos-button"
+codex/remove-alert-from-click-handler
 
 codex/remove-aria-label-from-button-in-sos.jsx
         style={{
@@ -73,6 +76,13 @@ codex/add-tests-for-sos-component
           role="alertdialog"
           aria-modal="true"
           aria-labelledby="sos-title"
+codex/remove-alert-from-click-handler
+          className="sos-modal-overlay"
+        >
+          <div className="sos-modal" role="document" aria-live="assertive">
+            <h2 id="sos-title" className="sos-modal-title">SOS activated</h2>
+            <p className="sos-modal-message">Emergency services have been notified.</p>
+
  codex/remove-aria-label-from-button-in-sos.jsx
           style={{
             position: "fixed",
@@ -107,10 +117,14 @@ codex/add-tests-for-sos-component
 main
               Emergency services have been notified.
             </p>
+main
             <button
               ref={closeButtonRef}
               onClick={close}
               type="button"
+ codex/remove-alert-from-click-handler
+              className="sos-modal-close"
+
  codex/remove-aria-label-from-button-in-sos.jsx
               style={{
                 padding: "8px 16px",
@@ -126,6 +140,8 @@ main
               Close
             </button>
           </div>
+codex/remove-alert-from-click-handler
+
 main
         </div>
       )}
