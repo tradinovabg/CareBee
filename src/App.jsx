@@ -1,58 +1,62 @@
-// src/App.jsx
- codex/replace-link-with-navlink-in-header-nav-b5rbde
-import { HashRouter as Router, Routes, Route, NavLink, Navigate } from "react-router-dom";
-=======
-codex/create-notfound-page-and-route
-import { HashRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+
 import Home from "./pages/Home";
+import Meds from "./pages/Meds";
+import Visits from "./pages/Visits";
+import Calendar from "./pages/Calendar";
+import Vitals from "./pages/Vitals";
+import Nearby from "./pages/Nearby";
+import Profile from "./pages/Profile";
 import Sos from "./pages/Sos";
 import NotFound from "./pages/NotFound";
-=======
-import { HashRouter as Router, Routes, Route, Link, Navigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
- main
-import Home from "./pages/Home";
-import Sos from "./pages/Sos";
-import "./App.css";
-main
+
+const BASENAME = import.meta.env.BASE_URL;
 
 export default function App() {
   const { t } = useTranslation();
-  return (
-    <Router>
-      <header style={{
-        position:"sticky",top:0,zIndex:10,background:"#fff8e1",
-        borderBottom:"1px solid #f0d48a", padding:"8px 12px"
-      }}>
-codex/wrap-navigation-links-in-ul-and-style
-        <nav aria-label="Main">
-          <ul style={{display:"flex",gap:12,fontSize:14,listStyle:"none",margin:0,padding:0}}>
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/sos">SOS</Link></li>
-          </ul>
-=======
-codex/add-internationalization-to-app-component
-        <nav style={{display:"flex",gap:12,fontSize:14}}>
-codex/replace-link-with-navlink-in-header-nav-b5rbde
-          <NavLink to="/" className={({ isActive }) => isActive ? "active" : undefined}>Home</NavLink>
-          <NavLink to="/sos" className={({ isActive }) => isActive ? "active" : undefined}>SOS</NavLink>
-=======
-          <Link to="/">{t('nav.home', 'Home')}</Link>
-          <Link to="/sos">{t('nav.sos', 'SOS')}</Link>
-=======
-        <nav className="main-nav">
-          <Link to="/">Home</Link>
-          <Link to="/sos">SOS</Link>
-main
 
+  return (
+    <BrowserRouter basename={BASENAME}>
+      <header className="header-bar hb-honey">
+        <nav aria-label="Main">
+          <ul>
+            <li>
+              <NavLink to="/" end>{t("nav.home", "Home")}</NavLink>
+            </li>
+            <li>
+              <NavLink to="/meds">{t("nav.meds", "Meds")}</NavLink>
+            </li>
+            <li>
+              <NavLink to="/visits">{t("nav.visits", "Visits")}</NavLink>
+            </li>
+            <li>
+              <NavLink to="/calendar">{t("nav.calendar", "Calendar")}</NavLink>
+            </li>
+            <li>
+              <NavLink to="/vitals">{t("nav.vitals", "Vitals")}</NavLink>
+            </li>
+            <li>
+              <NavLink to="/nearby">{t("nav.nearby", "Nearby")}</NavLink>
+            </li>
+            <li>
+              <NavLink to="/profile">{t("nav.profile", "Profile")}</NavLink>
+            </li>
+          </ul>
         </nav>
       </header>
 
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/meds" element={<Meds />} />
+        <Route path="/visits" element={<Visits />} />
+        <Route path="/calendar" element={<Calendar />} />
+        <Route path="/vitals" element={<Vitals />} />
+        <Route path="/nearby" element={<Nearby />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/sos" element={<Sos />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 }
