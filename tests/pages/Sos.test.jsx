@@ -1,6 +1,11 @@
+codex/create-faq-privacy-and-guide-components
+/** @vitest-environment jsdom */
+=======
 // @vitest-environment jsdom
+main
 import { render, fireEvent, screen } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
+import "@testing-library/jest-dom/vitest";
 import Sos from "../../src/pages/Sos";
 
 describe("Sos page", () => {
