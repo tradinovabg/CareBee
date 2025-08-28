@@ -8,7 +8,6 @@ import Calendar from "./pages/Calendar";
 import Vitals from "./pages/Vitals";
 import Nearby from "./pages/Nearby";
 import Profile from "./pages/Profile";
-import Sos from "./pages/Sos";
 import NotFound from "./pages/NotFound";
 
 const BASENAME = import.meta.env.BASE_URL;
@@ -54,7 +53,6 @@ export default function App() {
         <Route path="/vitals" element={<Vitals />} />
         <Route path="/nearby" element={<Nearby />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/sos" element={<Sos />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

@@ -19,14 +19,6 @@ export default function Home() {
         <h1 className="text-3xl font-bold mb-4">CareBee</h1>
         <p className="text-slate-600">Welcome!</p>
       </div>
-
-      <Link
-        to="/sos"
-        className="btn btn-danger text-xl p-6 rounded-xl mx-auto w-full max-w-md"
-      >
-        🚨 SOS
-      </Link>
-
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {cards.map((card) => (
           <Link key={card.to} to={card.to} className="card text-center">
