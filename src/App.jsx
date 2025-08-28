@@ -1,46 +1,30 @@
-import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
-import { useTranslation } from "react-i18next";
+import { HashRouter, Routes, Route, NavLink, Navigate } from "react-router-dom";
 
 import Home from "./pages/Home";
-import Meds from "./pages/Meds";
-import Visits from "./pages/Visits";
-import Calendar from "./pages/Calendar";
-import Vitals from "./pages/Vitals";
-import Nearby from "./pages/Nearby";
-import Profile from "./pages/Profile";
 import Sos from "./pages/Sos";
-import NotFound from "./pages/NotFound";
 
-const BASENAME = import.meta.env.BASE_URL;
+const linkStyle = ({ isActive }) => ({
+  textDecoration: "none",
+  padding: "8px 12px",
+  borderRadius: "6px",
+  background: isActive ? "#fde68a" : "transparent",
+});
 
 export default function App() {
-  const { t } = useTranslation();
-
   return (
-    <BrowserRouter basename={BASENAME}>
-      <header className="header-bar hb-honey">
+    <HashRouter>
+      <header style={{ position: "sticky", top: 0, zIndex: 10, background: "#fff8e1", borderBottom: "1px solid #f0d48a", padding: "8px 12px" }}>
         <nav aria-label="Main">
-          <ul>
+          <ul style={{ display: "flex", gap: 12, listStyle: "none", margin: 0, padding: 0 }}>
             <li>
-              <NavLink to="/" end>{t("nav.home", "Home")}</NavLink>
+              <NavLink to="/" end style={linkStyle}>
+                Home
+              </NavLink>
             </li>
             <li>
-              <NavLink to="/meds">{t("nav.meds", "Meds")}</NavLink>
-            </li>
-            <li>
-              <NavLink to="/visits">{t("nav.visits", "Visits")}</NavLink>
-            </li>
-            <li>
-              <NavLink to="/calendar">{t("nav.calendar", "Calendar")}</NavLink>
-            </li>
-            <li>
-              <NavLink to="/vitals">{t("nav.vitals", "Vitals")}</NavLink>
-            </li>
-            <li>
-              <NavLink to="/nearby">{t("nav.nearby", "Nearby")}</NavLink>
-            </li>
-            <li>
-              <NavLink to="/profile">{t("nav.profile", "Profile")}</NavLink>
+              <NavLink to="/sos" style={linkStyle}>
+                SOS
+              </NavLink>
             </li>
           </ul>
         </nav>
@@ -48,15 +32,9 @@ export default function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/meds" element={<Meds />} />
-        <Route path="/visits" element={<Visits />} />
-        <Route path="/calendar" element={<Calendar />} />
-        <Route path="/vitals" element={<Vitals />} />
-        <Route path="/nearby" element={<Nearby />} />
-        <Route path="/profile" element={<Profile />} />
         <Route path="/sos" element={<Sos />} />
-        <Route path="*" element={<NotFound />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
