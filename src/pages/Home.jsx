@@ -1,22 +1,3 @@
-<div className="relative rounded-xl overflow-hidden">
-  <video
-    className="w-full h-auto"
-    autoPlay
-    muted
-    loop
-    playsInline
-  >
-    <source src="/hero.mp4" type="video/mp4" />
-    Your browser does not support the video tag.
-  </video>
-
-  <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/30 text-white text-center p-4">
-    <img src="/carebee-logo.png" alt="CareBee" className="w-24 h-24 mb-4" />
-    <h1 className="text-3xl font-bold">CareBee — заботливая пчёлка рядом с вами.</h1>
-    <p className="mt-2 text-lg">Помогает следить за здоровьем близких</p>
-  </div>
-</div>
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -50,22 +31,24 @@ export default function Home() {
   return (
     <main className="mx-auto max-w-5xl p-4 md:p-6 pb-28">
       {/* HERO */}
-      <section className="rounded-2xl border border-amber-300 bg-amber-100/80 p-6 md:p-10 mb-6">
-        <div className="flex flex-col items-center gap-6 text-center">
-          <img
-            src="/CareBee/carebee-logo.png"
-            onError={(e) => {
-              e.currentTarget.src = "/carebee-logo.png";
-            }}
-            alt="CareBee logo"
-            className="w-40 h-40 md:w-56 md:h-56 rounded-full border-8 border-white shadow-xl bg-white object-contain"
-            loading="lazy"
-          />
-          <h1 className="text-2xl md:text-4xl font-extrabold leading-tight">
-            {t("app.title")}
-          </h1>
+      <div className="relative rounded-xl overflow-hidden">
+        <video
+          className="w-full h-auto"
+          autoPlay
+          muted
+          loop
+          playsInline
+        >
+          <source src="/hero.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/30 text-white text-center p-4">
+          <img src="/carebee-logo.png" alt="CareBee" className="w-24 h-24 mb-4" />
+          <h1 className="text-3xl font-bold">CareBee — заботливая пчёлка рядом с вами.</h1>
+          <p className="mt-2 text-lg">Помогает следить за здоровьем близких</p>
         </div>
-      </section>
+      </div>
 
       {/* Пояснение */}
       <section className="rounded-xl border border-slate-200 bg-white p-5 md:p-6 mb-6">
