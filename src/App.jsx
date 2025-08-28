@@ -59,25 +59,15 @@ export default function App() {
   return (
     <Router>
       {/* HEADER WITH NAVIGATION */}
-      <header
-        style={{ position: "sticky", top: 0, zIndex: 10 }}
-        className="bg-amber-50 border-b border-amber-200"
-      >
-        <div className="max-w-6xl mx-auto flex items-center justify-between gap-2 p-2 text-sm">
-          <nav className="flex flex-wrap gap-2">
-            <LinkItem to="/">{t("nav.home")}</LinkItem>
-            <LinkItem to="/profile">{t("nav.profile")}</LinkItem>
-            <LinkItem to="/meds">{t("nav.meds")}</LinkItem>
-            <LinkItem to="/visits">{t("nav.visits")}</LinkItem>
-            <LinkItem to="/calendar">{t("nav.calendar")}</LinkItem>
-            <LinkItem to="/vitals">{t("nav.vitals")}</LinkItem>
-            <LinkItem to="/nearby">{t("nav.nearby")}</LinkItem>
-            <LinkItem to="/contacts">{t("nav.contacts")}</LinkItem>
-            <LinkItem to="/sos">{t("nav.sos")}</LinkItem>
-          </nav>
-          <LanguageSwitcher />
-        </div>
-      </header>
+      <header className="sticky top-0 z-40 bg-amber-50 border-b border-amber-200">
+  <div className="max-w-6xl mx-auto flex items-center justify-between gap-2 p-2 text-sm">
+    <nav className="flex flex-wrap gap-2">
+      {/* LinkItem ... как сейчас */}
+    </nav>
+    <LanguageSwitcher />
+  </div>
+</header>
+
 
       {/* ROUTES */}
       <Routes>
