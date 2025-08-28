@@ -1,18 +1,6 @@
 import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 
 export default function Home() {
-  const { t } = useTranslation();
-
-  const cards = [
-    { to: "/calendar", label: t("nav.calendar", "Calendar") },
-    { to: "/visits", label: t("nav.visits", "Visits") },
-    { to: "/meds", label: t("nav.meds", "Meds") },
-    { to: "/vitals", label: t("nav.vitals", "Vitals") },
-    { to: "/nearby", label: t("nav.nearby", "Nearby") },
-    { to: "/profile", label: t("nav.profile", "Profile") },
-  ];
-
   return (
     <div className="container grid gap-6">
       <div className="text-center">
@@ -22,18 +10,10 @@ export default function Home() {
 
       <Link
         to="/sos"
-        className="btn btn-danger text-xl p-6 rounded-xl mx-auto w-full max-w-md"
+        className="mx-auto flex h-72 w-72 items-center justify-center rounded-full bg-red-600 text-3xl font-bold text-white"
       >
-        🚨 SOS
+        SOS
       </Link>
-
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {cards.map((card) => (
-          <Link key={card.to} to={card.to} className="card text-center">
-            <div className="card-title">{card.label}</div>
-          </Link>
-        ))}
-      </div>
     </div>
   );
 }
