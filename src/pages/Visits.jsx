@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { load, save } from "../lib/storage.js";
 
-const load = (k, def) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : def; } catch { return def; } };
-const save = (k, v) => localStorage.setItem(k, JSON.stringify(v));
 const todayStr = () => new Date().toISOString().slice(0, 10);
 
 export default function Visits() {
