@@ -1,3 +1,28 @@
+codex/add-aria-hidden-and-role-to-video-element
+<div className="relative rounded-xl overflow-hidden">
+  <video
+    className="w-full h-auto"
+    autoPlay
+    muted
+    loop
+    playsInline
+    aria-hidden="true"
+    role="presentation"
+  >
+    <source src="/hero.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+
+  <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/30 text-white text-center p-4">
+    <img src="/carebee-logo.png" alt="CareBee" className="w-24 h-24 mb-4" />
+    <h1 className="text-3xl font-bold">CareBee — заботливая пчёлка рядом с вами.</h1>
+    <p className="mt-2 text-lg">Помогает следить за здоровьем близких</p>
+    <p className="sr-only">Background video playing</p>
+  </div>
+</div>
+
+=======
+main
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
