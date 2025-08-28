@@ -31,5 +31,7 @@
     "category": "Catégorie",
     "categories": { "doctor":"Médecin", "clinic":"Clinique", "pharmacy":"Pharmacie", "other":"Autre" },
     "openInMaps": "Ouvrir dans Maps"
-  }
+  },
+  "home": { "sos": "Ouvrir SOS" },
+  "footer": { "copyright": "\u00a9 2024 CareBee" }
 }
