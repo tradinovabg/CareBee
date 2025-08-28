@@ -5,6 +5,7 @@ const load = (k, def) => { try { const v = localStorage.getItem(k); return v ? J
 const save = (k, v) => localStorage.setItem(k, JSON.stringify(v));
 const todayStr = () => new Date().toISOString().slice(0,10);
 const addDays = (d, n) => { const dt = new Date(d); dt.setDate(dt.getDate()+n); return dt.toISOString().slice(0,10); };
+const newId = () => (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2));
 
 export default function Calendar () {
   const { t } = useTranslation();
@@ -12,10 +13,20 @@ export default function Calendar () {
   const [showVisits, setShowVisits] = useState(true);
   const [showMeds, setShowMeds]     = useState(true);
 
-  const [visits, setVisits] = useState(() => load("carebee.visits", []));
-  const [meds, setMeds]     = useState(() => load("carebee.meds", []));
+  const withIds = (key) => {
+    const data = load(key, []);
+    let changed = false;
+    const res = data.map(it => {
+      if (!it.id) { changed = true; return { ...it, id: newId() }; }
+      return it;
+    });
+    if (changed) save(key, res);
+    return res;
+  };
+  const [visits, setVisits] = useState(() => withIds("carebee.visits"));
+  const [meds, setMeds]     = useState(() => withIds("carebee.meds"));
   useEffect(() => {
-    const h = () => { setVisits(load("carebee.visits", [])); setMeds(load("carebee.meds", [])); };
+    const h = () => { setVisits(withIds("carebee.visits")); setMeds(withIds("carebee.meds")); };
     window.addEventListener("storage", h); return () => window.removeEventListener("storage", h);
   }, []);
 
@@ -29,7 +40,7 @@ export default function Calendar () {
     if (showVisits) {
       visits.forEach(v => {
         if (v.date >= today && v.date <= end) {
-          res[v.date].push({ time: v.time, title: v.doctor, type: "visit", location: v.place, notes: v.notes });
+          res[v.date].push({ id: v.id, time: v.time, title: v.doctor, type: "visit", location: v.place, notes: v.notes });
         }
       });
     }
@@ -37,13 +48,13 @@ export default function Calendar () {
       meds.forEach(m => {
         if (m.mode === "once") {
           if (m.once?.date >= today && m.once?.date <= end) {
-            res[m.once.date].push({ time: m.once.time, title: m.name, type: "med" });
+            res[m.once.date].push({ id: m.id, time: m.once.time, title: m.name, type: "med" });
           }
         } else {
           const d = m.daily || {};
           days.forEach(day => {
             const within = (!d.start || day >= d.start) && (!d.end || day <= d.end);
-            if (within) (d.times||[]).forEach(tm => res[day].push({ time: tm, title: m.name, type: "med" }));
+            if (within) (d.times||[]).forEach(tm => res[day].push({ id: `${m.id}-${tm}`, time: tm, title: m.name, type: "med" }));
           });
         }
       });
@@ -57,7 +68,7 @@ export default function Calendar () {
   const onVChange = e => setVForm({ ...vForm, [e.target.name]: e.target.value });
   const addVisit = (e) => {
     e.preventDefault();
-    const next = [...visits, { ...vForm }];
+    const next = [...visits, { id: newId(), ...vForm }];
     setVisits(next); save("carebee.visits", next);
     setVForm({ date: todayStr(), time: "", doctor: "", place: "", notes: "" });
   };
@@ -78,7 +89,7 @@ export default function Calendar () {
   });
   const addMed = (e) => {
     e.preventDefault();
-    const rec = { name: mForm.name, dose: mForm.dose, mode: modeMed };
+    const rec = { id: newId(), name: mForm.name, dose: mForm.dose, mode: modeMed };
     if (modeMed === "once") rec.once = { ...mForm.once };
     else rec.daily = { ...mForm.daily };
     const next = [...meds, rec];
@@ -154,8 +165,8 @@ export default function Calendar () {
             </strong>
             {list.length ? (
               <ul className="mt-2">
-                {list.map((e, i) => (
-                  <li key={i}>
+                {list.map(e => (
+                  <li key={e.id}>
                     {e.time ? `${e.time} ` : ""}{e.title} ({e.type==="visit" ? t("calendar.visit","Visit") : t("calendar.med","Med")})
                     {e.location ? ` — ${e.location}` : ""}{e.notes ? ` — ${e.notes}` : ""}
                   </li>

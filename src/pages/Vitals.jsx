@@ -6,25 +6,35 @@ const load = (k, def) => { try { const v = localStorage.getItem(k); return v ? J
 const save = (k, v) => localStorage.setItem(k, JSON.stringify(v));
 const todayStr = () => new Date().toISOString().slice(0, 10);
 const timeStr  = () => new Date().toTimeString().slice(0,5);
+const newId = () => (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2));
 
 export default function Vitals() {
   const { t } = useTranslation();
-  const [items, setItems] = useState(() => load("carebee.vitals", []));
+  const [items, setItems] = useState(() => {
+    const data = load("carebee.vitals", []);
+    let changed = false;
+    const withIds = data.map(it => {
+      if (!it.id) { changed = true; return { ...it, id: newId() }; }
+      return it;
+    });
+    if (changed) save("carebee.vitals", withIds);
+    return withIds;
+  });
   const [form, setForm]   = useState({ type: "hr", value: "", date: todayStr(), time: timeStr(), notes: "" });
 
   const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const add = (e) => {
     e.preventDefault();
-    const next = [...items, { ...form }];
+    const next = [...items, { id: newId(), ...form }];
     next.sort((a,b)=> (a.date+a.time).localeCompare(b.date+b.time));
     setItems(next); save("carebee.vitals", next);
     maybeSendDailySummary();
     setForm({ type: form.type, value:"", date: todayStr(), time: timeStr(), notes:"" });
   };
 
-  const delAt = (i) => {
-    const next = items.filter((_, idx) => idx !== i);
+  const del = (id) => {
+    const next = items.filter(r => r.id !== id);
     setItems(next); save("carebee.vitals", next);
   };
 
@@ -55,13 +65,13 @@ export default function Vitals() {
         <div className="card muted">{t("vitals.empty","No vitals recorded yet")}</div>
       ) : (
         <ul className="grid gap-2">
-          {items.map((r, i) => (
-            <li key={i} className="card flex items-start justify-between">
+          {items.map(r => (
+            <li key={r.id} className="card flex items-start justify-between">
               <div>
                 <div className="font-medium">{r.date} {r.time} — {r.type.toUpperCase()}: {r.value}</div>
                 {r.notes ? <div className="muted text-sm">{r.notes}</div> : null}
               </div>
-              <button className="btn btn-danger" onClick={()=>delAt(i)}>{t("actions.delete","Delete")}</button>
+              <button className="btn btn-danger" onClick={()=>del(r.id)}>{t("actions.delete","Delete")}</button>
             </li>
           ))}
         </ul>
