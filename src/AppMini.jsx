@@ -1,5 +1,5 @@
 // src/AppMini.jsx
-import { BrowserRouter, Routes, Route, Link, Navigate } from "react-router-dom";
+import { HashRouter, Routes, Route, Link, Navigate } from "react-router-dom";
 
 // ключевой трюк: берем корректный base из Vite
 const BASENAME = import.meta.env.BASE_URL; // в Codespaces это как раз /CareBee/
@@ -62,7 +62,7 @@ function Sos() {
 export default function AppMini() {
   console.log("[MINI] mount AppMini, base =", BASENAME);
   return (
-    <BrowserRouter basename={BASENAME}>
+    <HashRouter basename={BASENAME}>
       <header style={{position:"sticky",top:0,zIndex:10,background:"#fff8e1",borderBottom:"1px solid #f0d48a", padding:"8px 12px"}}>
         <nav aria-label="Main">
           <ul style={{display:"flex",gap:12,fontSize:14,listStyle:"none",margin:0,padding:0}}>
@@ -76,6 +76,6 @@ export default function AppMini() {
         <Route path="/sos" element={<Sos />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
