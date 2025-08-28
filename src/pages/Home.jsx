@@ -1,39 +1,14 @@
 import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 
 export default function Home() {
-  const { t } = useTranslation();
-
-  const cards = [
-    { to: "/calendar", label: t("nav.calendar", "Calendar") },
-    { to: "/visits", label: t("nav.visits", "Visits") },
-    { to: "/meds", label: t("nav.meds", "Meds") },
-    { to: "/vitals", label: t("nav.vitals", "Vitals") },
-    { to: "/nearby", label: t("nav.nearby", "Nearby") },
-    { to: "/profile", label: t("nav.profile", "Profile") },
-  ];
-
   return (
-    <div className="container grid gap-6">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold mb-4">CareBee</h1>
-        <p className="text-slate-600">Welcome!</p>
-      </div>
-
+    <main className="min-h-[70vh] grid place-items-center p-4">
       <Link
         to="/sos"
-        className="btn btn-danger text-xl p-6 rounded-xl mx-auto w-full max-w-md"
+        className="w-72 h-72 rounded-full bg-red-600 text-white text-6xl font-extrabold shadow-xl border-8 border-red-300 grid place-items-center"
       >
-        🚨 SOS
+        SOS
       </Link>
-
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {cards.map((card) => (
-          <Link key={card.to} to={card.to} className="card text-center">
-            <div className="card-title">{card.label}</div>
-          </Link>
-        ))}
-      </div>
-    </div>
+    </main>
   );
 }
