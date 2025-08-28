@@ -5,6 +5,8 @@
     muted
     loop
     playsInline
+    aria-hidden="true"
+    role="presentation"
   >
     <source src="/hero.mp4" type="video/mp4" />
     Your browser does not support the video tag.
@@ -14,6 +16,7 @@
     <img src="/carebee-logo.png" alt="CareBee" className="w-24 h-24 mb-4" />
     <h1 className="text-3xl font-bold">CareBee — заботливая пчёлка рядом с вами.</h1>
     <p className="mt-2 text-lg">Помогает следить за здоровьем близких</p>
+    <p className="sr-only">Background video playing</p>
   </div>
 </div>
 
