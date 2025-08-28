@@ -32,5 +32,10 @@
     "categories": { "doctor":"Doctor", "clinic":"Clinic", "pharmacy":"Pharmacy", "other":"Other" },
     "openInMaps": "Open in Maps"
   },
+codex/overwrite-src/app.jsx-with-new-content
   "footer": { "guide": "Guide", "faq": "FAQ", "privacy": "Privacy" }
+=======
+  "home": { "sos": "Open SOS" },
+  "footer": { "copyright": "\u00a9 2024 CareBee" }
+main
 }
