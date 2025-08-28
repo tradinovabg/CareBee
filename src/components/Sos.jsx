@@ -15,7 +15,7 @@ export default function Sos() {
         ref={buttonRef}
         onClick={() => setActive(true)}
         type="button"
-        className="w-72 h-72 rounded-full bg-red-600 text-white text-6xl font-extrabold shadow-xl border-8 border-red-300 focus:outline-none"
+        className={`w-72 h-72 rounded-full bg-red-600 text-white text-6xl font-extrabold shadow-xl border-8 border-red-300 focus:outline-none`}
       >
         SOS
       </button>
