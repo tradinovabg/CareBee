@@ -5,10 +5,18 @@ export default function Home() {
     <main className="min-h-[70vh] grid place-items-center p-4">
       <Link
         to="/sos"
+codex/replace-sos-link-and-card-grid
+        className="mx-auto flex h-72 w-72 items-center justify-center rounded-full bg-red-600 text-3xl font-bold text-white"
+      >
+        SOS
+      </Link>
+    </div>
+=======
         className="w-72 h-72 rounded-full bg-red-600 text-white text-6xl font-extrabold shadow-xl border-8 border-red-300 grid place-items-center"
       >
         SOS
       </Link>
     </main>
+main
   );
 }
