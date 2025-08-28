@@ -1,56 +1,34 @@
 {
-  "app": { "title": "CareBee" },
-  "nav": { "home": "Accueil", "sos": "SOS", "profile": "Profil", "meds": "Médicaments", "visits": "Visites", "calendar": "Calendrier", "vitals": "Signes vitaux", "nearby": "À proximité" },
-  "today": "Aujourd'hui",
-  "actions": { "add": "Ajouter", "save": "Enregistrer", "delete": "Supprimer", "cancel": "Annuler", "clear":"Effacer" },
-  "fields": { "name":"Nom", "dose":"Dose", "mode":"Mode", "date":"Date", "time":"Heure", "start":"Début", "end":"Fin", "times":"Heures", "doctor":"Médecin", "place":"Lieu", "notes":"Notes", "value":"Valeur", "type":"Type", "address":"Adresse", "phone":"Téléphone" },
-  "calendar": {
-    "title": "Calendrier", "day": "Jour", "week": "Semaine", "month": "Mois",
-    "showVisits": "Visites & Événements", "showMeds": "Prise des médicaments",
-    "visit": "Visite", "med": "Médicament", "empty": "Rien de prévu",
-    "quick": "Ajout rapide", "addVisit":"Ajouter une visite", "addMed":"Ajouter un médicament"
+  "app": {
+    "title": "CareBee — l’abeille attentionnée, toujours à vos côtés.",
+    "blurb": "CareBee aide la famille à suivre l’état d’un proche, chercher de l’aide à proximité, tenir un calendrier et gérer les médicaments."
   },
-  "meds": { "title": "Médicaments", "empty": "Aucun médicament", "mode_once": "Une fois", "mode_daily": "Quotidien", "hint_times": "Séparées par des virgules (ex. 08:00, 20:00)", "add":"Ajouter un médicament" },
-  "visits": { "title": "Visites & Événements", "empty": "Aucune visite", "add":"Ajouter une visite" },
-  "vitals": { "title": "Signes vitaux", "empty": "Aucune mesure", "add":"Ajouter une mesure", "hr":"Fréquence cardiaque (bpm)", "temp":"Température (°C)", "sys":"Systolique (mmHg)", "dia":"Diastolique (mmHg)" },
-  "profile": {
-    "title": "Profil",
-    "fullName": "Nom complet",
-    "birthDate": "Date de naissance",
-    "bloodType": "Groupe sanguin",
-    "allergies": "Allergies (séparées par virgules)",
-    "conditions": "Affections / notes",
-    "emgName": "Contact d'urgence — nom",
-    "emgPhone": "Contact d'urgence — téléphone",
-    "saved": "Profil enregistré"
+  "nav": {
+    "home": "Accueil",
+    "profile": "Profil",
+    "meds": "Médicaments",
+    "visits": "Visites",
+    "calendar": "Calendrier",
+    "vitals": "Indicateurs",
+    "nearby": "À proximité",
+    "sos": "SOS",
+    "faq": "FAQ",
+    "privacy": "Confidentialité",
+    "guide": "Guide"
   },
   "home": {
-    "tagline": "CareBee — l'abeille attentionnée, toujours à vos côtés.",
-    "aboutTitle": "CareBee",
-    "aboutText": "CareBee aide une famille à surveiller l'état d'un proche, à rechercher rapidement une aide urgente à proximité, à tenir un calendrier des événements et visites et à gérer le programme des médicaments. Un assistant pour les familles qui s'occupent de parents âgés ou malades.",
-    "logoAlt": "Logo CareBee",
-    "openSos": "Ouvrir SOS",
-    "cards": {
-      "calendar": { "text": "Rien de prévu — ajoutez rapidement vos événements et rappels." },
-      "visits": { "text": "Planifiez et suivez les rendez-vous." },
-      "meds": { "text": "Séparées par des virgules (ex. 08:00, 20:00). Gérez le programme des médicaments." },
-      "vitals": { "text": "Enregistrez les principaux indicateurs de santé." },
-      "nearby": { "text": "Données : OpenStreetMap/Overpass. Veuillez chercher de manière responsable." },
-      "profile": { "text": "Données de base du patient et info d'urgence." }
-    }
+    "sos": "SOS"
   },
-  "nearby": {
-    "title": "À proximité",
-    "empty": "Aucun lieu enregistré",
-    "addPlace": "Ajouter un lieu",
-    "category": "Catégorie",
-    "categories": { "doctor":"Médecin", "clinic":"Clinique", "pharmacy":"Pharmacie", "other":"Autre" },
-    "openInMaps": "Ouvrir dans Maps"
+  "footer": {
+    "faq": "FAQ",
+    "privacy": "Politique de confidentialité",
+    "guide": "Mode d’emploi"
   },
-codex/overwrite-src/app.jsx-with-new-content
-  "footer": { "guide": "Guide", "faq": "FAQ", "privacy": "Confidentialité" }
-=======
-  "home": { "sos": "Ouvrir SOS" },
-  "footer": { "copyright": "\u00a9 2024 CareBee" }
-main
+  "categories": {
+    "doctor": "Médecin",
+    "clinic": "Clinique",
+    "pharmacy": "Pharmacie",
+    "other": "Autre"
+  },
+  "openInMaps": "Ouvrir dans Maps"
 }
