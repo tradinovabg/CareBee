@@ -1,73 +1,84 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { LabeledInput, LabeledTextarea } from "../components/forms/Labeled";
 import { load, save } from "../lib/storage.js";
-
-const todayStr = () => new Date().toISOString().slice(0, 10);
-const newId = () => (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2));
 
 export default function Visits() {
   const { t } = useTranslation();
-  const [items, setItems] = useState(() => {
-    const data = load("carebee.visits", []);
-    let changed = false;
-    const withIds = data.map(it => {
-      if (!it.id) { changed = true; return { ...it, id: newId() }; }
-      return it;
-    });
-    if (changed) save("carebee.visits", withIds);
-    return withIds;
-  });
-  const [form, setForm] = useState({ date: todayStr(), time: "", doctor: "", place: "", notes: "" });
-
-  const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const [items, setItems] = useState(() => load("carebee.visits", []));
+  const [place, setPlace] = useState("");
+  const [doctor, setDoctor] = useState("");
+  const [purpose, setPurpose] = useState("");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [notes, setNotes] = useState("");
 
   const add = (e) => {
     e.preventDefault();
-    const next = [...items, { id: newId(), ...form }];
-    next.sort((a,b)=> (a.date+a.time).localeCompare(b.date+b.time));
-    setItems(next); save("carebee.visits", next);
-    setForm({ date: todayStr(), time: "", doctor: "", place: "", notes: "" });
+    const rec = { id: crypto.randomUUID(), place, doctor, purpose, date, time, notes };
+    const next = [...items, rec];
+    next.sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+    setItems(next);
+    save("carebee.visits", next);
+    setPlace("");
+    setDoctor("");
+    setPurpose("");
+    setDate("");
+    setTime("");
+    setNotes("");
   };
 
   const del = (id) => {
-    const next = items.filter(v => v.id!==id);
-    setItems(next); save("carebee.visits", next);
+    const next = items.filter((v) => v.id !== id);
+    setItems(next);
+    save("carebee.visits", next);
   };
 
   return (
-    <div className="container">
-      <h1>{t("visits.title","Visits & Events")}</h1>
+    <main className="mx-auto max-w-5xl p-4 space-y-3">
+      <h1 className="text-xl font-bold">{t("visits.title")}</h1>
 
-      <div className="card mb-4">
-        <form onSubmit={add} className="form-grid">
-          <input className="input" type="date"  name="date"  value={form.date} onChange={onChange} />
-          <input className="input" type="time"  name="time"  value={form.time} onChange={onChange} />
-          <input className="input" type="text"  name="doctor" placeholder={t("fields.doctor")} value={form.doctor} onChange={onChange} />
-          <input className="input" type="text"  name="place"  placeholder={t("fields.place")}  value={form.place}  onChange={onChange} />
-          <input className="input md:col-span-3" type="text" name="notes"  placeholder={t("fields.notes")} value={form.notes} onChange={onChange} />
-          <div className="md:col-span-3">
-            <button className="btn btn-primary" type="submit">{t("visits.add","Add visit")}</button>
+      <div className="rounded-xl border p-3 space-y-3 bg-white">
+        <form onSubmit={add} className="space-y-3">
+          <div className="grid md:grid-cols-2 gap-2">
+            <LabeledInput label={t("visits.form.place")} value={place} onChange={(e) => setPlace(e.target.value)} />
+            <LabeledInput label={t("visits.form.doctor")} value={doctor} onChange={(e) => setDoctor(e.target.value)} />
           </div>
+
+          <LabeledInput label={t("visits.form.purpose")} value={purpose} onChange={(e) => setPurpose(e.target.value)} />
+
+          <div className="grid md:grid-cols-2 gap-2">
+            <LabeledInput type="date" label={t("visits.form.date")} value={date} onChange={(e) => setDate(e.target.value)} />
+            <LabeledInput type="time" label={t("visits.form.time")} value={time} onChange={(e) => setTime(e.target.value)} />
+          </div>
+
+          <LabeledTextarea label={t("visits.form.notes")} value={notes} onChange={(e) => setNotes(e.target.value)} />
+
+          <button className="px-4 py-2 rounded bg-amber-600 text-white font-semibold">
+            {t("visits.form.add")}
+          </button>
         </form>
       </div>
 
-      {!items.length ? (
-        <div className="card muted">{t("visits.empty","No visits yet")}</div>
-      ) : (
-        <ul className="grid gap-2">
-          {items.map(v => (
-            <li key={v.id} className="card flex items-start justify-between">
+      {!!items.length && (
+        <ul className="space-y-2">
+          {items.map((v) => (
+            <li key={v.id} className="rounded-xl border p-3 bg-white flex items-start justify-between">
               <div>
-                <div className="font-medium">{v.date} {v.time ? v.time : ""} — {v.doctor || t("fields.doctor")}</div>
-                <div className="muted text-sm">
-                  {[v.place, v.notes].filter(Boolean).join(" · ")}
+                <div className="font-medium">
+                  {v.date} {v.time ? v.time : ""} — {v.doctor}
+                </div>
+                <div className="text-sm text-slate-600">
+                  {[v.place, v.purpose, v.notes].filter(Boolean).join(" · ")}
                 </div>
               </div>
-              <button className="btn btn-danger" onClick={()=>del(v.id)}>{t("actions.delete","Delete")}</button>
+              <button className="btn btn-danger" onClick={() => del(v.id)}>
+                {t("visits.delete")}
+              </button>
             </li>
           ))}
         </ul>
       )}
-    </div>
+    </main>
   );
 }

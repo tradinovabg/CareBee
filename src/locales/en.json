@@ -6,11 +6,12 @@
   "nav": {
     "home": "Home",
     "profile": "Profile",
-    "meds": "Meds",
+    "meds": "Medications",
     "visits": "Visits",
     "calendar": "Calendar",
     "vitals": "Vitals",
     "nearby": "Nearby",
+    "contacts": "Contacts",
     "sos": "SOS",
     "faq": "FAQ",
     "privacy": "Privacy",
@@ -28,7 +29,7 @@
         "text": "Plan and track appointments."
       },
       "meds": {
-        "title": "Meds",
+        "title": "Medications",
         "text": "Manage medication schedule."
       },
       "vitals": {
@@ -41,9 +42,57 @@
       },
       "profile": {
         "title": "Profile",
-        "text": "Basic patient data and emergency info."
+        "text": "Basic data and emergency info."
       }
     }
+  },
+  "meds": {
+    "title": "Medications",
+    "form": {
+      "name": "Medication name",
+      "dose": "Dosage",
+      "mode": "Schedule",
+      "times": "Times",
+      "from": "From",
+      "to": "To",
+      "add": "Add medication"
+    },
+    "modes": {
+      "daily": "Daily",
+      "odd_even": "Odd/Even",
+      "custom": "Custom"
+    },
+    "hint_times": "e.g. 08:00, 20:00",
+    "delete": "Delete"
+  },
+  "visits": {
+    "title": "Visits",
+    "form": {
+      "place": "Place / Clinic",
+      "doctor": "Doctor",
+      "purpose": "Purpose",
+      "date": "Date",
+      "time": "Time",
+      "notes": "Notes",
+      "add": "Add visit"
+    },
+    "delete": "Delete"
+  },
+  "contacts": {
+    "title": "Contacts",
+    "form": {
+      "name": "Name",
+      "phone": "Phone (+E.164)",
+      "email": "Email",
+      "priority": "Priority",
+      "add": "Add contact"
+    },
+    "empty": "No contacts yet"
+  },
+  "actions": {
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save"
   },
   "footer": {
     "faq": "FAQ",

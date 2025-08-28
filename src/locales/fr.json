@@ -11,6 +11,7 @@
     "calendar": "Calendrier",
     "vitals": "Indicateurs",
     "nearby": "À proximité",
+    "contacts": "Contacts",
     "sos": "SOS",
     "faq": "FAQ",
     "privacy": "Confidentialité",
@@ -26,6 +27,54 @@
       "nearby": { "title": "À proximité", "text": "Rechercher de l'aide à proximité (OpenStreetMap/Overpass)." },
       "profile": { "title": "Profil", "text": "Données de base et info d'urgence." }
     }
+  },
+  "meds": {
+    "title": "Médicaments",
+    "form": {
+      "name": "Nom du médicament",
+      "dose": "Dosage",
+      "mode": "Schéma",
+      "times": "Heures",
+      "from": "De",
+      "to": "À",
+      "add": "Ajouter un médicament"
+    },
+    "modes": {
+      "daily": "Quotidien",
+      "odd_even": "Pair/Impair",
+      "custom": "Personnalisé"
+    },
+    "hint_times": "ex : 08:00, 20:00",
+    "delete": "Supprimer"
+  },
+  "visits": {
+    "title": "Visites",
+    "form": {
+      "place": "Lieu / clinique",
+      "doctor": "Médecin",
+      "purpose": "Motif",
+      "date": "Date",
+      "time": "Heure",
+      "notes": "Notes",
+      "add": "Ajouter une visite"
+    },
+    "delete": "Supprimer"
+  },
+  "contacts": {
+    "title": "Contacts",
+    "form": {
+      "name": "Nom",
+      "phone": "Téléphone (+E.164)",
+      "email": "Email",
+      "priority": "Priorité",
+      "add": "Ajouter un contact"
+    },
+    "empty": "Pas encore de contacts"
+  },
+  "actions": {
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "save": "Enregistrer"
   },
   "footer": {
     "faq": "FAQ",

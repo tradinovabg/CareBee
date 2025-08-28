@@ -1,37 +1,14 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { LabeledInput } from "../components/forms/Labeled";
-
-const STORAGE_KEY = "carebee.contacts";
-
-function loadContacts() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
-  } catch {
-    return [];
-  }
-}
-
-function saveContacts(list) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
-  } catch {
-    /* ignore */
-  }
-}
-
-const newId = () =>
-  crypto.randomUUID
-    ? crypto.randomUUID()
-    : Date.now().toString(36) + Math.random().toString(36).slice(2);
+import { loadContacts, saveContacts } from "../lib/contactsStore";
 
 export default function Contacts() {
   const { t } = useTranslation();
   const [items, setItems] = useState([]);
   const [form, setForm] = useState({
     name: "",
-    phone: "",
+    phone_e164: "",
     email: "",
     priority: 0,
   });
@@ -51,19 +28,19 @@ export default function Contacts() {
       setItems(next);
       saveContacts(next);
     } else {
-      const next = [...items, { id: newId(), ...payload }];
+      const next = [...items, { id: crypto.randomUUID(), ...payload }];
       setItems(next);
       saveContacts(next);
     }
     setEditing(null);
-    setForm({ name: "", phone: "", email: "", priority: 0 });
+    setForm({ name: "", phone_e164: "", email: "", priority: 0 });
   };
 
   const onEdit = (c) => {
     setEditing(c.id);
     setForm({
       name: c.name || "",
-      phone: c.phone || "",
+      phone_e164: c.phone_e164 || "",
       email: c.email || "",
       priority: c.priority ?? 0,
     });
@@ -77,32 +54,32 @@ export default function Contacts() {
 
   return (
     <div className="container">
-      <h1>{t("nav.contacts")}</h1>
+      <h1>{t("contacts.title")}</h1>
 
       <div className="card mb-4">
         <form onSubmit={submit} className="grid gap-3 md:grid-cols-2">
           <LabeledInput
-            label="Name"
+            label={t("contacts.form.name")}
             name="name"
             value={form.name}
             onChange={onChange}
             required
           />
           <LabeledInput
-            label="Phone (+E.164)"
-            name="phone"
-            value={form.phone}
+            label={t("contacts.form.phone")}
+            name="phone_e164"
+            value={form.phone_e164}
             onChange={onChange}
           />
           <LabeledInput
-            label="Email"
+            label={t("contacts.form.email")}
             type="email"
             name="email"
             value={form.email}
             onChange={onChange}
           />
           <LabeledInput
-            label="Priority"
+            label={t("contacts.form.priority")}
             type="number"
             name="priority"
             value={form.priority}
@@ -110,14 +87,14 @@ export default function Contacts() {
           />
           <div className="md:col-span-2">
             <button className="btn btn-primary" type="submit">
-              {editing ? t("actions.save", "Save") : t("contacts.add", "Add contact")}
+              {editing ? t("actions.save") : t("contacts.form.add")}
             </button>
           </div>
         </form>
       </div>
 
       {!items.length ? (
-        <div className="card muted">{t("contacts.empty", "No contacts yet")}</div>
+        <div className="card muted">{t("contacts.empty")}</div>
       ) : (
         <ul className="grid gap-2">
           {items
@@ -128,16 +105,16 @@ export default function Contacts() {
                 <div>
                   <div className="font-medium">{c.name}</div>
                   <div className="muted text-sm">
-                    {[c.phone, c.email].filter(Boolean).join(" · ")}
+                    {[c.phone_e164, c.email].filter(Boolean).join(" · ")}
                   </div>
-                  <div className="muted text-xs">Priority: {c.priority ?? 0}</div>
+                  <div className="muted text-xs">{t("contacts.form.priority")}: {c.priority ?? 0}</div>
                 </div>
                 <div className="flex gap-2">
                   <button className="btn" onClick={() => onEdit(c)}>
-                    {t("actions.edit", "Edit")}
+                    {t("actions.edit")}
                   </button>
                   <button className="btn btn-danger" onClick={() => onDelete(c.id)}>
-                    {t("actions.delete", "Delete")}
+                    {t("actions.delete")}
                   </button>
                 </div>
               </li>
