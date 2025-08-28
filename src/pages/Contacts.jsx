@@ -1,4 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { LabeledInput } from "../components/forms/Labeled";
+// ...
+<div key={c.id} className="rounded-xl border p-3 grid md:grid-cols-5 gap-2">
+  <LabeledInput label="Name" value={c.name} onChange={e=>update(c.id,{name:e.target.value})} />
+  <LabeledInput label="Phone (+E.164)" value={c.phone_e164||""} onChange={e=>update(c.id,{phone_e164:e.target.value})} />
+  <LabeledInput label="Email" value={c.email||""} onChange={e=>update(c.id,{email:e.target.value})} />
+  <LabeledInput label="Priority" type="number" value={c.priority??0} onChange={e=>update(c.id,{priority:+e.target.value})} />
+  <button onClick={()=>{removeContact(c.id); setItems(loadContacts());}}
+          className="self-end h-10 rounded bg-red-600 text-white px-3">Delete</button>
+</div>
 
 const STORAGE_KEY = "carebee.contacts";
 
