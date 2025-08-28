@@ -10,6 +10,7 @@ import Visits from "./pages/Visits";
 import Calendar from "./pages/Calendar";
 import Vitals from "./pages/Vitals";
 import Nearby from "./pages/Nearby";
+import Contacts from "./pages/Contacts";
 
 // Built‑in SOS page with rectangular button
 function SosPage() {
@@ -62,8 +63,8 @@ export default function App() {
         style={{ position: "sticky", top: 0, zIndex: 10 }}
         className="bg-amber-50 border-b border-amber-200"
       >
-        <div className="max-w-6xl mx-auto flex flex-wrap items-center gap-2 p-2 text-sm">
-          <nav className="flex flex-wrap gap-2 grow">
+        <div className="max-w-6xl mx-auto flex items-center justify-between gap-2 p-2 text-sm">
+          <nav className="flex flex-wrap gap-2">
             <LinkItem to="/">{t("nav.home")}</LinkItem>
             <LinkItem to="/profile">{t("nav.profile")}</LinkItem>
             <LinkItem to="/meds">{t("nav.meds")}</LinkItem>
@@ -71,6 +72,7 @@ export default function App() {
             <LinkItem to="/calendar">{t("nav.calendar")}</LinkItem>
             <LinkItem to="/vitals">{t("nav.vitals")}</LinkItem>
             <LinkItem to="/nearby">{t("nav.nearby")}</LinkItem>
+            <LinkItem to="/contacts">{t("nav.contacts")}</LinkItem>
             <LinkItem to="/sos">{t("nav.sos")}</LinkItem>
           </nav>
           <LanguageSwitcher />
@@ -86,6 +88,7 @@ export default function App() {
         <Route path="/calendar" element={<Calendar />} />
         <Route path="/vitals" element={<Vitals />} />
         <Route path="/nearby" element={<Nearby />} />
+        <Route path="/contacts" element={<Contacts />} />
         <Route path="/sos" element={<SosPage />} />
         <Route path="/faq" element={<FaqPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
