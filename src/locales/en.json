@@ -31,5 +31,6 @@
     "category": "Category",
     "categories": { "doctor":"Doctor", "clinic":"Clinic", "pharmacy":"Pharmacy", "other":"Other" },
     "openInMaps": "Open in Maps"
-  }
+  },
+  "footer": { "guide": "Guide", "faq": "FAQ", "privacy": "Privacy" }
 }

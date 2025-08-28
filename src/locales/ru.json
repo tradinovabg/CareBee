@@ -31,5 +31,6 @@
     "category": "Категория",
     "categories": { "doctor":"Врач", "clinic":"Клиника", "pharmacy":"Аптека", "other":"Другое" },
     "openInMaps": "Открыть в Картах"
-  }
+  },
+  "footer": { "guide": "Руководство", "faq": "ЧАВО", "privacy": "Конфиденциальность" }
 }

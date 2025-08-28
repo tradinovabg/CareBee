@@ -31,5 +31,6 @@
     "category": "Catégorie",
     "categories": { "doctor":"Médecin", "clinic":"Clinique", "pharmacy":"Pharmacie", "other":"Autre" },
     "openInMaps": "Ouvrir dans Maps"
-  }
+  },
+  "footer": { "guide": "Guide", "faq": "FAQ", "privacy": "Confidentialité" }
 }
