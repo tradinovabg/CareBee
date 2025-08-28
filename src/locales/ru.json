@@ -32,6 +32,10 @@
     "categories": { "doctor":"Врач", "clinic":"Клиника", "pharmacy":"Аптека", "other":"Другое" },
     "openInMaps": "Открыть в Картах"
   },
+codex/overwrite-src/app.jsx-with-new-content
+  "footer": { "guide": "Руководство", "faq": "ЧАВО", "privacy": "Конфиденциальность" }
+=======
   "home": { "sos": "Открыть SOS" },
   "footer": { "copyright": "\u00a9 2024 CareBee" }
+main
 }
