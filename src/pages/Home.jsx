@@ -1,8 +1,22 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import SosModal from "../components/SosModal";
+import { loadContacts } from "../lib/contacts";
 
 export default function Home() {
   const { t } = useTranslation();
+  const [open, setOpen] = useState(false);
+  const [contacts, setContacts] = useState([]);
+
+  useEffect(() => {
+    loadContacts().then(setContacts);
+  }, []);
+
+  const send = () => {
+    alert("SOS send placeholder");
+    setOpen(false);
+  };
 
   return (
     <main className="mx-auto max-w-5xl p-4 md:p-6">
@@ -35,16 +49,14 @@ export default function Home() {
         </p>
       </section>
 
-      {/* SOS LARGE */}
-      <div className="grid place-items-center my-4">
-        <Link
-          to="/sos"
-          aria-label={t("home.openSos", "Open SOS")}
-          className="grid place-items-center w-72 h-40 rounded-2xl bg-red-600 text-white text-5xl font-extrabold shadow-[0_20px_50px_-12px_rgba(220,38,38,0.6)] ring-4 ring-red-300/50 hover:bg-red-700 active:scale-95 focus:outline-none focus:ring-8 focus:ring-red-400/60 select-none"
-        >
-          {t("nav.sos", "SOS")}
-        </Link>
-      </div>
+      {/* SOS BUTTON */}
+      <button
+        onClick={() => setOpen(true)}
+        aria-label={t("home.openSos", "Open SOS")}
+        className="fixed inset-x-0 bottom-6 z-50 mx-auto grid h-16 w-72 place-items-center rounded-2xl bg-red-600 text-2xl font-extrabold text-white shadow-[0_20px_50px_-12px_rgba(220,38,38,0.6)] ring-4 ring-red-300/50 hover:bg-red-700 active:scale-95 focus:outline-none focus:ring-8 focus:ring-red-400/60"
+      >
+        {t("nav.sos", "SOS")}
+      </button>
 
       {/* CARD LINKS */}
       <section className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-2">
@@ -79,6 +91,7 @@ export default function Home() {
           text={t("home.cards.profile.text", "Basic patient data and emergency info.")}
         />
       </section>
+      <SosModal open={open} onClose={() => setOpen(false)} contacts={contacts} onSend={send} />
     </main>
   );
 }
