@@ -1,56 +1,34 @@
 {
-  "app": { "title": "CareBee" },
-  "nav": { "home": "Home", "sos": "SOS", "profile": "Profile", "meds": "Meds", "visits": "Visits", "calendar": "Calendar", "vitals": "Vitals", "nearby": "Nearby" },
-  "today": "Today",
-  "actions": { "add": "Add", "save": "Save", "delete": "Delete", "cancel": "Cancel", "clear":"Clear" },
-  "fields": { "name":"Name", "dose":"Dose", "mode":"Mode", "date":"Date", "time":"Time", "start":"Start", "end":"End", "times":"Times", "doctor":"Doctor", "place":"Place", "notes":"Notes", "value":"Value", "type":"Type", "address":"Address", "phone":"Phone" },
-  "calendar": {
-    "title": "Calendar", "day": "Day", "week": "Week", "month": "Month",
-    "showVisits": "Visits & Events", "showMeds": "Meds schedule",
-    "visit": "Visit", "med": "Med", "empty": "Nothing scheduled",
-    "quick": "Quick add", "addVisit": "Add visit", "addMed": "Add medication"
+  "app": {
+    "title": "CareBee — the caring bee, always by your side.",
+    "blurb": "CareBee helps a family monitor a loved one's condition, look for urgent help nearby, keep a calendar of events and visits, and manage medications."
   },
-  "meds": { "title": "Medications", "empty": "No medications added yet", "mode_once": "Once", "mode_daily": "Daily", "hint_times": "Comma-separated (e.g. 08:00, 20:00)", "add":"Add medication" },
-  "visits": { "title": "Visits & Events", "empty": "No visits yet", "add":"Add visit" },
-  "vitals": { "title": "Vitals", "empty": "No vitals recorded yet", "add":"Add measurement", "hr":"Heart rate (bpm)", "temp":"Temperature (°C)", "sys":"Systolic (mmHg)", "dia":"Diastolic (mmHg)" },
-  "profile": {
-    "title": "Profile",
-    "fullName": "Full name",
-    "birthDate": "Birth date",
-    "bloodType": "Blood type",
-    "allergies": "Allergies (comma separated)",
-    "conditions": "Conditions / notes",
-    "emgName": "Emergency contact name",
-    "emgPhone": "Emergency contact phone",
-    "saved": "Profile saved"
+  "nav": {
+    "home": "Home",
+    "profile": "Profile",
+    "meds": "Meds",
+    "visits": "Visits",
+    "calendar": "Calendar",
+    "vitals": "Vitals",
+    "nearby": "Nearby",
+    "sos": "SOS",
+    "faq": "FAQ",
+    "privacy": "Privacy",
+    "guide": "Guide"
   },
   "home": {
-    "tagline": "CareBee — the caring bee, always by your side.",
-    "aboutTitle": "CareBee",
-    "aboutText": "CareBee helps a family monitor a loved one's condition, quickly look for urgent help nearby, keep a calendar of events and visits, and manage the medication schedule. A helper for families who take care of elderly or ill relatives.",
-    "logoAlt": "CareBee logo",
-    "openSos": "Open SOS",
-    "cards": {
-      "calendar": { "text": "Nothing scheduled — quick add your events and reminders." },
-      "visits": { "text": "Plan and keep track of appointments." },
-      "meds": { "text": "Comma-separated (e.g. 08:00, 20:00). Manage medication schedule." },
-      "vitals": { "text": "Record key health indicators." },
-      "nearby": { "text": "Data: OpenStreetMap/Overpass. Please search responsibly." },
-      "profile": { "text": "Basic patient data and emergency info." }
-    }
+    "sos": "SOS"
   },
-  "nearby": {
-    "title": "Nearby",
-    "empty": "No saved places",
-    "addPlace": "Add place",
-    "category": "Category",
-    "categories": { "doctor":"Doctor", "clinic":"Clinic", "pharmacy":"Pharmacy", "other":"Other" },
-    "openInMaps": "Open in Maps"
+  "footer": {
+    "faq": "FAQ",
+    "privacy": "Privacy Policy",
+    "guide": "How to use"
   },
-codex/overwrite-src/app.jsx-with-new-content
-  "footer": { "guide": "Guide", "faq": "FAQ", "privacy": "Privacy" }
-=======
-  "home": { "sos": "Open SOS" },
-  "footer": { "copyright": "\u00a9 2024 CareBee" }
-main
+  "categories": {
+    "doctor": "Doctor",
+    "clinic": "Clinic",
+    "pharmacy": "Pharmacy",
+    "other": "Other"
+  },
+  "openInMaps": "Open in Maps"
 }
