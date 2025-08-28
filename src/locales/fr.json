@@ -24,6 +24,21 @@
     "emgPhone": "Contact d'urgence — téléphone",
     "saved": "Profil enregistré"
   },
+  "home": {
+    "tagline": "CareBee — l'abeille attentionnée, toujours à vos côtés.",
+    "aboutTitle": "CareBee",
+    "aboutText": "CareBee aide une famille à surveiller l'état d'un proche, à rechercher rapidement une aide urgente à proximité, à tenir un calendrier des événements et visites et à gérer le programme des médicaments. Un assistant pour les familles qui s'occupent de parents âgés ou malades.",
+    "logoAlt": "Logo CareBee",
+    "openSos": "Ouvrir SOS",
+    "cards": {
+      "calendar": { "text": "Rien de prévu — ajoutez rapidement vos événements et rappels." },
+      "visits": { "text": "Planifiez et suivez les rendez-vous." },
+      "meds": { "text": "Séparées par des virgules (ex. 08:00, 20:00). Gérez le programme des médicaments." },
+      "vitals": { "text": "Enregistrez les principaux indicateurs de santé." },
+      "nearby": { "text": "Données : OpenStreetMap/Overpass. Veuillez chercher de manière responsable." },
+      "profile": { "text": "Données de base du patient et info d'urgence." }
+    }
+  },
   "nearby": {
     "title": "À proximité",
     "empty": "Aucun lieu enregistré",
@@ -31,5 +46,11 @@
     "category": "Catégorie",
     "categories": { "doctor":"Médecin", "clinic":"Clinique", "pharmacy":"Pharmacie", "other":"Autre" },
     "openInMaps": "Ouvrir dans Maps"
-  }
+  },
+codex/overwrite-src/app.jsx-with-new-content
+  "footer": { "guide": "Guide", "faq": "FAQ", "privacy": "Confidentialité" }
+=======
+  "home": { "sos": "Ouvrir SOS" },
+  "footer": { "copyright": "\u00a9 2024 CareBee" }
+main
 }
