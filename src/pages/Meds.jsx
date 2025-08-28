@@ -4,10 +4,20 @@ import { useTranslation } from "react-i18next";
 const load = (k, def) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : def; } catch { return def; } };
 const save = (k, v) => localStorage.setItem(k, JSON.stringify(v));
 const todayStr = () => new Date().toISOString().slice(0, 10);
+const newId = () => (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2));
 
 export default function Meds() {
   const { t } = useTranslation();
-  const [items, setItems] = useState(() => load("carebee.meds", []));
+  const [items, setItems] = useState(() => {
+    const data = load("carebee.meds", []);
+    let changed = false;
+    const withIds = data.map(it => {
+      if (!it.id) { changed = true; return { ...it, id: newId() }; }
+      return it;
+    });
+    if (changed) save("carebee.meds", withIds);
+    return withIds;
+  });
   const [mode, setMode] = useState("daily");
   const [form, setForm] = useState({
     name: "", dose: "",
@@ -30,7 +40,7 @@ export default function Meds() {
 
   const add = (e) => {
     e.preventDefault();
-    const rec = { name: form.name, dose: form.dose, mode };
+    const rec = { id: newId(), name: form.name, dose: form.dose, mode };
     if (mode === "once") rec.once = { ...form.once };
     else rec.daily = { ...form.daily };
     const next = [...items, rec];
@@ -38,8 +48,8 @@ export default function Meds() {
     setForm({ name:"", dose:"", once:{ date: todayStr(), time:"" }, daily:{ times:["08:00","20:00"], start:"", end:"" } });
   };
 
-  const delAt = (i) => {
-    const next = items.filter((_, idx) => idx !== i);
+  const del = (id) => {
+    const next = items.filter(m => m.id !== id);
     setItems(next); save("carebee.meds", next);
   };
 
@@ -88,8 +98,8 @@ export default function Meds() {
         <div className="card muted">{t("meds.empty","No medications added yet")}</div>
       ) : (
         <ul className="grid gap-2">
-          {items.map((m, i) => (
-            <li key={i} className="card flex items-center justify-between">
+          {items.map(m => (
+            <li key={m.id} className="card flex items-center justify-between">
               <div>
                 <div className="font-medium">
                   {m.name}{m.dose ? ` — ${m.dose}` : ""}
@@ -102,7 +112,7 @@ export default function Meds() {
                           ? `(${m.daily?.start||"…"} — ${m.daily?.end||"…"})` : ""}`}
                 </div>
               </div>
-              <button className="btn btn-danger" onClick={()=>delAt(i)}>{t("actions.delete","Delete")}</button>
+              <button className="btn btn-danger" onClick={()=>del(m.id)}>{t("actions.delete","Delete")}</button>
             </li>
           ))}
         </ul>

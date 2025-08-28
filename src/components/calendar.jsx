@@ -9,6 +9,8 @@ const load = (k, def) => {
     return def
   }
 }
+const save = (k, v) => localStorage.setItem(k, JSON.stringify(v))
+const newId = () => (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2))
 
 const addDays = (date, n) => {
   const d = new Date(date)
@@ -22,13 +24,23 @@ export default function Calendar () {
   const [showVisits, setShowVisits] = useState(true)
   const [showMeds, setShowMeds] = useState(true)
 
-  const [visits, setVisits] = useState(() => load('carebee.visits', []))
-  const [meds, setMeds] = useState(() => load('carebee.meds', []))
+  const withIds = key => {
+    const data = load(key, [])
+    let changed = false
+    const res = data.map(it => {
+      if (!it.id) { changed = true; return { ...it, id: newId() } }
+      return it
+    })
+    if (changed) save(key, res)
+    return res
+  }
+  const [visits, setVisits] = useState(() => withIds('carebee.visits'))
+  const [meds, setMeds] = useState(() => withIds('carebee.meds'))
 
   useEffect(() => {
     const handler = () => {
-      setVisits(load('carebee.visits', []))
-      setMeds(load('carebee.meds', []))
+      setVisits(withIds('carebee.visits'))
+      setMeds(withIds('carebee.meds'))
     }
     window.addEventListener('storage', handler)
     return () => window.removeEventListener('storage', handler)
@@ -48,6 +60,7 @@ export default function Calendar () {
       visits.forEach(v => {
         if (v.date >= today && v.date <= end) {
           res[v.date].push({
+            id: v.id,
             time: v.time,
             title: v.doctor,
             type: 'visit',
@@ -62,6 +75,7 @@ export default function Calendar () {
         if (m.mode === 'once') {
           if (m.once.date >= today && m.once.date <= end) {
             res[m.once.date].push({
+              id: m.id,
               time: m.once.time,
               title: m.name,
               type: 'med'
@@ -73,7 +87,7 @@ export default function Calendar () {
             const within = (!d.start || day >= d.start) && (!d.end || day <= d.end)
             if (within) {
               d.times.forEach(t => {
-                res[day].push({ time: t, title: m.name, type: 'med' })
+                res[day].push({ id: `${m.id}-${t}`, time: t, title: m.name, type: 'med' })
               })
             }
           })
@@ -109,8 +123,8 @@ export default function Calendar () {
             </strong>
             {list.length ? (
               <ul>
-                {list.map((e, i) => (
-                  <li key={i}>
+                {list.map(e => (
+                  <li key={e.id}>
                     {e.time ? `${e.time} ` : ''}{e.title} ({e.type === 'visit' ? t('calendar.visit', 'Visit') : t('calendar.med', 'Med')})
                     {e.location ? ` — ${e.location}` : ''}
                     {e.notes ? <div style={{ color: '#555' }}>{e.notes}</div> : null}

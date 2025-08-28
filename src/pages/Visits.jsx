@@ -4,24 +4,34 @@ import { useTranslation } from "react-i18next";
 const load = (k, def) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : def; } catch { return def; } };
 const save = (k, v) => localStorage.setItem(k, JSON.stringify(v));
 const todayStr = () => new Date().toISOString().slice(0, 10);
+const newId = () => (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2));
 
 export default function Visits() {
   const { t } = useTranslation();
-  const [items, setItems] = useState(() => load("carebee.visits", []));
+  const [items, setItems] = useState(() => {
+    const data = load("carebee.visits", []);
+    let changed = false;
+    const withIds = data.map(it => {
+      if (!it.id) { changed = true; return { ...it, id: newId() }; }
+      return it;
+    });
+    if (changed) save("carebee.visits", withIds);
+    return withIds;
+  });
   const [form, setForm] = useState({ date: todayStr(), time: "", doctor: "", place: "", notes: "" });
 
   const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const add = (e) => {
     e.preventDefault();
-    const next = [...items, { ...form }];
+    const next = [...items, { id: newId(), ...form }];
     next.sort((a,b)=> (a.date+a.time).localeCompare(b.date+b.time));
     setItems(next); save("carebee.visits", next);
     setForm({ date: todayStr(), time: "", doctor: "", place: "", notes: "" });
   };
 
-  const delAt = (i) => {
-    const next = items.filter((_, idx) => idx!==i);
+  const del = (id) => {
+    const next = items.filter(v => v.id!==id);
     setItems(next); save("carebee.visits", next);
   };
 
@@ -46,15 +56,15 @@ export default function Visits() {
         <div className="card muted">{t("visits.empty","No visits yet")}</div>
       ) : (
         <ul className="grid gap-2">
-          {items.map((v, i) => (
-            <li key={i} className="card flex items-start justify-between">
+          {items.map(v => (
+            <li key={v.id} className="card flex items-start justify-between">
               <div>
                 <div className="font-medium">{v.date} {v.time ? v.time : ""} — {v.doctor || t("fields.doctor")}</div>
                 <div className="muted text-sm">
                   {[v.place, v.notes].filter(Boolean).join(" · ")}
                 </div>
               </div>
-              <button className="btn btn-danger" onClick={()=>delAt(i)}>{t("actions.delete","Delete")}</button>
+              <button className="btn btn-danger" onClick={()=>del(v.id)}>{t("actions.delete","Delete")}</button>
             </li>
           ))}
         </ul>
