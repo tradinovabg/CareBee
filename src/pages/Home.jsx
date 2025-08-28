@@ -4,6 +4,15 @@ import { useTranslation } from "react-i18next";
 import SosModal from "../components/SosModal";
 import { loadContacts } from "../lib/contactsStore";
 
+const COLORS = {
+  calendar: "bg-sky-50 border-sky-200 hover:bg-sky-100",
+  visits: "bg-violet-50 border-violet-200 hover:bg-violet-100",
+  meds: "bg-emerald-50 border-emerald-200 hover:bg-emerald-100",
+  vitals: "bg-amber-50 border-amber-200 hover:bg-amber-100",
+  nearby: "bg-rose-50 border-rose-200 hover:bg-rose-100",
+  profile: "bg-fuchsia-50 border-fuchsia-200 hover:bg-fuchsia-100",
+};
+
 export default function Home() {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
@@ -50,31 +59,37 @@ export default function Home() {
           to="/calendar"
           title={t("home.cards.calendar.title")}
           text={t("home.cards.calendar.text")}
+          color={COLORS.calendar}
         />
         <Card
           to="/visits"
           title={t("home.cards.visits.title")}
           text={t("home.cards.visits.text")}
+          color={COLORS.visits}
         />
         <Card
           to="/meds"
           title={t("home.cards.meds.title")}
           text={t("home.cards.meds.text")}
+          color={COLORS.meds}
         />
         <Card
           to="/vitals"
           title={t("home.cards.vitals.title")}
           text={t("home.cards.vitals.text")}
+          color={COLORS.vitals}
         />
         <Card
           to="/nearby"
           title={t("home.cards.nearby.title")}
           text={t("home.cards.nearby.text")}
+          color={COLORS.nearby}
         />
         <Card
           to="/profile"
           title={t("home.cards.profile.title")}
           text={t("home.cards.profile.text")}
+          color={COLORS.profile}
         />
       </section>
 
@@ -96,11 +111,11 @@ export default function Home() {
   );
 }
 
-function Card({ to, title, text }) {
+function Card({ to, title, text, color }) {
   return (
-    <Link to={to} className="block rounded-xl border border-slate-200 bg-white p-4 hover:shadow-md transition">
+    <Link to={to} className={`block rounded-xl border p-4 transition ${color}`}>
       <div className="font-semibold mb-1">{title}</div>
-      <div className="text-sm text-slate-600">{text}</div>
+      <div className="text-sm text-slate-700">{text}</div>
     </Link>
   );
 }
