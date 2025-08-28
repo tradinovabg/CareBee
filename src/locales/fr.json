@@ -17,7 +17,15 @@
     "guide": "Guide"
   },
   "home": {
-    "sos": "SOS"
+    "sos": "SOS",
+    "cards": {
+      "calendar": { "title": "Calendrier", "text": "Ajoutez ou consultez rapidement votre planning." },
+      "visits": { "title": "Visites", "text": "Planifier et suivre les rendez-vous." },
+      "meds": { "title": "Médicaments", "text": "Gérer la prise de médicaments." },
+      "vitals": { "title": "Indicateurs", "text": "Enregistrer les principaux indicateurs de santé." },
+      "nearby": { "title": "À proximité", "text": "Rechercher de l'aide à proximité (OpenStreetMap/Overpass)." },
+      "profile": { "title": "Profil", "text": "Données de base et info d'urgence." }
+    }
   },
   "footer": {
     "faq": "FAQ",

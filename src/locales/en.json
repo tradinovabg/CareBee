@@ -17,7 +17,33 @@
     "guide": "Guide"
   },
   "home": {
-    "sos": "SOS"
+    "sos": "SOS",
+    "cards": {
+      "calendar": {
+        "title": "Calendar",
+        "text": "Quickly add or see your schedule."
+      },
+      "visits": {
+        "title": "Visits",
+        "text": "Plan and track appointments."
+      },
+      "meds": {
+        "title": "Meds",
+        "text": "Manage medication schedule."
+      },
+      "vitals": {
+        "title": "Vitals",
+        "text": "Record key health indicators."
+      },
+      "nearby": {
+        "title": "Nearby",
+        "text": "Search responsibly (OpenStreetMap/Overpass)."
+      },
+      "profile": {
+        "title": "Profile",
+        "text": "Basic patient data and emergency info."
+      }
+    }
   },
   "footer": {
     "faq": "FAQ",

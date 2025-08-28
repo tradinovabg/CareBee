@@ -1,14 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { LabeledInput } from "../components/forms/Labeled";
-// ...
-<div key={c.id} className="rounded-xl border p-3 grid md:grid-cols-5 gap-2">
-  <LabeledInput label="Name" value={c.name} onChange={e=>update(c.id,{name:e.target.value})} />
-  <LabeledInput label="Phone (+E.164)" value={c.phone_e164||""} onChange={e=>update(c.id,{phone_e164:e.target.value})} />
-  <LabeledInput label="Email" value={c.email||""} onChange={e=>update(c.id,{email:e.target.value})} />
-  <LabeledInput label="Priority" type="number" value={c.priority??0} onChange={e=>update(c.id,{priority:+e.target.value})} />
-  <button onClick={()=>{removeContact(c.id); setItems(loadContacts());}}
-          className="self-end h-10 rounded bg-red-600 text-white px-3">Delete</button>
-</div>
 
 const STORAGE_KEY = "carebee.contacts";
 
@@ -25,23 +17,24 @@ function saveContacts(list) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
   } catch {
-    // ignore write errors
+    /* ignore */
   }
 }
 
-function removeContact(id) {
-  const list = loadContacts().filter(c => c.id !== id);
-  saveContacts(list);
-  return list;
-}
-
-const newId = () => (
-  crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2)
-);
+const newId = () =>
+  crypto.randomUUID
+    ? crypto.randomUUID()
+    : Date.now().toString(36) + Math.random().toString(36).slice(2);
 
 export default function Contacts() {
+  const { t } = useTranslation();
   const [items, setItems] = useState([]);
-  const [form, setForm] = useState({ name: "", phone: "", email: "", priority: 0 });
+  const [form, setForm] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    priority: 0,
+  });
   const [editing, setEditing] = useState(null);
 
   useEffect(() => {
@@ -54,7 +47,7 @@ export default function Contacts() {
     e.preventDefault();
     const payload = { ...form, priority: Number(form.priority) || 0 };
     if (editing) {
-      const next = items.map(c => (c.id === editing ? { ...c, ...payload } : c));
+      const next = items.map((c) => (c.id === editing ? { ...c, ...payload } : c));
       setItems(next);
       saveContacts(next);
     } else {
@@ -72,47 +65,44 @@ export default function Contacts() {
       name: c.name || "",
       phone: c.phone || "",
       email: c.email || "",
-      priority: c.priority ?? 0
+      priority: c.priority ?? 0,
     });
   };
 
   const onDelete = (id) => {
-    const next = items.filter(c => c.id !== id);
+    const next = items.filter((c) => c.id !== id);
     setItems(next);
-    removeContact(id);
+    saveContacts(next);
   };
 
   return (
     <div className="container">
-      <h1>Emergency contacts</h1>
+      <h1>{t("nav.contacts")}</h1>
 
       <div className="card mb-4">
         <form onSubmit={submit} className="grid gap-3 md:grid-cols-2">
-          <input
-            className="input"
+          <LabeledInput
+            label="Name"
             name="name"
-            placeholder="Name"
             value={form.name}
             onChange={onChange}
             required
           />
-          <input
-            className="input"
+          <LabeledInput
+            label="Phone (+E.164)"
             name="phone"
-            placeholder="Phone"
             value={form.phone}
             onChange={onChange}
           />
-          <input
-            className="input"
+          <LabeledInput
+            label="Email"
             type="email"
             name="email"
-            placeholder="Email"
             value={form.email}
             onChange={onChange}
           />
-          <input
-            className="input"
+          <LabeledInput
+            label="Priority"
             type="number"
             name="priority"
             value={form.priority}
@@ -120,20 +110,20 @@ export default function Contacts() {
           />
           <div className="md:col-span-2">
             <button className="btn btn-primary" type="submit">
-              {editing ? "Save" : "Add contact"}
+              {editing ? t("actions.save", "Save") : t("contacts.add", "Add contact")}
             </button>
           </div>
         </form>
       </div>
 
       {!items.length ? (
-        <div className="card muted">No contacts yet</div>
+        <div className="card muted">{t("contacts.empty", "No contacts yet")}</div>
       ) : (
         <ul className="grid gap-2">
           {items
             .slice()
             .sort((a, b) => (a.priority ?? 0) - (b.priority ?? 0))
-            .map(c => (
+            .map((c) => (
               <li key={c.id} className="card flex items-center justify-between">
                 <div>
                   <div className="font-medium">{c.name}</div>
@@ -143,9 +133,11 @@ export default function Contacts() {
                   <div className="muted text-xs">Priority: {c.priority ?? 0}</div>
                 </div>
                 <div className="flex gap-2">
-                  <button className="btn" onClick={() => onEdit(c)}>Edit</button>
+                  <button className="btn" onClick={() => onEdit(c)}>
+                    {t("actions.edit", "Edit")}
+                  </button>
                   <button className="btn btn-danger" onClick={() => onDelete(c.id)}>
-                    Delete
+                    {t("actions.delete", "Delete")}
                   </button>
                 </div>
               </li>

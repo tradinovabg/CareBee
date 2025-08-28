@@ -22,39 +22,60 @@ export default function Home() {
   return (
     <main className="mx-auto max-w-5xl p-4 md:p-6 pb-28">
       {/* HERO */}
-      <section className="rounded-2xl border border-amber-200 bg-amber-50/60 p-6 md:p-10 mb-6">
+      <section className="rounded-2xl border border-amber-300 bg-amber-100/80 p-6 md:p-10 mb-6">
         <div className="flex flex-col items-center gap-6 text-center">
           <img
             src="/CareBee/carebee-logo.png"
-            onError={(e) => { e.currentTarget.src = "/carebee-logo.png"; }}
+            onError={(e) => {
+              e.currentTarget.src = "/carebee-logo.png";
+            }}
             alt="CareBee logo"
             className="w-40 h-40 md:w-56 md:h-56 rounded-full border-8 border-white shadow-xl bg-white object-contain"
             loading="lazy"
           />
           <h1 className="text-2xl md:text-4xl font-extrabold leading-tight">
-            CareBee — the caring bee, always by your side.
+            {t("app.title")}
           </h1>
         </div>
       </section>
 
       {/* Пояснение */}
       <section className="rounded-xl border border-slate-200 bg-white p-5 md:p-6 mb-6">
-        <h2 className="text-lg font-semibold mb-2">CareBee</h2>
-        <p className="text-slate-700">
-          CareBee helps a family monitor a loved one's condition, quickly look for urgent help nearby,
-          keep a calendar of events and visits, and manage the medication schedule.
-          A helper for families who take care of elderly or ill relatives.
-        </p>
+        <p className="text-slate-700">{t("app.blurb")}</p>
       </section>
 
       {/* Карточки-линки */}
       <section className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-2">
-        <Card to="/calendar" title="Calendar" text="Quickly add or see your schedule." />
-        <Card to="/visits" title="Visits" text="Plan and track appointments." />
-        <Card to="/meds" title="Meds" text="Manage medication schedule." />
-        <Card to="/vitals" title="Vitals" text="Record key health indicators." />
-        <Card to="/nearby" title="Nearby" text="Search responsibly (OpenStreetMap/Overpass)." />
-        <Card to="/profile" title="Profile" text="Basic patient data and emergency info." />
+        <Card
+          to="/calendar"
+          title={t("home.cards.calendar.title")}
+          text={t("home.cards.calendar.text")}
+        />
+        <Card
+          to="/visits"
+          title={t("home.cards.visits.title")}
+          text={t("home.cards.visits.text")}
+        />
+        <Card
+          to="/meds"
+          title={t("home.cards.meds.title")}
+          text={t("home.cards.meds.text")}
+        />
+        <Card
+          to="/vitals"
+          title={t("home.cards.vitals.title")}
+          text={t("home.cards.vitals.text")}
+        />
+        <Card
+          to="/nearby"
+          title={t("home.cards.nearby.title")}
+          text={t("home.cards.nearby.text")}
+        />
+        <Card
+          to="/profile"
+          title={t("home.cards.profile.title")}
+          text={t("home.cards.profile.text")}
+        />
       </section>
 
       {/* Липкий низ с большой кнопкой SOS */}
