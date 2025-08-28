@@ -16,11 +16,15 @@ export default function ShareLink() {
         })
         return
       }
-      await navigator.clipboard.writeText(LINK)
-      setMsg(t('linkCopied', 'Link copied'))
-      setTimeout(() => setMsg(''), 2000)
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(LINK)
+        setMsg(t('linkCopied', 'Link copied'))
+        setTimeout(() => setMsg(''), 2000)
+        return
+      }
+      throw new Error('Clipboard unavailable')
     } catch {
-      setMsg(t('linkCopyFailed', 'Could not share'))
+      setMsg(t('linkCopyFailed', 'Could not share. Please copy the link manually.'))
       setTimeout(() => setMsg(''), 2000)
     }
   }
