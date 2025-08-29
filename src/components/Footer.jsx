@@ -1,28 +1,22 @@
-codex/add-footer-component-with-navigation-links
+import React from "react";
 import { NavLink } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 
 export default function Footer() {
-  const { t } = useTranslation();
+  const linkStyle = ({ isActive }) =>
+    "px-3 py-2 rounded-lg " + (isActive ? "font-semibold underline" : "");
+
   return (
-    <footer className="border-t p-4 text-sm text-center">
-      <nav className="space-x-4">
-        <NavLink to="/faq" className="hover:underline">
-          {t("footer.faq")}
-        </NavLink>
-        <NavLink to="/privacy" className="hover:underline">
-          {t("footer.privacy")}
-        </NavLink>
-        <NavLink to="/guide" className="hover:underline">
-          {t("footer.guide")}
-        </NavLink>
+    <footer className="border-t bg-white/70 backdrop-blur p-3">
+      <nav className="max-w-5xl mx-auto flex gap-3 flex-wrap">
+        <NavLink to="/" className={linkStyle}>Главная</NavLink>
+        <NavLink to="/sos" className={linkStyle}>SOS</NavLink>
+        <NavLink to="/schedule" className={linkStyle}>Расписание</NavLink>
+        <NavLink to="/nearby" className={linkStyle}>Поблизости</NavLink>
+        <NavLink to="/profile" className={linkStyle}>Профиль</NavLink>
       </nav>
-=======
-export default function Footer() {
-  return (
-    <footer className="bg-white shadow p-4 text-center text-sm">
-      &copy; {new Date().getFullYear()} CareBee
-main
+      <div className="max-w-5xl mx-auto mt-2 opacity-60 text-sm">
+        © {new Date().getFullYear()} CareBee
+      </div>
     </footer>
   );
 }
