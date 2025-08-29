@@ -35,72 +35,21 @@ function SosPage() {
   );
 }
 
+// src/App.jsx (фрагмент)
 export default function App() {
-  const { t } = useTranslation();
-
-  const nav = [
-    { to: "/", key: "nav.home" },
-    { to: "/profile", key: "nav.profile" },
-    { to: "/meds", key: "nav.meds" },
-    { to: "/visits", key: "nav.visits" },
-    { to: "/calendar", key: "nav.calendar" },
-    { to: "/vitals", key: "nav.vitals" },
-    { to: "/nearby", key: "nav.nearby" },
-    { to: "/contacts", key: "nav.contacts" },
-    { to: "/sos", key: "nav.sos" },
-  ];
-
   return (
-    <Router>
-      {/* HEADER WITH NAVIGATION */}
-      <header className="sticky top-0 z-40 bg-amber-200 border-b border-amber-300">
-        <div className="max-w-6xl mx-auto flex items-center justify-between gap-2 p-2 text-sm">
-          <nav className="flex flex-wrap items-center gap-2">
-            {nav.map((item) => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                end={item.to === "/"}
-                className={({ isActive }) =>
-                  `px-3 py-1 rounded ${
-                    isActive ? "bg-amber-300 font-semibold" : "hover:bg-amber-100"
-                  }`
-                }
-              >
-                {t(item.key)}
-              </NavLink>
-            ))}
-          </nav>
-          <LanguageSwitcher />
-        </div>
-      </header>
+    <div className="min-h-screen flex flex-col bg-slate-50">
+      {/* Header / Navigation */}
+      <Header />
 
-      {/* ROUTES */}
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/meds" element={<Meds />} />
-        <Route path="/visits" element={<Visits />} />
-        <Route path="/calendar" element={<Calendar />} />
-        <Route path="/vitals" element={<Vitals />} />
-        <Route path="/nearby" element={<Nearby />} />
-        <Route path="/contacts" element={<Contacts />} />
-        <Route path="/sos" element={<SosPage />} />
-        <Route path="/faq" element={<Faq />} />
-        <Route path="/privacy" element={<Privacy />} />
-        <Route path="/guide" element={<Guide />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+      {/* Контент растягивается, футер прижат к низу */}
+      <div className="flex-1">
+        <RouterProvider router={router} />
+      </div>
 
-      {/* FOOTER */}
-      <footer className="bg-amber-100 border-t border-amber-200 mt-8">
-        <div className="max-w-6xl mx-auto px-3 py-3 text-sm text-slate-700 flex gap-4">
-          <Link to="/guide">{t("nav.guide")}</Link>
-          <Link to="/faq">{t("nav.faq")}</Link>
-          <Link to="/privacy">{t("nav.privacy")}</Link>
-        </div>
-      </footer>
-    </Router>
+      {/* Footer */}
+      <Footer />
+    </div>
   );
 }
 
