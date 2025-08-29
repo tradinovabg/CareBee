@@ -1,14 +1,18 @@
-// src/main.jsx
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App";
-import "./index.css";
-import "./i18n";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 
-console.log("[BOOT] main.jsx • BASE_URL =", import.meta.env.BASE_URL);
+import App from './App';
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <App />
+    <HashRouter>
+      <Routes>
+        <Route path="/" element={<App />} />
+        {/* <Route path="/sos" element={<SosPage />} /> */}
+        {/* <Route path="/schedule" element={<SchedulePage />} /> */}
+        {/* <Route path="/nearby" element={<NearbyPage />} /> */}
+      </Routes>
+    </HashRouter>
   </React.StrictMode>
 );
