@@ -1,3 +1,19 @@
+name: Deploy Vite to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,7 +31,7 @@ jobs:
       - name: Install deps
         run: npm ci
 
-      # ✅ Добавляем проверку перед билдом
+      # === Диагностика ДО сборки: виден ли файл в public ===
       - name: List public before build
         run: |
           echo "=== PUBLIC ==="
@@ -24,12 +40,36 @@ jobs:
           find public -name "hero.mp4" -print || true
 
       - name: Build
+        # если у тебя нет/не нужны сейчас секреты, можно убрать env целиком
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          VITE_SUPABASE_EDGE_URL: ${{ secrets.VITE_SUPABASE_EDGE_URL }}
         run: npm run build
 
-      # ✅ Добавляем проверку после билда
+      # === Диагностика ПОСЛЕ сборки: попал ли файл в dist ===
       - name: List dist after build
         run: |
           echo "=== DIST ==="
           ls -lah dist || true
           echo "=== find hero.mp4 in dist ==="
           find dist -name "hero.mp4" -print || true
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
