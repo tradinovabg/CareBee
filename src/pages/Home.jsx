@@ -1,28 +1,3 @@
-codex/add-aria-hidden-and-role-to-video-element
-<div className="relative rounded-xl overflow-hidden">
-  <video
-    className="w-full h-auto"
-    autoPlay
-    muted
-    loop
-    playsInline
-    aria-hidden="true"
-    role="presentation"
-  >
-    <source src="/hero.mp4" type="video/mp4" />
-    Your browser does not support the video tag.
-  </video>
-
-  <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/30 text-white text-center p-4">
-    <img src="/carebee-logo.png" alt="CareBee" className="w-24 h-24 mb-4" />
-    <h1 className="text-3xl font-bold">CareBee — заботливая пчёлка рядом с вами.</h1>
-    <p className="mt-2 text-lg">Помогает следить за здоровьем близких</p>
-    <p className="sr-only">Background video playing</p>
-  </div>
-</div>
-
-=======
-main
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -46,34 +21,17 @@ export default function Home() {
   const onSend = ({ message, channels, recipients }) => {
     // TODO: заменить на Edge Function. Пока: демонстрация.
     alert(
-      `Sending SOS:\n${message}\n\nVia: ${
-        Object.entries(channels).filter(([,v])=>v).map(([k])=>k).join(", ")
-      }\nTo: ${recipients.map(r=>r.name).join(", ")}`
+      `Sending SOS:\n${message}\n\nVia: ${Object.entries(channels)
+        .filter(([, v]) => v)
+        .map(([k]) => k)
+        .join(", ")}\nTo: ${recipients.map((r) => r.name).join(", ")}`
     );
     setOpen(false);
   };
 
   return (
     <main className="mx-auto max-w-5xl p-4 md:p-6 pb-28">
-      {/* HERO */}
-      <div className="relative rounded-xl overflow-hidden">
-        <video
-          className="w-full h-auto"
-          autoPlay
-          muted
-          loop
-          playsInline
-        >
-          <source src="/hero.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/30 text-white text-center p-4">
-          <img src="/carebee-logo.png" alt="CareBee" className="w-24 h-24 mb-4" />
-          <h1 className="text-3xl font-bold">CareBee — заботливая пчёлка рядом с вами.</h1>
-          <p className="mt-2 text-lg">Помогает следить за здоровьем близких</p>
-        </div>
-      </div>
+      <Hero />
 
       {/* Пояснение */}
       <section className="rounded-xl border border-slate-200 bg-white p-5 md:p-6 mb-6">
@@ -133,8 +91,44 @@ export default function Home() {
         </button>
       </div>
 
-      <SosModal open={open} onClose={() => setOpen(false)} contacts={contacts} onSend={onSend} />
+      <SosModal
+        open={open}
+        onClose={() => setOpen(false)}
+        contacts={contacts}
+        onSend={onSend}
+      />
     </main>
+  );
+}
+
+function Hero() {
+  const [error, setError] = useState(false);
+  const src = import.meta.env.BASE_URL + "video/hero.mp4";
+  const poster = import.meta.env.BASE_URL + "carebee-logo.png";
+
+  if (error) {
+    return (
+      <div className="bg-amber-400 rounded-2xl p-6 text-center shadow-md">
+        <img src={poster} alt="CareBee" className="mx-auto w-24 h-24 mb-4" />
+        <h1 className="text-3xl font-bold">
+          CareBee — заботливая пчёлка рядом с вами.
+        </h1>
+        <p className="mt-2 text-lg">Помогает следить за здоровьем близких</p>
+      </div>
+    );
+  }
+
+  return (
+    <video
+      autoPlay
+      muted
+      loop
+      playsInline
+      poster={poster}
+      onError={() => setError(true)}
+      className="w-full h-auto rounded-2xl shadow-md object-cover"
+      src={src}
+    />
   );
 }
 
