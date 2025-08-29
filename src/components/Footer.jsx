@@ -1,10 +1,16 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+<<<<<<< HEAD
 
 export default function Footer() {
   const linkStyle = ({ isActive }) =>
     "px-3 py-2 rounded-lg " + (isActive ? "font-semibold underline" : "");
 
+=======
+export default function Footer() {
+  const linkStyle = ({ isActive }) =>
+    "px-3 py-2 rounded-lg " + (isActive ? "font-semibold underline" : "");
+>>>>>>> 2cca76d (feat(router): add /schedule route and align footer links)
   return (
     <footer className="border-t bg-white/70 backdrop-blur p-3">
       <nav className="max-w-5xl mx-auto flex gap-3 flex-wrap">

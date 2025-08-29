@@ -1,4 +1,12 @@
+<<<<<<< HEAD
 import React from "react";
+=======
+import { HashRouter as Router, Routes, Route, NavLink, Navigate, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "./components/LanguageSwitcher";
+import Footer from "./components/Footer";
+=======
+>>>>>>> 2cca76d (feat(router): add /schedule route and align footer links)
 import { createHashRouter, RouterProvider } from "react-router-dom";
 
 // Layout
