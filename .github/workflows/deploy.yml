@@ -1,8 +1,8 @@
-name: Deploy to GitHub Pages
+name: Deploy Vite to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   workflow_dispatch:
 
 permissions:
@@ -11,23 +11,66 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
+  group: pages
   cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
-      - run: npm ci
-      - run: npm run build
-      # SPA fallback для GitHub Pages
-      - run: cp dist/index.html dist/404.html
-      - uses: actions/upload-pages-artifact@v3
+          cache-dependency-path: package-lock.json
+
+      # Если package-lock повреждён/отсутствует, npm ci упадёт.
+      # Делаем мягкий fallback на npm install.
+      - name: Install deps
+        run: |
+          npm ci || npm install
+
+      # Покажем содержимое public и наличие видео
+      - name: List public before build
+        run: |
+          echo "=== PUBLIC ==="
+          ls -lah public || true
+          echo "=== find hero.mp4 ==="
+          find public -name "hero.mp4" -print || true
+
+      # Сам билд (без секретов, чтобы не блокировало)
+      - name: Build with Vite
+        env:
+          # Включаем CI=false, чтобы предупреждения не роняли сборку в некоторых конфигурациях
+          CI: false
+        run: |
+          echo "Vite build starting…"
+          npm run build 2>&1 | tee build.log
+          echo "=== LAST 200 LINES OF BUILD LOG ==="
+          tail -n 200 build.log
+
+      - name: Assert dist exists
+        run: |
+          echo "Checking dist…"
+          test -d dist && test -f dist/index.html || (echo "dist not found" && exit 1)
+
+      # Проверим, попало ли видео в dist
+      - name: List dist after build
+        run: |
+          echo "=== DIST ==="
+          ls -lah dist || true
+          echo "=== find hero.mp4 in dist ==="
+          find dist -name "hero.mp4" -print || true
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
           path: dist
 
@@ -38,5 +81,6 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - id: deployment
+      - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
