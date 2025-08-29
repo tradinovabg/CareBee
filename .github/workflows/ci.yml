@@ -1,0 +1,31 @@
+name: CI
+on:
+  pull_request: { branches: [main] }
+  push:         { branches: [main] }
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install deps
+        run: |
+          if [ -f package-lock.json ]; then npm ci --no-audit --no-fund; else npm i --no-audit --no-fund; fi
+      - name: Test
+        run: npm run test -- --passWithNoTests
+      - name: Build
+        run: npm run build
+      - name: Smoke check dist
+        run: |
+          test -f dist/index.html
+          grep -q '<div id="root">' dist/index.html || (echo "no #root in index.html" && exit 1)
+          test -f dist/404.html || cp dist/index.html dist/404.html
+      - name: Upload dist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
