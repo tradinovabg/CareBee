@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { createHashRouter, RouterProvider } from "react-router-dom";
 
 // Layout
 import Header from "./components/Header";
@@ -8,19 +8,11 @@ import Footer from "./components/Footer";
 // Pages
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
-import Meds from "./pages/Meds";
-import Visits from "./pages/Visits";
-import Calendar from "./pages/Calendar";
-import Vitals from "./pages/Vitals";
+import Schedule from "./pages/Schedule";     // <— добавили
 import Nearby from "./pages/Nearby";
-import Contacts from "./pages/Contacts";
-import Docs from "./pages/Docs";
-import Guide from "./pages/Guide";
-import Faq from "./pages/Faq";
-import Privacy from "./pages/Privacy";
 import NotFound from "./pages/NotFound";
 
-// Built-in SOS page (заглушка)
+// Временная страница SOS
 function SosPage() {
   const click = () => alert("SOS sent (test) ✅");
   return (
@@ -35,27 +27,24 @@ function SosPage() {
   );
 }
 
+// Роутер
+const router = createHashRouter([
+  { path: "/", element: <Home /> },
+  { path: "/sos", element: <SosPage /> },
+  { path: "/schedule", element: <Schedule /> },  // <— добавили
+  { path: "/nearby", element: <Nearby /> },
+  { path: "/profile", element: <Profile /> },
+  { path: "*", element: <NotFound /> }
+]);
+
 export default function App() {
   return (
-    <Router basename="/CareBee">
+    <div className="min-h-screen flex flex-col bg-slate-50">
       <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/sos" element={<SosPage />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/meds" element={<Meds />} />
-        <Route path="/visits" element={<Visits />} />
-        <Route path="/calendar" element={<Calendar />} />
-        <Route path="/vitals" element={<Vitals />} />
-        <Route path="/nearby" element={<Nearby />} />
-        <Route path="/contacts" element={<Contacts />} />
-        <Route path="/docs" element={<Docs />} />
-        <Route path="/guide" element={<Guide />} />
-        <Route path="/faq" element={<Faq />} />
-        <Route path="/privacy" element={<Privacy />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <div className="flex-1">
+        <RouterProvider router={router} />
+      </div>
       <Footer />
-    </Router>
+    </div>
   );
 }
