@@ -32,12 +32,18 @@ jobs:
         run: npm ci
         # если нет package-lock.json, замени на: npm install
 
+      - name: List public before build
+        run: ls -lah public || true
+
       - name: Build
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
           VITE_SUPABASE_EDGE_URL: ${{ secrets.VITE_SUPABASE_EDGE_URL }}
         run: npm run build
+
+      - name: List dist after build
+        run: ls -lah dist || true
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
