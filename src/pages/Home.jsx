@@ -1,42 +1,69 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import SosModal from "../components/SosModal";
-import { loadContacts } from "../lib/contactsStore";
+// src/pages/Home.jsx
+import { useEffect, useRef, useState } from "react";
 
-const COLORS = {
-  calendar: "bg-sky-50 border-sky-200 hover:bg-sky-100",
-  visits: "bg-violet-50 border-violet-200 hover:bg-violet-100",
-  meds: "bg-emerald-50 border-emerald-200 hover:bg-emerald-100",
-  vitals: "bg-amber-50 border-amber-200 hover:bg-amber-100",
-  nearby: "bg-rose-50 border-rose-200 hover:bg-rose-100",
-  profile: "bg-fuchsia-50 border-fuchsia-200 hover:bg-fuchsia-100",
-};
+function HeroVideo() {
+  const videoRef = useRef(null);
+  const [fallback, setFallback] = useState(false);
 
-export default function Home() {
-  const { t } = useTranslation();
-  const [open, setOpen] = useState(false);
-  const contacts = loadContacts();
+  const src = import.meta.env.BASE_URL + "video/hero.mp4";
+  const poster = import.meta.env.BASE_URL + "carebee-logo.png";
 
-  const onSend = ({ message, channels, recipients }) => {
-    // TODO: заменить на Edge Function. Пока: демонстрация.
-    alert(
-      `Sending SOS:\n${message}\n\nVia: ${Object.entries(channels)
-        .filter(([, v]) => v)
-        .map(([k]) => k)
-        .join(", ")}\nTo: ${recipients.map((r) => r.name).join(", ")}`
-    );
-    setOpen(false);
-  };
+  // автопауза, если вкладка не активна
+  useEffect(() => {
+    const onVisibility = () => {
+      const v = videoRef.current;
+      if (!v) return;
+      if (document.visibilityState !== "visible") v.pause();
+      else v.play().catch(() => {});
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => document.removeEventListener("visibilitychange", onVisibility);
+  }, []);
 
   return (
-    <main className="mx-auto max-w-5xl p-4 md:p-6 pb-28">
-      <Hero />
+    <div className="relative rounded-2xl overflow-hidden shadow-md">
+      {!fallback ? (
+        <>
+          <video
+            ref={videoRef}
+            className="w-full h-auto object-cover"
+            autoPlay
+            muted
+            loop
+            playsInline
+            src={src}
+            poster={poster}
+            onError={() => setFallback(true)}
+          />
+          {/* Лёгкое затемнение, чтобы титры были читабельны */}
+          <div className="absolute inset-0 bg-black/10 pointer-events-none" />
+        </>
+      ) : (
+        <div className="flex items-center justify-center bg-amber-100 py-10">
+          <img src={poster} alt="CareBee" className="w-28 h-28 mr-4" />
+          <div className="text-center">
+            <h1 className="text-2xl md:text-3xl font-bold">
+              CareBee — заботливая пчёлка рядом с вами.
+            </h1>
+            <p className="text-sm opacity-80 mt-1">
+              Помогает следить за здоровьем близких
+            </p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
-      {/* Пояснение */}
-      <section className="rounded-xl border border-slate-200 bg-white p-5 md:p-6 mb-6">
-        <p className="text-slate-700">{t("app.blurb")}</p>
-      </section>
+export default function Home() {
+  return (
+    <main className="mx-auto max-w-6xl w-full p-3 space-y-4">
+      <HeroVideo />
+      {/* ниже остаётся ваш текст и карточки */}
+      {/* ... */}
+    </main>
+  );
+}
 
       {/* Карточки-линки */}
       <section className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-2">
