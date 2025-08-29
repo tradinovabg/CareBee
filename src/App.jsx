@@ -1,6 +1,7 @@
 import { HashRouter as Router, Routes, Route, NavLink, Navigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "./components/LanguageSwitcher";
+import Footer from "./components/Footer";
 
 // PAGES
 import Home from "./pages/Home";
