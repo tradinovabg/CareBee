@@ -1,4 +1,11 @@
+codex/add-footer-component-with-navigation-links
+import { HashRouter as Router, Routes, Route, NavLink, Navigate, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "./components/LanguageSwitcher";
+import Footer from "./components/Footer";
+=======
 import { createHashRouter, RouterProvider } from "react-router-dom";
+main
 
 // Layout components
 import Header from "./components/Header";
