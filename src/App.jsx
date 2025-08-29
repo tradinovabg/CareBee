@@ -1,8 +1,10 @@
-import { HashRouter as Router, Routes, Route, NavLink, Navigate, Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import LanguageSwitcher from "./components/LanguageSwitcher";
+import { createHashRouter, RouterProvider } from "react-router-dom";
 
-// PAGES
+// Layout components
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+
+// Pages
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import Meds from "./pages/Meds";
@@ -11,9 +13,11 @@ import Calendar from "./pages/Calendar";
 import Vitals from "./pages/Vitals";
 import Nearby from "./pages/Nearby";
 import Contacts from "./pages/Contacts";
+import Docs from "./pages/Docs";
 import Guide from "./pages/Guide";
 import Faq from "./pages/Faq";
 import Privacy from "./pages/Privacy";
+import NotFound from "./pages/NotFound";
 
 // Built‑in SOS page with rectangular button
 function SosPage() {
@@ -35,19 +39,31 @@ function SosPage() {
   );
 }
 
-// src/App.jsx (фрагмент)
+// Router definition
+const router = createHashRouter([
+  { path: "/", element: <Home /> },
+  { path: "/profile", element: <Profile /> },
+  { path: "/meds", element: <Meds /> },
+  { path: "/visits", element: <Visits /> },
+  { path: "/calendar", element: <Calendar /> },
+  { path: "/vitals", element: <Vitals /> },
+  { path: "/nearby", element: <Nearby /> },
+  { path: "/contacts", element: <Contacts /> },
+  { path: "/docs", element: <Docs /> },
+  { path: "/guide", element: <Guide /> },
+  { path: "/faq", element: <Faq /> },
+  { path: "/privacy", element: <Privacy /> },
+  { path: "/sos", element: <SosPage /> },
+  { path: "*", element: <NotFound /> },
+]);
+
 export default function App() {
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
-      {/* Header / Navigation */}
       <Header />
-
-      {/* Контент растягивается, футер прижат к низу */}
       <div className="flex-1">
         <RouterProvider router={router} />
       </div>
-
-      {/* Footer */}
       <Footer />
     </div>
   );
