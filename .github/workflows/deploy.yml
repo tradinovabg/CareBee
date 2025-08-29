@@ -53,6 +53,11 @@ jobs:
           echo "=== LAST 200 LINES OF BUILD LOG ==="
           tail -n 200 build.log
 
+      - name: Assert dist exists
+        run: |
+          echo "Checking dist…"
+          test -d dist && test -f dist/index.html || (echo "dist not found" && exit 1)
+
       # Проверим, попало ли видео в dist
       - name: List dist after build
         run: |
