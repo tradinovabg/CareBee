@@ -1,10 +1,11 @@
 name: CI
 
 on:
+  workflow_dispatch: {}        # <-- запуск вручную из Actions
   pull_request:
-    branches: [main]
+    branches: [main]           # PR в main
   push:
-    branches: [main]
+    branches: [main]           # пуши в main (если разрешены)
 
 jobs:
   check:
