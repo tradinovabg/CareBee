@@ -1,3 +1,4 @@
+cat > src/components/Footer.jsx <<'EOF'
 import React from "react";
 import { NavLink } from "react-router-dom";
 <<<<<<< HEAD
@@ -26,3 +27,4 @@ export default function Footer() {
     </footer>
   );
 }
+EOF

@@ -1,7 +1,16 @@
 name: CI
+ci/setup
 on:
   pull_request: { branches: [main] }
   push:         { branches: [main] }
+=======
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+main
 
 jobs:
   check:
@@ -15,15 +24,33 @@ jobs:
       - name: Install deps
         run: |
           if [ -f package-lock.json ]; then npm ci --no-audit --no-fund; else npm i --no-audit --no-fund; fi
+ci/setup
       - name: Test
         run: npm run test -- --passWithNoTests
       - name: Build
         run: npm run build
+=======
+
+      # Юнит-тесты (если тестов нет — не падаем)
+      - name: Test
+        run: npm run test -- --passWithNoTests
+
+      # Сборка (гарантирует, что билд вообще собирается)
+      - name: Build
+        run: npm run build
+
+      # Лёгкий smoke-тест артефакта
+main
       - name: Smoke check dist
         run: |
           test -f dist/index.html
           grep -q '<div id="root">' dist/index.html || (echo "no #root in index.html" && exit 1)
           test -f dist/404.html || cp dist/index.html dist/404.html
+ci/setup
+=======
+
+      # Сохраняем билд как артефакт PR (чтобы при желании скачать и посмотреть)
+main
       - name: Upload dist artifact
         uses: actions/upload-artifact@v4
         with:
