@@ -1,30 +1,43 @@
-cat > src/components/Footer.jsx <<'EOF'
 import React from "react";
 import { NavLink } from "react-router-dom";
-<<<<<<< HEAD
+
+const linkBase =
+  "px-3 py-2 rounded-lg text-sm font-medium transition";
+const linkActive =
+  "bg-slate-900 text-white";
+const linkIdle =
+  "text-slate-600 hover:bg-slate-200";
 
 export default function Footer() {
-  const linkStyle = ({ isActive }) =>
-    "px-3 py-2 rounded-lg " + (isActive ? "font-semibold underline" : "");
+  const year = new Date().getFullYear();
 
-=======
-export default function Footer() {
-  const linkStyle = ({ isActive }) =>
-    "px-3 py-2 rounded-lg " + (isActive ? "font-semibold underline" : "");
->>>>>>> 2cca76d (feat(router): add /schedule route and align footer links)
+  const Item = ({ to, children, end }) => (
+    <NavLink
+      to={to}
+      end={end}
+      className={({ isActive }) =>
+        `${linkBase} ${isActive ? linkActive : linkIdle}`
+      }
+    >
+      {children}
+    </NavLink>
+  );
+
   return (
-    <footer className="border-t bg-white/70 backdrop-blur p-3">
-      <nav className="max-w-5xl mx-auto flex gap-3 flex-wrap">
-        <NavLink to="/" className={linkStyle}>Главная</NavLink>
-        <NavLink to="/sos" className={linkStyle}>SOS</NavLink>
-        <NavLink to="/schedule" className={linkStyle}>Расписание</NavLink>
-        <NavLink to="/nearby" className={linkStyle}>Поблизости</NavLink>
-        <NavLink to="/profile" className={linkStyle}>Профиль</NavLink>
-      </nav>
-      <div className="max-w-5xl mx-auto mt-2 opacity-60 text-sm">
-        © {new Date().getFullYear()} CareBee
+    <footer className="border-t border-slate-200 bg-white">
+      <div className="max-w-5xl mx-auto w-full p-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <nav className="flex flex-wrap gap-2">
+          <Item to="/" end>Главная</Item>
+          <Item to="/sos">SOS</Item>
+          <Item to="/schedule">Расписание</Item>
+          <Item to="/nearby">Поблизости</Item>
+          <Item to="/profile">Профиль</Item>
+        </nav>
+
+        <div className="text-xs text-slate-500">
+          © {year} CareBee
+        </div>
       </div>
     </footer>
   );
 }
-EOF
