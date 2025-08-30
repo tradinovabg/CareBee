@@ -1,16 +1,13 @@
 cat > src/App.jsx <<'EOF'
 import React from "react";
 import { createHashRouter, RouterProvider } from "react-router-dom";
-
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import Schedule from "./pages/Schedule";
 import Nearby from "./pages/Nearby";
 import NotFound from "./pages/NotFound";
-
 function SosPage() {
   const click = () => alert("SOS sent (test) ✅");
   return (
