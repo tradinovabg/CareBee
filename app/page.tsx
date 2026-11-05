@@ -1,11 +1,12 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
-import { deleteEntry, exportDiary, formatDate, MAX_TEXT_LENGTH, readEntries, saveEntry, STORAGE_KEY } from '../lib/diary.mjs';
+import { deleteEntry, exportDiary, formatDate, MAX_TEXT_LENGTH, readEntries, saveEntry, markDelivery, STORAGE_KEY } from '../lib/diary.mjs';
+import { telegramRequest } from '../lib/telegram-client';
 import SendConfirmation from './SendConfirmation';
 import { readRecipients, recognizeRecipient, whatsappLink, RECIPIENTS_KEY } from '../lib/recipients.mjs';
 import { getRecognition, Recognition, speechError } from '../lib/speech';
 
-type Profile = { id: string; name: string; aliases: string[]; phone: string; channel: string; isDefault: boolean; updatedAt: string };
+type Profile = { id: string; name: string; aliases: string[]; phone: string; channel: string; isDefault: boolean; updatedAt: string; telegramChatId?:string; telegramKey?:string };
 type Handoff = { recipientName: string; at: string; channel: string };
 type Entry = { id: string; text: string; createdAt: string; updatedAt: string; handoffs?: Handoff[] };
 type VoiceState = 'idle' | 'starting' | 'listening' | 'stopping';
@@ -15,6 +16,9 @@ export default function Diary() {
   const [selectedId, setSelectedId] = useState('');
   const [recipientMessage, setRecipientMessage] = useState('');
   const [sendJob, setSendJob] = useState<{ profile: Profile; text: string; editing: Entry | null } | null>(null);
+  const [telegramResult,setTelegramResult] = useState<{delivered:boolean;message:string;profile:Profile;text:string;entryId:string;requestId:string}|null>(null);
+  const [telegramBusy,setTelegramBusy] = useState(false);
+  const [telegramConfig,setTelegramConfig] = useState<boolean|null>(null);
   const [handoffLink, setHandoffLink] = useState('');
   const sendLocked = useRef(false);
   const allowNavigation = useRef(false);
@@ -52,6 +56,7 @@ export default function Diary() {
   }
   useEffect(() => {
     refresh(); refreshProfiles();
+    fetch('/api/telegram/config').then(r=>r.json()).then(data=>setTelegramConfig(Boolean(data.configured))).catch(()=>setTelegramConfig(false));
     setVoiceAvailable(Boolean(getRecognition()) && window.isSecureContext);
     setVoiceReason(!window.isSecureContext ? 'Для микрофона откройте приложение по HTTPS. Сейчас можно вводить текст вручную.' : !getRecognition() ? 'Этот браузер не поддерживает голосовой ввод. Попробуйте Chrome на Android или Safari на iPhone, либо введите текст вручную.' : '');
     const sync = (event: StorageEvent) => { if (event.key === STORAGE_KEY || event.key === null) refresh(); if(event.key === RECIPIENTS_KEY || event.key === null) refreshProfiles(); };
@@ -110,22 +115,50 @@ export default function Diary() {
   function requestSend() {
     if (recording || busy || !storageOK || !text.trim()) return;
     if (!chosen) { setRecipientMessage('Выберите получателя кнопкой ниже. Сохранение в дневник доступно без получателя.'); return; }
-    sendLocked.current = false; setError(''); setHandoffLink('');
+    sendLocked.current = false; setError(''); setHandoffLink(''); setTelegramResult(null);
     setSendJob({profile:{...chosen}, text:text.trim(), editing});
   }
-  function completeSend() {
+  async function deliverTelegram(profile:Profile,message:string,entryId:string,requestId:string) {
+    setTelegramBusy(true);setBusy(true);
+    try {
+      const result=await telegramRequest('send',{chatId:profile.telegramChatId,telegramKey:profile.telegramKey,text:message,requestId});
+      let note='Доставлено в Telegram. Это означает принятие сообщения Bot API, а не прочтение получателем.';
+      try {setEntries(markDelivery(localStorage,entryId,{recipientName:profile.name,channel:'telegram',at:result.at}));}
+      catch {note+=' Не удалось сохранить отметку в дневнике; не отправляйте повторно.';}
+      setTelegramResult({delivered:true,message:note,profile,text:message,entryId,requestId});
+    }catch(e){setTelegramResult({delivered:false,message:e instanceof Error?e.message:'Нет ответа сервера. Проверьте чат перед повтором.',profile,text:message,entryId,requestId});}
+    finally{setTelegramBusy(false);setBusy(false);}
+  }
+  async function completeSend() {
     if (!sendJob || sendLocked.current) return;
     sendLocked.current = true;
     try {
       const current = readRecipients(localStorage).find((p: Profile) => p.id === sendJob.profile.id);
       if (!current || current.updatedAt !== sendJob.profile.updatedAt) throw new Error('Получатель изменён или удалён. Выберите его и подтвердите отправку заново.');
-      const link = whatsappLink(current, sendJob.text);
+      if(sendJob.profile.channel==='telegram') {
+        const before=readEntries(localStorage);const ids=new Set(before.map((e:Entry)=>e.id));
+        const next=saveEntry(localStorage,{id:sendJob.editing?.id,expectedUpdatedAt:sendJob.editing?.updatedAt,text:sendJob.text});
+        const entry=sendJob.editing ? next.find((e:Entry)=>e.id===sendJob.editing!.id) : next.find((e:Entry)=>!ids.has(e.id));
+        setEntries(next);setText('');setEditing(null);setVoiceMessage('');setSendJob(null);
+        await deliverTelegram(current,sendJob.text,entry.id,crypto.randomUUID());return;
+      }
+      const link = whatsappLink({...current,channel:'whatsapp'}, sendJob.text);
       const next = saveEntry(localStorage,{id:sendJob.editing?.id,expectedUpdatedAt:sendJob.editing?.updatedAt,text:sendJob.text,handoff:{recipientName:current.name,channel:'whatsapp',at:new Date().toISOString()}});
       setEntries(next); setText(''); setEditing(null); setVoiceMessage(''); setSendJob(null); setHandoffLink(link); setNotice('Запись сохранена. Подтвердите отправку в WhatsApp.');
       allowNavigation.current = true;
       try { window.location.assign(link); } catch { setNotice('Запись сохранена. Нажмите «Перейти в WhatsApp» ниже.'); }
       setTimeout(()=>{allowNavigation.current=false;},10000);
-    } catch(e) { setSendJob(null); setError(e instanceof Error ? e.message : 'Не удалось сохранить запись. WhatsApp не открыт.'); }
+    } catch(e) { setSendJob(null); setError(e instanceof Error ? e.message : 'Не удалось сохранить запись. Сообщение не отправлено.'); }
+  }
+  function fallbackWhatsApp() {
+    if(!telegramResult)return;
+    try {
+      const result=telegramResult;const profile=readRecipients(localStorage).find((p:Profile)=>p.id===result.profile.id);
+      if(!profile)throw new Error('Получатель удалён.');
+      const entry=readEntries(localStorage).find((e:Entry)=>e.id===result.entryId);
+      if(!entry)throw new Error('Запись удалена. Откройте её заново.');
+      sendLocked.current=false;setSendJob({profile:{...profile,channel:'whatsapp'},text:result.text,editing:entry});setTelegramResult(null);
+    }catch(e){setError(e instanceof Error?e.message:'Не удалось открыть WhatsApp.');}
   }
   function submit(event: React.FormEvent) {
     event.preventDefault(); if (!text.trim() || recording || !storageOK || busy) return;
@@ -158,24 +191,26 @@ export default function Diary() {
   return <main className="diary-shell">
     <header className="brand-row"><a href="/" className="brand"><span aria-hidden="true">✿</span> CareBee</a><a className="secondary manage-recipients" href="/recipients">Получатели</a></header>
     <section className="intro"><p className="eyebrow">ЗАПИСАТЬ. ПРОВЕРИТЬ. СОХРАНИТЬ.</p><h1>Забота —<br/>своими словами.</h1><p>Дневник ухода и самочувствия.<br/>Расскажите, как прошёл день, пока всё помните.</p><div className="intro-flower" aria-hidden="true">✿</div></section>
-    <aside className="privacy-note"><span aria-hidden="true">ⓘ</span><p>Записи хранятся <strong>в браузере этого устройства</strong>. Между телефонами они не синхронизируются и могут исчезнуть при очистке данных браузера. В приватном режиме хранение может быть временным. Сохраняйте копию через экспорт.</p></aside>
+    <aside className="privacy-note"><span aria-hidden="true">ⓘ</span><p>Записи хранятся <strong>в браузере этого устройства</strong>. При отправке в Telegram текст проходит через наш сервер и серверы Telegram. Между телефонами записи не синхронизируются и могут исчезнуть при очистке данных браузера. В приватном режиме хранение может быть временным. Сохраняйте копию через экспорт.</p></aside>
     <section className="card composer" aria-labelledby="composer-title"><div className="section-heading"><div><p className="eyebrow">{editing ? 'РЕДАКТИРОВАНИЕ' : 'МОМЕНТ ЗАБОТЫ'}</p><h2 id="composer-title">{editing ? 'Изменить запись' : 'Новая запись'}</h2></div><span className="step-badge">{editing ? '✎' : '01'}</span></div>
       {editing && <p className="edit-date">Запись от {formatDate(editing.createdAt)}. Дата создания сохранится.</p>}
       <button type="button" className={'voice-button ' + (recording ? 'is-recording' : '')} disabled={!ready || !voiceAvailable || voice === 'stopping'} onClick={recording ? stopVoice : beginVoice}><span className="mic-icon" aria-hidden="true">{recording ? '■' : <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><rect x="9" y="2" width="6" height="13" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8"/></svg>}</span><span>{voice === 'starting' ? 'Отменить запуск' : voice === 'listening' ? 'Остановить' : voice === 'stopping' ? 'Останавливаю…' : 'Записать голосом'}</span>{voice === 'listening' && <span className="recording-dot"/>}</button>
       <p className="voice-status" role="status">{voiceMessage || voiceReason || (ready ? 'Нажмите кнопку и разрешите доступ к микрофону.' : 'Проверяем возможности браузера…')}</p>
       <p className="audio-notice">Голос может обрабатываться внешним сервисом браузера. Обычно нужен интернет. Можно обойтись ручным вводом.</p><details className="voice-privacy"><summary>Куда передаётся голос?</summary><p>Используется распознавание речи вашего браузера. Аудио может передаваться внешнему сервису поставщика браузера (например, Google в Chrome или Apple в Safari); обработка зависит от браузера и его настроек. Обычно нужен интернет. CareBee не записывает аудиофайлы и не отправляет текст на свой сервер. Для первой проверки используйте вымышленные сведения; если не хотите передавать аудио, вводите текст вручную.</p></details>
-      <section className="recipient-picker" aria-label="Выбор получателя"><p className="recipient-to">Кому: <strong>{chosen?.name || 'Выберите получателя'}</strong></p>{chosen && <p className="recipient-number">{chosen.phone} · WhatsApp{chosen.isDefault ? ' · Основной' : ''}</p>}<div className="recipient-buttons">{profiles.map(profile=><button type="button" key={profile.id} disabled={recording} className={selectedId===profile.id?'selected-recipient':'secondary'} aria-pressed={selectedId===profile.id} onClick={()=>{setSelectedId(profile.id);setRecipientMessage('Получатель выбран вручную.');}}>{profile.name}</button>)}</div>{!profiles.length && <a className="secondary add-recipient-link" href="/recipients">＋ Добавить получателя</a>}<p className="recipient-status" role="status">{profilesError || recipientMessage || (!chosen ? 'Выберите человека для WhatsApp. Просто сохранить запись можно и без получателя.' : 'Можно выбрать другого человека кнопкой выше.')}</p></section>
+      <section className="recipient-picker" aria-label="Выбор получателя"><p className="recipient-to">Кому: <strong>{chosen?.name || 'Выберите получателя'}</strong></p>{chosen && <p className="recipient-number">{chosen.phone} · {chosen.channel==='telegram'?'Telegram':'WhatsApp'}{chosen.isDefault ? ' · Основной' : ''}</p>}{chosen?.channel==='telegram'&&(!chosen.telegramChatId||!chosen.telegramKey||telegramConfig===false)&&<p className="error">{telegramConfig===false?'Telegram не настроен на сервере.':'Telegram ещё не привязан к получателю.'} Можно сохранить запись или отправить через WhatsApp.</p>}<div className="recipient-buttons">{profiles.map(profile=><button type="button" key={profile.id} disabled={recording} className={selectedId===profile.id?'selected-recipient':'secondary'} aria-pressed={selectedId===profile.id} onClick={()=>{setSelectedId(profile.id);setRecipientMessage('Получатель выбран вручную.');}}>{profile.name}</button>)}</div>{!profiles.length && <a className="secondary add-recipient-link" href="/recipients">＋ Добавить получателя</a>}<p className="recipient-status" role="status">{profilesError || recipientMessage || (!chosen ? 'Выберите человека для WhatsApp. Просто сохранить запись можно и без получателя.' : 'Можно выбрать другого человека кнопкой выше.')}</p></section>
       <form onSubmit={submit}><label htmlFor="entry-text">{editing ? 'Текст записи' : 'Проверьте текст или напишите вручную'}</label><textarea ref={editor} id="entry-text" name="text" rows={6} maxLength={MAX_TEXT_LENGTH} value={text} onChange={e => setText(e.target.value)} disabled={recording} placeholder="Например: Сегодня утром измерили маме давление — 130 на 80. Чувствует себя хорошо." aria-describedby="save-hint"/><div className="text-meta"><span>{recording ? 'После остановки текст можно исправить' : 'Можно исправить каждое слово'}</span><span>{text.length.toLocaleString('ru-RU')} / 20 000</span></div>
-      <p id="save-hint" className="save-hint">«Сохранить» добавляет запись только в дневник. «Отправить» сохраняет её после обратного отсчёта и открывает WhatsApp. Несохранённый текст может потеряться при закрытии страницы.</p>
+      <p id="save-hint" className="save-hint">«Сохранить» добавляет запись только в дневник. «Отправить» сохраняет её после обратного отсчёта и отправляет через основной канал. Telegram передаёт текст через наш сервер и серверы Telegram; WhatsApp открывается для ручного подтверждения. Несохранённый текст может потеряться при закрытии страницы.</p>
       {error && !deleting && <p className="error" role="alert">{error}</p>}
-      <div className="composer-actions diary-save-actions"><button className="primary" type="submit" disabled={!ready || !storageOK || !text.trim() || recording || busy}>{busy ? 'Сохраняем…' : editing ? 'Сохранить изменения' : 'Сохранить' }<span aria-hidden="true">→</span></button><button type="button" className="send-button" disabled={!ready || !storageOK || !text.trim() || recording || busy} onClick={requestSend}>Отправить</button>{(editing || text) && <button className="secondary" type="button" disabled={recording || busy} onClick={cancel}>{editing ? 'Отмена' : 'Очистить'}</button>}</div></form>
+      <div className="composer-actions diary-save-actions"><button className="primary" type="submit" disabled={!ready || !storageOK || !text.trim() || recording || busy}>{busy ? 'Сохраняем…' : editing ? 'Сохранить изменения' : 'Сохранить' }<span aria-hidden="true">→</span></button><button type="button" className="send-button" disabled={!ready || !storageOK || !text.trim() || recording || busy} onClick={requestSend}>Отправить</button>{chosen?.channel==='telegram'&&<button className="secondary" type="button" disabled={busy||recording||!text.trim()||!storageOK} onClick={()=>{sendLocked.current=false;setSendJob({profile:{...chosen,channel:'whatsapp'},text:text.trim(),editing});}}>Отправить через WhatsApp</button>}{(editing || text) && <button className="secondary" type="button" disabled={recording || busy} onClick={cancel}>{editing ? 'Отмена' : 'Очистить'}</button>}</div></form>
     </section>
+    {telegramBusy&&<section className="card telegram-result" role="status"><h2>Отправляем в Telegram…</h2><p>Не закрывайте страницу. Запись уже сохранена в дневнике.</p></section>}
+    {telegramResult&&<section className="card telegram-result" role="status"><h2>{telegramResult.delivered?'Доставлено':'Не удалось отправить'}</h2><p>{telegramResult.message}</p>{!telegramResult.delivered&&<div className="composer-actions"><button className="primary" disabled={telegramBusy} onClick={()=>{const r=telegramResult;void deliverTelegram(r.profile,r.text,r.entryId,r.requestId);}}>Повторить</button><button className="secondary" disabled={telegramBusy} onClick={()=>{if(window.confirm('Проверьте чат: Telegram мог принять сообщение. Повторная отправка может создать дубль. Отправить заново?')){const r=telegramResult;void deliverTelegram(r.profile,r.text,r.entryId,crypto.randomUUID());}}}>Отправить заново</button><button className="secondary" disabled={telegramBusy} onClick={fallbackWhatsApp}>Отправить через WhatsApp</button></div>}</section>}
     {handoffLink && <section className="card handoff-fallback"><h2>Открыть WhatsApp</h2><p>Если мессенджер не открылся, нажмите кнопку. Запись уже сохранена; повторно сохранять её не нужно.</p><a className="primary" href={handoffLink}>Перейти в WhatsApp</a><p>Окончательную отправку подтвердите в WhatsApp. CareBee не получает подтверждения отправки или доставки.</p></section>}
-    {sendJob && <SendConfirmation name={sendJob.profile.name} phone={sendJob.profile.phone} text={sendJob.text} onCancel={()=>{sendLocked.current=true;setSendJob(null);setNotice('Отправка отменена. Текст остался в поле, изменения не сохранены.');}} onConfirm={completeSend}/>}
+    {sendJob && <SendConfirmation name={sendJob.profile.name} phone={sendJob.profile.channel==='telegram' ? (sendJob.profile.telegramChatId || 'Не подключён') : sendJob.profile.phone} channel={sendJob.profile.channel} text={sendJob.text} onCancel={()=>{sendLocked.current=true;setSendJob(null);setNotice('Отправка отменена. Текст остался в поле, изменения не сохранены.');}} onConfirm={completeSend}/>}
     {storageError && <div className="error" role="alert"><p>{storageError}</p><button className="secondary" onClick={refresh}>Повторить загрузку</button></div>}
     <section className="journal" aria-labelledby="journal-title"><div className="section-heading"><div><p className="eyebrow">ВАЖНОЕ ОСТАЁТСЯ РЯДОМ</p><h2 id="journal-title">Ваш дневник <span className="count">{entries.length}</span></h2></div><button className="export-button" disabled={!ready || !storageOK || !entries.length} onClick={download}><span aria-hidden="true">↓</span> Скачать .txt</button></div>
       <p className="journal-hint">Новые записи сверху · дата и время по настройкам устройства</p>
-      {!ready ? <p className="empty">Загружаем дневник…</p> : !storageOK ? <p className="empty">Дневник пока недоступен. Ваш текст можно набрать выше.</p> : !entries.length ? <div className="empty card"><span aria-hidden="true">♡</span><h3>Начнём с одного момента</h3><p>Продиктуйте или напишите, как прошёл день.<br/>После сохранения запись появится здесь.</p></div> : <div className="entry-list">{entries.map(entry => <article className="card entry" key={entry.id}><div className="entry-top"><time dateTime={entry.createdAt}>{formatDate(entry.createdAt)}</time><span aria-hidden="true">✧</span></div><p className="entry-text">{entry.text}</p>{entry.updatedAt !== entry.createdAt && <p className="edited-at">Изменено: {formatDate(entry.updatedAt)}</p>}{entry.handoffs?.map((handoff,index)=><p className="handoff-mark" key={index}>Отправлено: <strong>{handoff.recipientName}</strong> · {formatDate(handoff.at)}<small>Открытие WhatsApp. Отправка и доставка не подтверждены.</small></p>)}<div className="entry-actions"><button disabled={recording || busy} onClick={() => edit(entry)}>Изменить</button><button className="delete-link" disabled={recording || busy} onClick={() => { setError(''); setDeleting(entry); }}>Удалить</button></div></article>)}</div>}
+      {!ready ? <p className="empty">Загружаем дневник…</p> : !storageOK ? <p className="empty">Дневник пока недоступен. Ваш текст можно набрать выше.</p> : !entries.length ? <div className="empty card"><span aria-hidden="true">♡</span><h3>Начнём с одного момента</h3><p>Продиктуйте или напишите, как прошёл день.<br/>После сохранения запись появится здесь.</p></div> : <div className="entry-list">{entries.map(entry => <article className="card entry" key={entry.id}><div className="entry-top"><time dateTime={entry.createdAt}>{formatDate(entry.createdAt)}</time><span aria-hidden="true">✧</span></div><p className="entry-text">{entry.text}</p>{entry.updatedAt !== entry.createdAt && <p className="edited-at">Изменено: {formatDate(entry.updatedAt)}</p>}{entry.handoffs?.map((handoff,index)=><p className="handoff-mark" key={index}>Отправлено: <strong>{handoff.recipientName}</strong> · {formatDate(handoff.at)}<small>{handoff.channel==='telegram'?'Доставлено в Telegram. Bot API принял сообщение; прочтение не подтверждено.':'Открытие WhatsApp. Отправка и доставка не подтверждены.'}</small></p>)}<div className="entry-actions"><button disabled={recording || busy} onClick={() => edit(entry)}>Изменить</button><button className="delete-link" disabled={recording || busy} onClick={() => { setError(''); setDeleting(entry); }}>Удалить</button></div></article>)}</div>}
       <p className="export-hint">Экспорт включает только сохранённые записи. Файл может содержать личные сведения — храните его бережно.</p>
     </section>
     <footer><span>✿ CareBee · Рядом с близкими</span><p>Показатели остаются частью текста. Приложение не интерпретирует их и не даёт медицинских рекомендаций.</p></footer>
